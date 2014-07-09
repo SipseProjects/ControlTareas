@@ -1,75 +1,69 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <publishData>
-  <publishProfile publishUrl="S:\wwwroot\ProyectosGestionSeg" deleteExistingFiles="False" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="/seguridad" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="True" profileName="Perfil1" publishMethod="FileSystem" replaceMatchingFiles="True" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
-    <file relUrl="bin/de/System.Spatial.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/de/Microsoft.Data.OData.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/ru/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
-    <file relUrl="bin/ar/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
-    <file relUrl="validacion/validate.min.js" publishTime="06/17/2014 16:38:11" />
-    <file relUrl="bin/ko/System.Spatial.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/System.Spatial.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/ru/Microsoft.Data.Edm.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/pl/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
-    <file relUrl="bin/Microsoft.Data.Edm.xml" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="Web.config" publishTime="06/27/2014 10:23:26" />
-    <file relUrl="bin/it/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
-    <file relUrl="bin/ja/Microsoft.Data.OData.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/System.Spatial.xml" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/fr/System.Spatial.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/zh-CHS/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
-    <file relUrl="bin/pt/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
-    <file relUrl="bin/he/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
-    <file relUrl="validacion/jquery.validate.js" publishTime="06/19/2014 17:24:29" />
-    <file relUrl="bin/ja/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
-    <file relUrl="bin/fr/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
-    <file relUrl="bin/ja/System.Spatial.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/AjaxControlToolkit.dll" publishTime="06/05/2014 13:47:33" />
-    <file relUrl="validacion/ValidationEngine.css" publishTime="06/17/2014 18:34:54" />
+  <publishProfile publishUrl="C:\inetpub\wwwroot\PWeb" deleteExistingFiles="False" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Perfil1" publishMethod="FileSystem" replaceMatchingFiles="True" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
     <file relUrl="bin/it/Microsoft.Data.OData.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/AjaxMin.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/zh-Hant/Microsoft.Data.OData.resources.dll" publishTime="06/05/2014 13:47:31" />
     <file relUrl="bin/Microsoft.WindowsAzure.Storage.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/fr/Microsoft.Data.Edm.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/tr-TR/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
-    <file relUrl="bin/ko/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
-    <file relUrl="bin/zh-CHT/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
+    <file relUrl="bin/it/Microsoft.Data.Edm.resources.dll" publishTime="06/05/2014 13:47:31" />
     <file relUrl="bin/zh-Hant/Microsoft.Data.Edm.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/de/Microsoft.Data.Edm.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/ja/Microsoft.Data.Edm.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/zh-Hant/System.Spatial.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/de/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
-    <file relUrl="bin/Microsoft.Data.Edm.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/HtmlAgilityPack.pdb" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="Main.aspx" publishTime="06/27/2014 17:35:48" />
-    <file relUrl="bin/es/System.Spatial.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="packages.config" publishTime="06/05/2014 13:47:41" />
-    <file relUrl="bin/es/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
     <file relUrl="bin/Microsoft.WindowsAzure.Storage.xml" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="validacion/validate.js" publishTime="06/17/2014 16:38:11" />
-    <file relUrl="bin/HtmlAgilityPack.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/ko/Microsoft.Data.OData.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/ru/System.Spatial.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/nl/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
-    <file relUrl="bin/zh-Hans/Microsoft.Data.OData.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/AjaxMin.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/ProyectosWeb.pdb" publishTime="06/27/2014 16:47:14" />
+    <file relUrl="bin/ja/Microsoft.Data.OData.resources.dll" publishTime="06/05/2014 13:47:31" />
     <file relUrl="bin/Microsoft.Data.OData.xml" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/zh-Hans/Microsoft.Data.Edm.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/es/Microsoft.Data.Edm.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/BCrypt.Net.dll" publishTime="11/21/2013 15:37:25" />
-    <file relUrl="bin/ru/Microsoft.Data.OData.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/System.Spatial.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/es/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
+    <file relUrl="bin/ko/System.Spatial.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="Main.aspx" publishTime="06/18/2014 09:22:45" />
+    <file relUrl="bin/zh-CHT/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
     <file relUrl="bin/hi/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
+    <file relUrl="bin/zh-Hant/Microsoft.Data.OData.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/ko/Microsoft.Data.OData.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/ar/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
+    <file relUrl="bin/zh-CHS/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
+    <file relUrl="bin/ru/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
+    <file relUrl="bin/System.Spatial.xml" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/Microsoft.Data.Edm.xml" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/HtmlAgilityPack.xml" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/ru/Microsoft.Data.Edm.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/zh-Hans/System.Spatial.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/ru/System.Spatial.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/Microsoft.WindowsAzure.Storage.pdb" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/de/Microsoft.Data.OData.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/HtmlAgilityPack.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/de/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
+    <file relUrl="packages.config" publishTime="06/05/2014 13:47:41" />
+    <file relUrl="bin/AjaxControlToolkit.dll" publishTime="06/05/2014 13:47:33" />
+    <file relUrl="bin/fr/System.Spatial.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/Microsoft.WindowsAzure.Configuration.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/fr/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
     <file relUrl="bin/es/Microsoft.Data.OData.resources.dll" publishTime="06/05/2014 13:47:31" />
     <file relUrl="bin/fr/Microsoft.Data.OData.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/Microsoft.WindowsAzure.Storage.pdb" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/Microsoft.Data.OData.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/ko/Microsoft.Data.Edm.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/HtmlAgilityPack.xml" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/ProyectosWeb.dll" publishTime="06/27/2014 17:35:54" />
-    <file relUrl="validacion/jquery-1.7.1.min.js" publishTime="06/19/2014 17:24:29" />
-    <file relUrl="bin/cs/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
-    <file relUrl="bin/ProyectosWeb.pdb" publishTime="06/27/2014 17:35:54" />
-    <file relUrl="bin/it/Microsoft.Data.Edm.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/zh-Hans/Microsoft.Data.Edm.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/zh-Hant/System.Spatial.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/he/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
+    <file relUrl="bin/ja/System.Spatial.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/fr/Microsoft.Data.Edm.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/Microsoft.Data.Edm.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/de/Microsoft.Data.Edm.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/tr-TR/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
+    <file relUrl="bin/pl/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
+    <file relUrl="bin/zh-Hans/Microsoft.Data.OData.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/it/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
+    <file relUrl="bin/ru/Microsoft.Data.OData.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/es/Microsoft.Data.Edm.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/ProyectosWeb.dll" publishTime="06/27/2014 16:47:14" />
+    <file relUrl="bin/HtmlAgilityPack.pdb" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="Web.config" publishTime="06/27/2014 10:11:58" />
     <file relUrl="bin/it/System.Spatial.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/zh-Hans/System.Spatial.resources.dll" publishTime="06/05/2014 13:47:31" />
-    <file relUrl="bin/Microsoft.WindowsAzure.Configuration.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/de/System.Spatial.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/ja/Microsoft.Data.Edm.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/pt/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
+    <file relUrl="bin/cs/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
+    <file relUrl="bin/nl/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
+    <file relUrl="bin/ko/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
+    <file relUrl="bin/ja/AjaxControlToolkit.resources.dll" publishTime="06/05/2014 13:47:33" />
+    <file relUrl="bin/ko/Microsoft.Data.Edm.resources.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/Microsoft.Data.OData.dll" publishTime="06/05/2014 13:47:31" />
+    <file relUrl="bin/es/System.Spatial.resources.dll" publishTime="06/05/2014 13:47:31" />
   </publishProfile>
 </publishData>
