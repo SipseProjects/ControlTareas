@@ -83,7 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Formulario web1.aspx" />
-    <Content Include="Formulario web2.aspx" />
     <Content Include="Main.aspx" />
     <Content Include="scripts\seguridad\Seguridad.js" />
     <Content Include="validacion\jquery-1.7.1.min.js" />
@@ -115,13 +114,6 @@
     </Compile>
     <Compile Include="Formulario web1.aspx.designer.cs">
       <DependentUpon>Formulario web1.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Formulario web2.aspx.cs">
-      <DependentUpon>Formulario web2.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Formulario web2.aspx.designer.cs">
-      <DependentUpon>Formulario web2.aspx</DependentUpon>
     </Compile>
     <Compile Include="Main.aspx.cs">
       <DependentUpon>Main.aspx</DependentUpon>
@@ -158,7 +150,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>51575</DevelopmentServerPort>
+          <DevelopmentServerPort>55316</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
