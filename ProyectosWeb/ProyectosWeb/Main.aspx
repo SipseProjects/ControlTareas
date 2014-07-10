@@ -20,7 +20,7 @@
                 animated: 'slide',
                 autoHeight: false,
                 navigation: true
-            $("#accordion").accordion();
+        });
         });     
     </script>
     <script type="text/javascript">
@@ -1013,7 +1013,7 @@
                                 <td>
                                     Nombre : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:TextBox ID="TextBoxNombre" runat="server"></asp:TextBox>
                                 </td>
-                                <td>
+                                <td><asp:Label ID="LabelDependencia" runat="server" Text=""></asp:Label>
                                     ID Dependencia :<asp:DropDownList ID="DropDownListDep" runat="server">
                                     </asp:DropDownList>
                                 </td>
@@ -1023,8 +1023,7 @@
                                 </td>
                             </tr>
                         </table>
-                        <p>
-                            Registrar Horas :
+                        <p><asp:Label ID="LabelHrs" runat="server" Text="Registrar horas : "></asp:Label>
                             <asp:DropDownList ID="DropDownListHoras" runat="server">
                                 <asp:ListItem>1</asp:ListItem>
                                 <asp:ListItem>2</asp:ListItem>
