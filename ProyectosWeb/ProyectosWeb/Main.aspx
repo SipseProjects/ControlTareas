@@ -28,7 +28,7 @@
                 ValidChars: " ",
                 FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
             });
-            $("#TextBoxApellidos").filteredTextBox({
+            $("#TextBoxApellidos").filteredTextBox({                                   
                 ValidChars: " ",
                 FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
             });
@@ -105,10 +105,10 @@
                 var options = $('[id*=ListBoxGruposSeg] option:selected');
                 for (var i = 0; i < options.length; i++) {
                     var opt = $(options[i]).clone();
-                    $(options[i]).remove();
+                    $(options[i]).remove();     
                     $('[id*=ListBoxGruposAsigSeg]').append(opt);
                 }
-            });
+            }); 
             $('#ButtonEliminarGU').bind('click', function () {
                 var options = $('[id*=ListBoxGruposAsigSeg] option:selected');
                 for (var i = 0; i < options.length; i++) {
