@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Formulario web1.aspx" />
+    <Content Include="CapturaTareas.aspx" />
     <Content Include="Main.aspx" />
     <Content Include="scripts\seguridad\Seguridad.js" />
     <Content Include="validacion\jquery-1.7.1.min.js" />
@@ -114,6 +115,13 @@
     </Compile>
     <Compile Include="Formulario web1.aspx.designer.cs">
       <DependentUpon>Formulario web1.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CapturaTareas.aspx.cs">
+      <DependentUpon>CapturaTareas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CapturaTareas.aspx.designer.cs">
+      <DependentUpon>CapturaTareas.aspx</DependentUpon>
     </Compile>
     <Compile Include="Main.aspx.cs">
       <DependentUpon>Main.aspx</DependentUpon>
