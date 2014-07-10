@@ -22,6 +22,7 @@ namespace ProyectosWeb
     public partial class Main : System.Web.UI.Page
     {
         //private SqlConnection conn = new SqlConnection("Data Source=(local); User ID=sa;Password=Adminpwd20; Integrated Security=true; Initial Catalog=ProyectosGestion;");
+        
         private static SqlConnection conn = new SqlConnection("Data Source=172.16.1.31;Initial Catalog=ProyectosGestion;Persist Security Info=True;User ID=sa;Password=Adminpwd20");
 
         private UsuarioFacade _usuarioFacade = new UsuarioFacade(conn);
@@ -44,7 +45,8 @@ namespace ProyectosWeb
             MultiView1Seg.ActiveViewIndex = -1;
             MultiView2SegGrid.ActiveViewIndex = -1;
             activarbotonSeg(false);
-            
+            MultiView2.ActiveViewIndex = -1;
+
             activarbotonTarea(false);
             DropDownListDep.Visible = false;
             if (IsPostBack&&ViewState["Index"]!=null) {
@@ -139,6 +141,7 @@ namespace ProyectosWeb
 
         protected void ProyectoOnClick(object sender, EventArgs e)
         {
+            MultiView2.ActiveViewIndex = 0;
             PrevIndex = PageIndex;
             ViewState["PrevIndex"] = PrevIndex;
             PageIndex = "Proyectos";
@@ -151,6 +154,7 @@ namespace ProyectosWeb
 
         protected void RequerimientoOnClick(object sender, EventArgs e)
         {
+            MultiView2.ActiveViewIndex = 0;
             PrevIndex = PageIndex;
             ViewState["PrevIndex"] = PrevIndex;
             PageIndex = "Requerimientos";
@@ -165,6 +169,7 @@ namespace ProyectosWeb
 
         protected void CasosUsoOnClick(object sender, EventArgs e)
         {
+            MultiView2.ActiveViewIndex = 0;
             PrevIndex = PageIndex;
             ViewState["PrevIndex"] = PrevIndex;
             PageIndex = "CasosUso";
@@ -179,6 +184,7 @@ namespace ProyectosWeb
         
         protected void ComponenteOnClick(object sender, EventArgs e)
         {
+            MultiView2.ActiveViewIndex = 0;
             PrevIndex = PageIndex;
             ViewState["PrevIndex"] = PrevIndex;
             PageIndex = "Componentes";
@@ -193,6 +199,7 @@ namespace ProyectosWeb
 
         protected void TareaOnClick(object sender, EventArgs e)
         {
+            MultiView2.ActiveViewIndex = 0;
             PrevIndex = PageIndex;
             ViewState["PrevIndex"] = PrevIndex;
             PageIndex = "Tareas";
