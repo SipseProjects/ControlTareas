@@ -141,6 +141,7 @@ namespace ProyectosWeb
 
         protected void ProyectoOnClick(object sender, EventArgs e)
         {
+            activarbotonTarea(true);
             MultiView2.ActiveViewIndex = 0;
             PrevIndex = PageIndex;
             ViewState["PrevIndex"] = PrevIndex;
@@ -154,6 +155,7 @@ namespace ProyectosWeb
 
         protected void RequerimientoOnClick(object sender, EventArgs e)
         {
+            activarbotonTarea(true);
             MultiView2.ActiveViewIndex = 0;
             PrevIndex = PageIndex;
             ViewState["PrevIndex"] = PrevIndex;
@@ -169,6 +171,7 @@ namespace ProyectosWeb
 
         protected void CasosUsoOnClick(object sender, EventArgs e)
         {
+            activarbotonTarea(true);
             MultiView2.ActiveViewIndex = 0;
             PrevIndex = PageIndex;
             ViewState["PrevIndex"] = PrevIndex;
@@ -184,6 +187,7 @@ namespace ProyectosWeb
         
         protected void ComponenteOnClick(object sender, EventArgs e)
         {
+            activarbotonTarea(true);
             MultiView2.ActiveViewIndex = 0;
             PrevIndex = PageIndex;
             ViewState["PrevIndex"] = PrevIndex;
@@ -199,6 +203,7 @@ namespace ProyectosWeb
 
         protected void TareaOnClick(object sender, EventArgs e)
         {
+            activarbotonTarea(true);
             MultiView2.ActiveViewIndex = 0;
             PrevIndex = PageIndex;
             ViewState["PrevIndex"] = PrevIndex;
