@@ -45,9 +45,11 @@ namespace ProyectosWeb
             MultiView1Seg.ActiveViewIndex = -1;
             MultiView2SegGrid.ActiveViewIndex = -1;
             activarbotonSeg(false);
+            //Desactivar Modulo Tareas
             MultiView2.ActiveViewIndex = -1;
-
+            MultiViewTareaGrid.ActiveViewIndex = -1;   
             activarbotonTarea(false);
+
             DropDownListDep.Visible = false;
             if (IsPostBack&&ViewState["Index"]!=null) {
                 PageIndex = ViewState["Index"].ToString();
@@ -143,6 +145,7 @@ namespace ProyectosWeb
         {
             activarbotonTarea(true);
             MultiView2.ActiveViewIndex = 0;
+            MultiViewTareaGrid.ActiveViewIndex = 0; 
             PrevIndex = PageIndex;
             ViewState["PrevIndex"] = PrevIndex;
             PageIndex = "Proyectos";
@@ -157,6 +160,7 @@ namespace ProyectosWeb
         {
             activarbotonTarea(true);
             MultiView2.ActiveViewIndex = 0;
+            MultiViewTareaGrid.ActiveViewIndex = 0; 
             PrevIndex = PageIndex;
             ViewState["PrevIndex"] = PrevIndex;
             PageIndex = "Requerimientos";
@@ -173,6 +177,7 @@ namespace ProyectosWeb
         {
             activarbotonTarea(true);
             MultiView2.ActiveViewIndex = 0;
+            MultiViewTareaGrid.ActiveViewIndex = 0; 
             PrevIndex = PageIndex;
             ViewState["PrevIndex"] = PrevIndex;
             PageIndex = "CasosUso";
@@ -189,6 +194,7 @@ namespace ProyectosWeb
         {
             activarbotonTarea(true);
             MultiView2.ActiveViewIndex = 0;
+            MultiViewTareaGrid.ActiveViewIndex = 0; 
             PrevIndex = PageIndex;
             ViewState["PrevIndex"] = PrevIndex;
             PageIndex = "Componentes";
@@ -205,6 +211,7 @@ namespace ProyectosWeb
         {
             activarbotonTarea(true);
             MultiView2.ActiveViewIndex = 0;
+            MultiViewTareaGrid.ActiveViewIndex = 0; 
             PrevIndex = PageIndex;
             ViewState["PrevIndex"] = PrevIndex;
             PageIndex = "Tareas";

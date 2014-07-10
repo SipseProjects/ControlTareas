@@ -1058,8 +1058,10 @@
                             ID="Button3" runat="server" Text="Mostrar todo" OnClick="Button3_Click" />
                 </p>
             </div>
-            <div id="ContentBot">
-                <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" OnRowEditing="GridView1_RowEditing"
+            <div id="ContentBot">                
+                <asp:MultiView ID="MultiViewTareaGrid" runat="server">
+                    <asp:View ID="View5GridTarea" runat="server">
+                    <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" OnRowEditing="GridView1_RowEditing"
                     OnRowDeleting="GridView1_RowDeleting" OnPageIndexChanging="GridView1_PageIndexChanging"
                     OnRowCancelingEdit="GridView1_RowCancelingEdit" OnRowUpdating="GridView1_RowUpdating"
                     BackColor="White" BorderColor="#DEDFDE" BorderStyle="None" BorderWidth="1px"
@@ -1093,6 +1095,9 @@
                     <SortedDescendingCellStyle BackColor="#EAEAD3" />
                     <SortedDescendingHeaderStyle BackColor="#575357" />
                 </asp:GridView>
+                    </asp:View>
+                </asp:MultiView>
+
                 <asp:MultiView ID="MultiView2SegGrid" runat="server">
                     <asp:View ID="View1" runat="server">
                         <asp:GridView ID="GridView2Seg" runat="server" AutoGenerateColumns="False" OnRowEditing="GridView2Seg_RowEditing"
