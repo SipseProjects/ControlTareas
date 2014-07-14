@@ -104,7 +104,13 @@
     </script>
     <script type="text/javascript" src="validacion/jquery.validate.js"></script>
     <script type="text/javascript">
-        $(function () {           
+
+        
+
+        $(function () {
+            $('#<%=LinkProyecto.ClientID%>').on('click', function () {
+                $('#<%=LabelNav.ClientID%>').val("Proyectos");
+            });
 
             $('#ButtonAgregarGU').bind('click', function () {
                 var options = $('[id*=ListBoxGruposSeg] option:selected');
@@ -124,7 +130,15 @@
             });
         });
 
+        
+
         $(document).ready(function () {
+
+            function showConfirm(event) {
+                event.stopPropagation();
+                return false;
+            }
+           
 
             $('#<%=ButtonGuardarGU.ClientID%>').bind("click", function () {
                 $("[id*=ListBoxGruposAsigSeg] option").attr("selected", "selected");
@@ -539,7 +553,7 @@
                         <li>Usuarios
                             <ul>
                                 <li>
-                                    <asp:LinkButton ID="LinkUsuariosSeg" runat="server" OnClick="UsuariosOnClick">Usuarios</asp:LinkButton></li>
+                                    <asp:LinkButton  ID="LinkUsuariosSeg" CommandName="LinkUsuariosSeg" runat="server" OnClick="UsuariosOnClick">Usuarios</asp:LinkButton></li>
                                 <li>
                                     <asp:LinkButton ID="LinkcuentaUsSeg" runat="server" OnClick="CuentaUsuarioOnClick">Cuenta</asp:LinkButton></li>
                                 <li>
@@ -582,7 +596,7 @@
                 <div id="DivProyecto2">
                     <ul>
                         <li>
-                            <asp:LinkButton ID="LinkProyecto" runat="server" OnClick="ProyectoOnClick">Proyecto</asp:LinkButton></li>
+                            <asp:LinkButton  ID="LinkProyecto" runat="server" OnClick="ProyectoOnClick">Proyecto</asp:LinkButton></li>
                         <li>
                             <asp:LinkButton ID="LinkRequerimiento" runat="server" OnClick="RequerimientoOnClick">Requerimiento</asp:LinkButton></li>
                         <li>

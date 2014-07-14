@@ -14,7 +14,8 @@ using System.Net;
 using System.Net.Mail;
 using ProyectosWeb.Models;
 using ProyectosWeb.BusinessLogic.Seguridad;
-
+using System.Security.Principal;
+using System.Web.Security;
 
 
 namespace ProyectosWeb
@@ -41,6 +42,7 @@ namespace ProyectosWeb
        
         protected void Page_Load(object sender, EventArgs e)
         {
+           
             //Desactivar Modulo Seguridad
             MultiView1Seg.ActiveViewIndex = -1;
             MultiView2SegGrid.ActiveViewIndex = -1;
@@ -50,10 +52,31 @@ namespace ProyectosWeb
             MultiViewTareaGrid.ActiveViewIndex = -1;   
             activarbotonTarea(false);
 
+            // Get the authentication cookie
+            //string cookieName = FormsAuthentication.FormsCookieName;
+            //HttpCookie authCookie = Context.Request.Cookies[cookieName];
+           //HttpApplication.AuthenticateRequest += new HttpApplication.AuthenticateRequest();
+
+            if(Context.User.Identity!=null){
+                            
+            int linkButtonTareas=0;
+            if (Request.Form["__EVENTTARGET"] != null)
+            {
+                if (Request.Form["__EVENTTARGET"] == LinkProyecto.UniqueID || Request.Form["__EVENTTARGET"] == LinkRequerimiento.UniqueID
+                    || Request.Form["__EVENTTARGET"] == LinkCasosUso.UniqueID || Request.Form["__EVENTTARGET"] == LinkComponente.UniqueID
+                    || Request.Form["__EVENTTARGET"] == LinkTarea.UniqueID)
+            {
+                linkButtonTareas = 1;
+            }
+            }
+
             DropDownListDep.Visible = false;
             if (IsPostBack&&ViewState["Index"]!=null) {
-                PageIndex = ViewState["Index"].ToString();
+                PageIndex = LabelNav.Text;//ViewState["Index"].ToString();
                 /**/
+
+                if (linkButtonTareas != 1)
+                {
                 if (PageIndex.Equals("Usuarios")) {
                     MultiView1Seg.ActiveViewIndex = 0;
                     MultiView2SegGrid.ActiveViewIndex = 0;
@@ -86,6 +109,7 @@ namespace ProyectosWeb
                 else if (PageIndex.Equals("Contraseña Nueva"))
                 {
                     MultiView1Seg.ActiveViewIndex = 6;
+                }
                 }
             }
             
@@ -128,6 +152,10 @@ namespace ProyectosWeb
                         LabelNav.Text = PageIndex;
                         MultiView1Seg.ActiveViewIndex = 7;
                     }
+            }
+            else if (split[1].Contains("emailRestore"))
+            {
+                MultiView1Seg.ActiveViewIndex = 5;
             }                
                
             }
@@ -138,7 +166,9 @@ namespace ProyectosWeb
                 PrevIndex = ViewState["PrevIndex"].ToString();
                 /**/
                 
-            }            
+            }
+            }
+            
         }
 
         protected void ProyectoOnClick(object sender, EventArgs e)
@@ -226,42 +256,47 @@ namespace ProyectosWeb
 
         protected void UsuariosOnClick(object sender, EventArgs e)
         {
-            limpiarFormUsuarios();
-            PrevIndex = PageIndex;
-            ViewState["PrevIndex"] = PrevIndex;
-            PageIndex = "Usuarios";
-            LabelNav.Text = PageIndex;
-            ViewState["Index"] = PageIndex;
-            activarbotonTarea(false);
-            activarbotonSeg(true);
-            MultiView1Seg.ActiveViewIndex = 0;
-            MultiView2SegGrid.ActiveViewIndex = 0;
-                                
-            GridView2Seg.Columns[0].HeaderText = "ID";
-            ((BoundField)GridView2Seg.Columns[0]).DataField = "ID" + PageIndex.Substring(0, PageIndex.Length - 1);
-            GridView2Seg.Columns[1].HeaderText = "Usuario";
-            ((BoundField)GridView2Seg.Columns[1]).DataField = "Nombre";
-            GridView2Seg.Columns[2].HeaderText = "Es Empleado";
-            ((BoundField)GridView2Seg.Columns[2]).DataField = "EsEmpleado";
-            GridView2Seg.Columns[3].HeaderText = "Estado";
-            ((BoundField)GridView2Seg.Columns[3]).DataField = "Estado";
-            GridView2Seg.Columns[4].HeaderText = "Nombre";
-            ((BoundField)GridView2Seg.Columns[4]).DataField = "nomUsuario";
-            GridView2Seg.Columns[5].HeaderText = "Apellidos";
-            ((BoundField)GridView2Seg.Columns[5]).DataField = "Apellido";
-            GridView2Seg.Columns[6].HeaderText = "Fecha Registro";
-            ((BoundField)GridView2Seg.Columns[6]).DataField = "FechaRegistro";
-            ((BoundField)GridView2Seg.Columns[6]).ReadOnly = true;
-            GridView2Seg.Columns[7].HeaderText = "Tecnologias";
-            ((BoundField)GridView2Seg.Columns[7]).DataField = "Tecnologias";
-            GridView2Seg.Columns[8].HeaderText = "Email";
-            ((BoundField)GridView2Seg.Columns[8]).DataField = "Email";
-            GridView2Seg.Columns[9].HeaderText = "Telefono";
-            ((BoundField)GridView2Seg.Columns[9]).DataField = "Telefono";            
-            gvbindSeg();
+            if (!Context.User.Identity.AuthenticationType.ToLower().Equals("ntlm"))
+            {
+                limpiarFormUsuarios();
+                PrevIndex = PageIndex;
+                ViewState["PrevIndex"] = PrevIndex;
+                PageIndex = "Usuarios";
+                LabelNav.Text = PageIndex;
+                ViewState["Index"] = PageIndex;
+                activarbotonTarea(false);
+                activarbotonSeg(true);
+                MultiView1Seg.ActiveViewIndex = 0;
+                MultiView2SegGrid.ActiveViewIndex = 0;
+
+                GridView2Seg.Columns[0].HeaderText = "ID";
+                ((BoundField)GridView2Seg.Columns[0]).DataField = "ID" + PageIndex.Substring(0, PageIndex.Length - 1);
+                GridView2Seg.Columns[1].HeaderText = "Usuario";
+                ((BoundField)GridView2Seg.Columns[1]).DataField = "Nombre";
+                GridView2Seg.Columns[2].HeaderText = "Es Empleado";
+                ((BoundField)GridView2Seg.Columns[2]).DataField = "EsEmpleado";
+                GridView2Seg.Columns[3].HeaderText = "Estado";
+                ((BoundField)GridView2Seg.Columns[3]).DataField = "Estado";
+                GridView2Seg.Columns[4].HeaderText = "Nombre";
+                ((BoundField)GridView2Seg.Columns[4]).DataField = "nomUsuario";
+                GridView2Seg.Columns[5].HeaderText = "Apellidos";
+                ((BoundField)GridView2Seg.Columns[5]).DataField = "Apellido";
+                GridView2Seg.Columns[6].HeaderText = "Fecha Registro";
+                ((BoundField)GridView2Seg.Columns[6]).DataField = "FechaRegistro";
+                ((BoundField)GridView2Seg.Columns[6]).ReadOnly = true;
+                GridView2Seg.Columns[7].HeaderText = "Tecnologias";
+                ((BoundField)GridView2Seg.Columns[7]).DataField = "Tecnologias";
+                GridView2Seg.Columns[8].HeaderText = "Email";
+                ((BoundField)GridView2Seg.Columns[8]).DataField = "Email";
+                GridView2Seg.Columns[9].HeaderText = "Telefono";
+                ((BoundField)GridView2Seg.Columns[9]).DataField = "Telefono";
+                gvbindSeg();
+            }
+            
         }
         protected void CuentaUsuarioOnClick(object sender, EventArgs e)
         {
+            TextBoxUsuarioUpdate.Text = Context.User.Identity.Name;
             MultiView2SegGrid.ActiveViewIndex = -1;
             activarbotonSeg(false);
             actualizaPagina("Actualizacion de Cuenta");
@@ -279,6 +314,7 @@ namespace ProyectosWeb
         }
         protected void RestablecerPasswordEmailOnClick(object sender, EventArgs e)
         {
+            LabUserRestore.Text = Context.User.Identity.Name;
             MultiView2SegGrid.ActiveViewIndex = -1;
             activarbotonSeg(false);
             actualizaPagina("Contraseña Nueva");
@@ -1483,6 +1519,25 @@ namespace ProyectosWeb
              }
                  //ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Left ListBox Items: " + leftSelectedItems + "\\nRight ListBox Items: " + rightSelectedItems + "');", true);
              
-         }               
+         }
+
+         protected void Application_AuthenticateRequest(Object sender, EventArgs e)
+         {
+             // Get the authentication cookie
+             string cookieName = FormsAuthentication.FormsCookieName;
+             HttpCookie authCookie = Context.Request.Cookies[cookieName];
+
+             // If the cookie can't be found, don't issue the ticket
+             if (authCookie == null) return;
+
+             // Get the authentication ticket and rebuild the principal 
+             // & identity
+             FormsAuthenticationTicket authTicket =
+               FormsAuthentication.Decrypt(authCookie.Value);
+             string[] roles = authTicket.UserData.Split(new Char[] { '|' });
+             GenericIdentity userIdentity =new GenericIdentity(authTicket.Name);
+             GenericPrincipal userPrincipal =new GenericPrincipal(userIdentity, roles);
+             Context.User = userPrincipal;
+         }
     }
 }

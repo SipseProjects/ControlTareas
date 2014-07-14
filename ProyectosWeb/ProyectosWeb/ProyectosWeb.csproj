@@ -82,13 +82,59 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Formulario web1.aspx" />
+    <Content Include="Views\Login\Login.aspx" />
     <Content Include="CapturaTareas.aspx" />
+    <Content Include="LoginSources\css\bootstrap-responsive.min.css" />
+    <Content Include="LoginSources\css\bootstrap.min.css" />
+    <Content Include="LoginSources\css\media-queries.css" />
+    <Content Include="LoginSources\css\styles.css" />
+    <Content Include="LoginSources\fancybox\blank.gif" />
+    <Content Include="LoginSources\fancybox\fancybox-x.png" />
+    <Content Include="LoginSources\fancybox\fancybox-y.png" />
+    <Content Include="LoginSources\fancybox\fancybox.png" />
+    <Content Include="LoginSources\fancybox\fancy_close.png" />
+    <Content Include="LoginSources\fancybox\fancy_loading.png" />
+    <Content Include="LoginSources\fancybox\fancy_nav_left.png" />
+    <Content Include="LoginSources\fancybox\fancy_nav_right.png" />
+    <Content Include="LoginSources\fancybox\fancy_shadow_e.png" />
+    <Content Include="LoginSources\fancybox\fancy_shadow_n.png" />
+    <Content Include="LoginSources\fancybox\fancy_shadow_ne.png" />
+    <Content Include="LoginSources\fancybox\fancy_shadow_nw.png" />
+    <Content Include="LoginSources\fancybox\fancy_shadow_s.png" />
+    <Content Include="LoginSources\fancybox\fancy_shadow_se.png" />
+    <Content Include="LoginSources\fancybox\fancy_shadow_sw.png" />
+    <Content Include="LoginSources\fancybox\fancy_shadow_w.png" />
+    <Content Include="LoginSources\fancybox\fancy_title_left.png" />
+    <Content Include="LoginSources\fancybox\fancy_title_main.png" />
+    <Content Include="LoginSources\fancybox\fancy_title_over.png" />
+    <Content Include="LoginSources\fancybox\fancy_title_right.png" />
+    <Content Include="LoginSources\fancybox\jquery.easing-1.3.pack.js" />
+    <Content Include="LoginSources\fancybox\jquery.fancybox-1.3.4.css" />
+    <Content Include="LoginSources\fancybox\jquery.fancybox-1.3.4.js" />
+    <Content Include="LoginSources\fancybox\jquery.fancybox-1.3.4.pack.js" />
+    <Content Include="LoginSources\fancybox\jquery.mousewheel-3.0.4.pack.js" />
+    <Content Include="LoginSources\favicon.ico" />
+    <Content Include="LoginSources\font\stylesheet.css" />
+    <Content Include="LoginSources\img\android_app_on_play_logo_large.png" />
+    <Content Include="LoginSources\img\app_icon.png" />
+    <Content Include="LoginSources\img\arrow-top.png" />
+    <Content Include="LoginSources\img\available-on-the-app-store.png" />
+    <Content Include="LoginSources\img\bg.png" />
+    <Content Include="LoginSources\img\check.png" />
+    <Content Include="LoginSources\img\phones.png" />
+    <Content Include="LoginSources\img\screenshot.jpg" />
+    <Content Include="LoginSources\index.html" />
+    <Content Include="LoginSources\js\bootstrap-collapse.js" />
+    <Content Include="LoginSources\js\bootstrap-scrollspy.js" />
+    <Content Include="LoginSources\js\bootstrap.js" />
+    <Content Include="LoginSources\js\bootstrap.min.js" />
+    <Content Include="LoginSources\js\init.js" />
     <Content Include="Main.aspx" />
     <Content Include="scripts\seguridad\Seguridad.js" />
     <Content Include="validacion\jquery-1.7.1.min.js" />
     <Content Include="validacion\jquery.validate.js" />
     <Content Include="validacion\ValidationEngine.css" />
+    <Content Include="Views\Login\Inicio.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -100,6 +146,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\general\EnvioEmail.cs" />
     <Compile Include="BusinessLogic\Seguridad\GruposBL.cs" />
     <Compile Include="BusinessLogic\Seguridad\PerfilBL.cs" />
     <Compile Include="BusinessLogic\Seguridad\PersonaBL.cs" />
@@ -109,12 +156,12 @@
     <Compile Include="DAO\SeguridadDAOS\PerfilDAO.cs" />
     <Compile Include="DAO\SeguridadDAOS\PersonaDAO.cs" />
     <Compile Include="DAO\SeguridadDAOS\UsuarioDAO.cs" />
-    <Compile Include="Formulario web1.aspx.cs">
-      <DependentUpon>Formulario web1.aspx</DependentUpon>
+    <Compile Include="Views\Login\Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Formulario web1.aspx.designer.cs">
-      <DependentUpon>Formulario web1.aspx</DependentUpon>
+    <Compile Include="Views\Login\Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
     <Compile Include="CapturaTareas.aspx.cs">
       <DependentUpon>CapturaTareas.aspx</DependentUpon>
@@ -143,6 +190,13 @@
     <Compile Include="Models\Seguridad\Persona.cs" />
     <Compile Include="Models\Seguridad\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\Login\Inicio.aspx.cs">
+      <DependentUpon>Inicio.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Login\Inicio.aspx.designer.cs">
+      <DependentUpon>Inicio.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -150,6 +204,15 @@
   <ItemGroup>
     <Content Include="MasterLogin.Master" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="LoginSources\app_icon.psd" />
+    <None Include="LoginSources\font\qlassikbold_tb-webfont.eot" />
+    <None Include="LoginSources\font\qlassikbold_tb-webfont.ttf" />
+    <None Include="LoginSources\font\qlassikbold_tb-webfont.woff" />
+    <None Include="LoginSources\phones.psd" />
+    <None Include="LoginSources\README.md" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <ProjectExtensions>
