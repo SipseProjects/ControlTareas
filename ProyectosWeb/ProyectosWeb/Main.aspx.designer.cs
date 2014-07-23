@@ -175,24 +175,6 @@ namespace ProyectosWeb {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl accordion;
         
         /// <summary>
-        /// Control Proyecto0.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Proyecto0;
-        
-        /// <summary>
-        /// Control Div1Proyecto0.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Div1Proyecto0;
-        
-        /// <summary>
         /// Control Proyecto1.
         /// </summary>
         /// <remarks>
