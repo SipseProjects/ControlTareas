@@ -23,16 +23,7 @@
 
         });
   </script>
-  <script>
-      function fireFileClick() {
-          var objfile = document.getElementById("<%= FileExcel.ClientID %>");
-          objfile.click();
 
-
-          var objTextBox = document.getElementById("<%= FileExcel.ClientID %>");
-          objTextBox.value = objfile.value;
-      }
-  </script>
 
 
     <script>
@@ -119,107 +110,14 @@
 
 
     <div id ="Content" runat="server">   
-       <p align="center"> 
-           <asp:Label ID="Label1" runat="server" Text="Gestor de " Font-Bold="True"></asp:Label>
-           <asp:Label ID="LabelNav" runat="server" Font-Bold="True"></asp:Label></p>
-    <div id="ContentTop" runat="server">
-    <table id="TableCont" align="center" style="width:100%;">
-    <tr>
-    <td>Clave : <br /><asp:TextBox ID="TextBoxClave" runat="server"></asp:TextBox></td>
-    <td>Cliente : <br /><asp:TextBox ID="TextBoxCliente" runat="server"></asp:TextBox></td>
-    <td>Fecha de Inicio : <br /><asp:TextBox ID="TextBoxFechaInicio" runat="server"></asp:TextBox></td>
-    </tr>
-    <tr>
-    <td>Descripcion : <br /><asp:TextBox ID="TextBoxDescripcion" runat="server"></asp:TextBox></td>    
-    <td>Estado :  <br />
-        <asp:DropDownList ID="DropDownList1" runat="server">
-        <asp:ListItem>Activo</asp:ListItem>
-        <asp:ListItem>Suspendido</asp:ListItem>
-        <asp:ListItem>Finalizado</asp:ListItem>
-        </asp:DropDownList> </td>
-    <td>Fecha fin estimada : <br /><asp:TextBox ID="TextBoxFechaFinEst" runat="server"></asp:TextBox></td>
-    </tr>
-    <tr>
-    <td>Nombre : <br /><asp:TextBox ID="TextBoxNombre" runat="server"></asp:TextBox></td>
-    <td>
-        <asp:Label ID="LabelDependencia" runat="server" Text=""></asp:Label><br /><asp:DropDownList ID="DropDownListDep" runat="server">
-        </asp:DropDownList><br />
-        Usuarios : <br /><asp:DropDownList ID="DropDownList2" runat="server">
-        <asp:ListItem>Juan Ramirez</asp:ListItem>
-        <asp:ListItem>Daniel Cafe</asp:ListItem>
-        <asp:ListItem>Pedro Perez</asp:ListItem>
-        </asp:DropDownList>
-    </td>
-    <td>Fecha fin real : <br /><asp:TextBox ID="TextBoxFechaFinReal" runat="server"></asp:TextBox><br /><br /><asp:FileUpload ID="FileExcel" runat="server" /></td>
-    </tr>
-    
-    
-    </table>
-
-    <p><asp:Label ID="LabelHrs" runat="server" Text="Registrar horas : "></asp:Label> <asp:DropDownList ID="DropDownListHoras" runat="server">
-    <asp:ListItem>1</asp:ListItem>
-    <asp:ListItem>2</asp:ListItem>
-    <asp:ListItem>3</asp:ListItem>
-    <asp:ListItem>4</asp:ListItem>
-    <asp:ListItem>5</asp:ListItem>
-    <asp:ListItem>6</asp:ListItem>
-    <asp:ListItem>7</asp:ListItem>
-    <asp:ListItem>8</asp:ListItem>
-    <asp:ListItem>9</asp:ListItem>
-    <asp:ListItem>10</asp:ListItem>
-    <asp:ListItem>11</asp:ListItem>
-    <asp:ListItem>12</asp:ListItem>
-    <asp:ListItem>13</asp:ListItem>
-    <asp:ListItem>14</asp:ListItem>
-    <asp:ListItem>15</asp:ListItem>
-    <asp:ListItem>16</asp:ListItem>
-    </asp:DropDownList>
-
-    </p>
- 
-        
-    <p>
-        <asp:Button ID="Button1" runat="server" Text="Insertar" 
-             />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button
-            ID="Button2" runat="server" Text="Buscar"  />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="Button3"
-                runat="server" Text="Mostrar todo"  /> </p>
-    </div>
-    <div id="ContentBot">
-    
-        <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" 
-             BackColor="White" BorderColor="#DEDFDE" BorderStyle="None" BorderWidth="1px" 
-            CellPadding="4" ForeColor="Black" GridLines="Vertical">
-            <AlternatingRowStyle BackColor="White" />
-        <columns>
-
-            <asp:BoundField HeaderText="ID" ReadOnly="True" DataField="IDProyectos" />
-            <asp:BoundField HeaderText="Clave" DataField="ClaveProyecto" />
-            <asp:BoundField HeaderText="Nombre" DataField="Nombre" />
-            <asp:BoundField HeaderText="Descripcion" DataField="Descripcion" />
-            <asp:BoundField HeaderText="Cliente" DataField="Cliente" />
-            <asp:BoundField HeaderText="Fecha registro" DataField="FechaRegistro" 
-                dataformatstring="{0:yyyy/MM/dd}" applyformatineditmode="true" 
-                ReadOnly="True" />
-            <asp:BoundField HeaderText="Fecha inicio" DataField="FechaInicio" dataformatstring="{0:yyyy/MM/dd}" applyformatineditmode="true" />
-            <asp:BoundField HeaderText="Fecha fin estimada" DataField="FechaFinEstimada" dataformatstring="{0:yyyy/MM/dd}" applyformatineditmode="true" />
-            <asp:BoundField HeaderText="Fecha fin real" DataField="FechaFinReal" dataformatstring="{0:yyyy/MM/dd}" applyformatineditmode="true" />
-            <asp:BoundField HeaderText="Tecnologias" DataField="Tecnologias" />
-
-        <asp:CommandField ShowEditButton="true" />
-        <asp:CommandField ShowDeleteButton="true" />
-        </columns>
-            <FooterStyle BackColor="#CCCC99" />
-            <HeaderStyle BackColor="#6B696B" Font-Bold="True" ForeColor="White" />
-            <PagerStyle BackColor="#F7F7DE" ForeColor="Black" HorizontalAlign="Right" />
-            <RowStyle BackColor="#F7F7DE" />
-            <SelectedRowStyle BackColor="#CE5D5A" Font-Bold="True" ForeColor="White" 
-                Width="10px" />
-            <SortedAscendingCellStyle BackColor="#FBFBF2" />
-            <SortedAscendingHeaderStyle BackColor="#848384" />
-            <SortedDescendingCellStyle BackColor="#EAEAD3" />
-            <SortedDescendingHeaderStyle BackColor="#575357" />
+   <h3 align="center">Captura de tareas</h3>
+   <h4>Actualizar Tareas por archivo :</h4><br />
+        <asp:FileUpload ID="FileUploadTareas" runat="server" /><br />
+        <asp:Button ID="ButtonUpload" runat="server" Text="Subir archivo" 
+            onclick="ButtonUpload_Click" /><asp:Label ID="LabelSubir" runat="server" 
+            BackColor="Red"></asp:Label>
+        <asp:GridView ID="GridView1" runat="server">
         </asp:GridView>
-    </div> 
     </div>
     <div id="RightSideMenu">
     
