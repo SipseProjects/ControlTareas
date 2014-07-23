@@ -11,6 +11,7 @@
         type="text/javascript"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="/Style/Style.css" />
+ <%--   <link rel="stylesheet" href="css/expandabletree.css" />--%>
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     
@@ -23,6 +24,24 @@
         });
         });     
     </script>
+<!-- include jQuery and jQueryUI libraries --><%--
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css"/>--%>
+
+<!-- include plugin -->
+<script type="text/javascript" src="jquery-tree-checkboxes/minified/jquery.tree.min.js"></script>
+<link rel="stylesheet" type="text/css" href="jquery-tree-checkboxes/minified/jquery.tree.min.css" />
+<!-- initialize checkboxTree plugin -->
+<script type="text/javascript">
+    //<!--
+    $(document).ready(function () {
+        $('#tree').tree({
+            /* specify here your options */
+        });
+    });
+    //-->
+</script>
     <script type="text/javascript">
         Sys.debug = true;
         Sys.require(Sys.components.filteredTextBox, function () {
@@ -101,11 +120,9 @@
             });
 
         }); 
-    </script>
+    </script>    
     <script type="text/javascript" src="validacion/jquery.validate.js"></script>
-    <script type="text/javascript">
-
-        
+    <script type="text/javascript">        
 
         $(function () {
             $('#<%=LinkProyecto.ClientID%>').on('click', function () {
@@ -128,9 +145,12 @@
                     $('[id*=ListBoxGruposSeg]').append(opt);
                 }
             });
-        });
 
-        
+            $("#TextBoxFechaoIniSis").datepicker({ dateFormat: "yy/mm/dd" });
+            $("#TextBoxFechaFinEsSis").datepicker({ dateFormat: "yy/mm/dd" });
+            $("#TextBoxFinRealSis").datepicker({ dateFormat: "yy/mm/dd" });
+
+        });
 
         $(document).ready(function () {
 
@@ -138,7 +158,7 @@
                 event.stopPropagation();
                 return false;
             }
-           
+
 
             $('#<%=ButtonGuardarGU.ClientID%>').bind("click", function () {
                 $("[id*=ListBoxGruposAsigSeg] option").attr("selected", "selected");
@@ -184,7 +204,7 @@
                 validarUs(usuariot, hid, sc, sc);
 
             });
-            
+
 
             $('#<%= TextBoxUsuarioUpdate.ClientID%>').keyup(function () {
                 var usuariot = $("#<%=TextBoxUsuarioUpdate.ClientID%>");
@@ -321,6 +341,13 @@
                 quitarValidacion(g);
             });
 
+            $('#<%= ButtonCancelSistema.ClientID%>').on('click', function (data) {
+                quitarValidacionSistema();
+            });
+            $('#<%= ButtonConsultaSistemasSeg.ClientID%>').on('click', function (data) {
+                quitarValidacionSistema();
+            });             
+
             function quitarValidacion(g) {
                 if (g == "Usuarios") {
                     $("#TextBoxUsuario").rules("remove");
@@ -340,6 +367,54 @@
                     $("#TextBoxNomPerfil").rules("remove");
                     $("#TextBoxDescripcionPerfil").rules("remove");
                 }
+                else if (g == "Sistemas") {
+                    quitarValidacionSistema();
+                }
+            }
+
+            function quitarValidacionSistema() {
+                $("#TextBoxClaveSis").rules("remove");
+                $("#TextBoxNombreSis").rules("remove");
+                $("#TextBoxDescSis").rules("remove");
+                $("#TextBoxClienteSis").rules("remove");
+                $("#TextBoxFechaoIniSis").rules("remove");
+                $("#TextBoxFechaFinEsSis").rules("remove");
+            }
+
+
+            $('#<%= ButtonUpdateSistema.ClientID%>').on('click', function () {
+                validaSistema();
+            });
+
+            function validaSistema() {
+                $("#BodyForm").validate({
+                    ignore: "",
+                    rules: {
+                        'TextBoxClaveSis': { required: true },
+                        'TextBoxNombreSis': { required: true },
+                        'TextBoxClienteSis': { required: true },
+                        'TextBoxDescSis': { required: true },
+                        'TextBoxFechaoIniSis': { required: true },
+                        'TextBoxFechaFinEsSis': { required: true }
+                    },
+                    messages: {
+                        'TextBoxClaveSis': { required: 'Ingrese una clave' },
+                        'TextBoxNombreSis': { required: 'Ingrese un nombre' },
+                        'TextBoxClienteSis': { required: 'Ingrese un nombre de cliente' },
+                        'TextBoxDescSis': { required: 'Ingrese una descripción' },
+                        'TextBoxFechaoIniSis': { required: 'Ingrese una fecha de Inicio' },
+                        'TextBoxFechaFinEsSis': { required: 'Ingrese una fecha estimada' }
+                    },
+                    errorPlacement: function (error, element) {
+                        error.insertAfter(element);
+                        error.addClass('message');  // add a class to the wrapper
+                        error.css("color", "red");
+                    },
+                    debug: true,
+                    submitHandler: function (ButtonUpdateSistema) {
+                        ButtonUpdateSistema.submit();
+                    }
+                });
             }
 
             $('#<%= ButtonEnviarEmailSeg.ClientID%>').on('click', function () {
@@ -351,7 +426,7 @@
                     },
                     messages: {
                         'TextBoxEmailRegistrado': { email: 'Ingrese un correo valido. Ejemplo: cristian@hotmail.com' },
-                        'HidValidEmailRestoreSeg':{required:''}
+                        'HidValidEmailRestoreSeg': { required: '' }
                     },
                     errorPlacement: function (error, element) {
                         error.insertAfter(element)
@@ -445,7 +520,7 @@
                             'PasswordConfirm': { required: 'La contraseña no coincide', minlength: 'La contraseña debe ser maximo 12 caracteres', minlength: 'La contraseña debe ser minimo 5 caracteres', equalTo: 'La contraseña no coincide' },
                             'HiddenValidUser': { required: '', maxlength: 'Maximo 30 caracteres' },
                             'TextAreaTecnologias': { maxlength: 'Maximo 30 caracteres' },
-                            'HidValidEmailReg': {required:''}
+                            'HidValidEmailReg': { required: '' }
                         },
                         errorPlacement: function (error, element) {
                             error.insertAfter(element)
@@ -510,6 +585,9 @@
                         }
                     });
                 }
+                else if (g == "Sistemas") {
+                    validaSistema();
+                }
             });
 
         });
@@ -535,45 +613,58 @@
     <asp:HiddenField ID="HidValidEmailReg" runat="server" Value="" />    
     <asp:HiddenField ID="HidValidEmailRestoreSeg" runat="server" Value="" />
     <asp:HiddenField ID="hidClicks" runat="server"  Value="0" />
+    <asp:HiddenField ID="HidSistemaUpdate" runat="server"  Value="0" /> 
+    <asp:HiddenField ID="hidopcionpant" runat="server"  Value="0" />  
+    <asp:HiddenField ID="hidcontchecks" runat="server"  Value="0" /> 
+    <asp:HiddenField ID="hidpantallaid" runat="server"  Value="" />
 
     <div id="header" align="center">
         <img src="/Img/SolIcon.png" alt="Empresa" height="100px" width="20%" style="float: left;">
         <h1>
-            Encabezado</h1>
+            Encabezado</h1> 
+            <p align="right">
+            <asp:Label ID="usuarioLogin" runat="server" Text=""></asp:Label>
+            <asp:LinkButton ID="LinkButton1" OnClick="cerrarSesiononclick" runat="server" >Cerrar Sesión</asp:LinkButton>
+            </p>
     </div>
     <div id="Container" runat="server">
         <div id="LeftSideMenu">
             <div id="accordion" runat="server">
+            <h3 id="Proyecto0" runat="server" align="left">
+                    Seguridadtests</h3>
+                <div id="Div1Proyecto0" runat="server">
+                    <p align="left">
+                        Catalogos</p>
+                    <ul>
+                    </ul>
+                    </div>
+
                 <h3 id="Proyecto1" runat="server" align="left">
                     Seguridad</h3>
                 <div id="DivProyecto1" runat="server">
                     <p align="left">
                         Catalogos</p>
                     <ul>
-                        <li>Usuarios
+                        <li ><asp:Label runat="server" ID="lblUsuariosSeg">Usuarios</asp:Label>
                             <ul>
                                 <li>
-                                    <asp:LinkButton  ID="LinkUsuariosSeg" CommandName="LinkUsuariosSeg" runat="server" OnClick="UsuariosOnClick">Usuarios</asp:LinkButton></li>
+                                    <asp:LinkButton  ID="LinkUsuariosSeg" CommandName="sub" runat="server" OnClick="UsuariosOnClick">Usuarios</asp:LinkButton></li>
                                 <li>
-                                    <asp:LinkButton ID="LinkcuentaUsSeg" runat="server" OnClick="CuentaUsuarioOnClick">Cuenta</asp:LinkButton></li>
-                                <li>
-                                    <asp:LinkButton ID="LinkRestablecerPass" runat="server" OnClick="RestablecerPasswordOnClick">Enviar Email</asp:LinkButton></li>
-                                <li>
-                                    <asp:LinkButton ID="LinkRestablecerPassEmailSeg" runat="server" OnClick="RestablecerPasswordEmailOnClick">Contraseña Nueva</asp:LinkButton></li>
+                                    <asp:LinkButton ID="LinkcuentaUsSeg" CommandName="sub" runat="server" OnClick="CuentaUsuarioOnClick">Cuenta</asp:LinkButton></li>                                                                
                             </ul>
                         </li>
                         <li>
                             <asp:LinkButton ID="LinkGruposSeg" runat="server" OnClick="GruposOnClick">Grupos</asp:LinkButton></li>
                         <li>
                             <asp:LinkButton ID="LinkPerfilesSeg" runat="server" OnClick="PerfilesOnClick">Perfiles</asp:LinkButton></li>
-                        <li>Relaciones
+                        <li ><asp:Label runat="server" ID="lblRelacionesSeg">Relaciones</asp:Label>
                             <ul>
                                 <li>
-                                    <asp:LinkButton ID="LinkRelacionesUsSeg" runat="server" OnClick="RelacionesUsuariosOnClick">Usuarios</asp:LinkButton></li>
+                                    <asp:LinkButton ID="LinkRelacionesUsSeg" CommandName="sub" runat="server" OnClick="RelacionesUsuariosOnClick">Usuarios</asp:LinkButton></li>
                                 <li>
-                                    <asp:LinkButton ID="LinkRelacionesGruSeg" runat="server" OnClick="RelacionesGruposOnClick">Grupos</asp:LinkButton></li>
+                                    <asp:LinkButton ID="LinkRelacionesGruSeg" CommandName="sub" runat="server" OnClick="RelacionesGruposOnClick">Grupos</asp:LinkButton></li>
                                 <li>
-                                    <asp:LinkButton ID="LinkRelacionesPerfSeg" runat="server" OnClick="RelacionesPerfilesOnClick">Perfiles</asp:LinkButton></li>
+                                    <asp:LinkButton ID="LinkRelacionesPerfSeg" CommandName="sub" runat="server" OnClick="RelacionesPerfilesOnClick">Perfiles</asp:LinkButton></li>
                             </ul>
                         </li>
                         <li><a href="#">Fases</a></li>
@@ -582,18 +673,17 @@
                         <li><a href="#">Parametros de sistema</a></li>
                         <li><a href="#">Clientes</a></li>
                     </ul>
-                    <p align="left">
-                        Control de acceso</p>
+                        <asp:Label runat="server" ID="LblControlAcceso">Control de acceso</asp:Label>
                     <ul>
-                        <li>Proyecto</li>
-                        <li>Modulos</li>
-                        <li>Pantallas</li>
-                        <li>Opciones</li>
+                        <li><asp:LinkButton ID="LB2CASistem" runat="server" CommandName="sub" OnClick="ControlAccesSistemaOnClick">Sistemas</asp:LinkButton></li>
+                        <li><asp:LinkButton ID="LB3CAModul" runat="server" CommandName="sub" OnClick="ControlAccesModuloOnClick">Módulos</asp:LinkButton></li>
+                        <li><asp:LinkButton ID="LB4CAWindo" runat="server" CommandName="sub" OnClick="ControlAccesPantallasOnClick">Pantallas</asp:LinkButton></li>
+                        <li><asp:LinkButton ID="LB5CAOption" runat="server" CommandName="sub" OnClick="ControlAccesOpcionesOnClick">Opciones</asp:LinkButton></li>
                     </ul>
                 </div>
                 <h3 id="Proyecto2" runat="server">
                     Tarea</h3>
-                <div id="DivProyecto2">
+                <div id="DivProyecto2" runat="server">
                     <ul>
                         <li>
                             <asp:LinkButton  ID="LinkProyecto" runat="server" OnClick="ProyectoOnClick">Proyecto</asp:LinkButton></li>
@@ -633,7 +723,7 @@
             <p align="center">
                 <asp:Label ID="Label1" runat="server" Text="Gestor de " Font-Bold="True"></asp:Label>
                 <asp:Label ID="LabelNav" runat="server" Font-Bold="True"></asp:Label>
-            </p>
+            </p>            
             <div id="ContentTop" runat="server">
                 <asp:MultiView ID="MultiView1Seg" runat="server">
                     <asp:View ID="View1Seg" runat="server">
@@ -972,7 +1062,7 @@
                                         runat="server" Text="Restablecer" />
                                 </td>
                                 <td>
-                                   <asp:HyperLink ID="HyperLinkSesion" NavigateUrl="~/Main.aspx" runat="server">Iniciar Sesion</asp:HyperLink>
+                                   <asp:HyperLink ID="HyperLinkSesion" NavigateUrl="~/Views/Login/Inicio.aspx" runat="server">Iniciar Sesion</asp:HyperLink>
                                 </td>
                             </tr>                            
                         </table>
@@ -992,6 +1082,293 @@
                                 </td>
                             </tr>
                         </table>
+                    </asp:View>
+                    <asp:View ID="ViewSistema" runat="server">
+                       <table id="Table8">
+                            <tr>                                
+                                    <td>Clave : </td><td><asp:TextBox MaxLength="30" ID="TextBoxClaveSis"
+                                        runat="server"></asp:TextBox>
+                                </td>
+                                </tr>
+                                <tr>
+                                <td>Nombre : </td><td>
+                                    <asp:TextBox ID="TextBoxNombreSis" MaxLength="30" runat="server"></asp:TextBox>
+                                </td>
+                                </tr> 
+                                <tr>
+                                <td>Cliente : </td><td>
+                                    <asp:TextBox ID="TextBoxClienteSis" MaxLength="45" runat="server"></asp:TextBox>
+                                </td>
+                                </tr>                               
+                            <tr>
+                                <td>
+                                    Descripcion :</td><td>
+                                    <asp:TextBox ID="TextBoxDescSis" MaxLength="45" runat="server"></asp:TextBox>
+                                </td>
+                                </tr>
+                                <tr>
+                                <td>
+                                    Fecha inicio : </td><td>
+                                    <asp:TextBox ID="TextBoxFechaoIniSis" runat="server"></asp:TextBox>
+                                </td>
+                            </tr>
+                                <tr>
+                                <td>
+                                    Fecha fin estimada : </td><td>
+                                    <asp:TextBox ID="TextBoxFechaFinEsSis" runat="server"></asp:TextBox>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Fecha fin real : </td><td>
+                                    <asp:TextBox ID="TextBoxFinRealSis" runat="server"></asp:TextBox>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Tecnologias : </td><td>
+                                    <asp:TextBox MaxLength="40" ID="TextBoxTecSistema" runat="server"></asp:TextBox>
+                                </td>
+                            </tr>
+                             <tr>
+                            <td>                                                
+                   </td>
+                            </tr>
+                        </table> 
+                        <div>
+                        <asp:Button ID="ButtonUpdateSistema" runat="server" Text="Actualizar"
+                        OnClick="ButtonUpdateSistemaseg_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="ButtonCancelSistema"
+                             runat="server" Text="Cancelar" OnClick="ButtonCancelSistemaseg_Click" />
+                             &nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="ButtonConsultaSistemasSeg"
+                             runat="server" Text="Consultas" OnClick="ButtonConsultaSistemasSeg_Click" />
+                        </div>
+                              <table>  
+                            <tr>
+                                <td colspan="2">
+                                    <asp:Label  ID="lblUpdateSistema"   runat="server"></asp:Label></td>
+                            </tr>
+                        </table>                                      
+                    </asp:View>
+                    <asp:View ID="ViewModulo" runat="server">
+                        <div> 
+                                    <asp:CheckBoxList ID="CheckBoxListModulo" runat="server">
+                                    </asp:CheckBoxList> </div>
+                                    <div><asp:Button ID="ButtonGuardarModuloSeg"
+                             runat="server" Text="Registrar" OnClick="ButtonGuardarModuloSeg_Click"  />
+                             <asp:Button ID="Button4"
+                             runat="server" Text="Actualizar" OnClick="ButtonAtualizaModuloSeg_Click"  />
+                             </div>
+                             <div><asp:Label  ID="LabUpdateModulo"   runat="server"></asp:Label></div>                              
+                    </asp:View>
+                    <asp:View ID="ViewPnntalla" runat="server">                                   
+                              <%--
+                             <div id = "submenu">
+    <ol class="treese">
+        <li>
+            <label for="folder1"><a href="intro.php">PKDiet</a></label> <input type="checkbox" checked id="folder1" /> 
+
+        </li>
+        <li>
+            <label for="folder2"><a href="http://www.pkdiet.com/pages/pkd/pkdhealth.htm">PKD Health</a></label> <input type="checkbox" checked id="folder2" /> 
+            <ol>
+                <li>
+                    <label for="subfolder1"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/renalperf.htm">Kidney Blood Flow</a></label> <input type="checkbox" id="subfolder1" /> 
+                </li>
+                <li>
+                    <label for="subfolder2"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/pkdtoxin.htm">PKD Kidney Toxins</a></label> <input type="checkbox" id="subfolder2" /> 
+                </li>
+                <li>
+                    <label for="subfolder3"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/imagingstudies.htm">Imaging Studies</a></label> <input type="checkbox" id="subfolder3" /> 
+                </li>
+                <li>
+                    <label for="subfolder4"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/habits.htm">Habits</a></label> <input type="checkbox" id="subfolder4" /> 
+                </li>
+                <li>
+                    <label for="subfolder5"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/exercise.htm">Exercise</a></label> <input type="checkbox" id="subfolder5" /> 
+                </li>
+                <li>
+                    <label for="subfolder6"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/art2hit.htm">Second Hit Phenomenon</a></label> <input type="checkbox" id="subfolder6" /> 
+                </li>
+            </ol>
+        </li>
+        <li>
+            <label for="folder3"><a href="http://www.pkdiet.com/pages/pkd/pkdsymptoms.htm">PKD Symptoms</a></label> <input type="checkbox" id="folder3" /> 
+            <ol>
+                <li>
+                    <label for="subfolder7"><a href="http://www.pkdiet.com/pages/pkd/pkdanemia.htm">Anemia</a></label> <input type="checkbox" id="subfolder7" /> 
+                </li>
+                <li>
+                    <label for="subfolder8"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/lvh.htm">Left Ventricular Hypertrophy</a></label> <input type="checkbox" id="subfolder8" /> 
+                </li>
+                <li>
+                    <label for="subfolder9"><a href="http://www.pkdiet.com/pages/pkd/pkdbp.htm">Blood Pressure</a></label> <input type="checkbox" id="subfolder9" /> 
+                    <ol>
+                        <li class="file"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/artbp.html">Blood Pressure Articles</a></li>
+                    </ol>
+                </li>
+                <li>
+                    <label for="subfolder10"><a href="http://www.pkdiet.com/pages/pkd/pkdproteinuria.htm">Proteinuria</a></label> <input type="checkbox" id="subfolder10" /> 
+                    <ol>
+                        <li class="file"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/artbrennerbio.htm">Dr. Brenner's Bio</a></li>
+                        <li class="file"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/artprotein.htm">Neutral Protein Intake</a></li>
+                        <li class="file"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/protlion.htm">Eating Like a Lion Harms GFR</a></li>
+                        <li class="file"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/arteaaa.htm">Essential Amino Acids</a></li>
+                        <li class="file"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/vlopro.htm">Very Low Protein</a></li>
+                        <li class="file"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/PKDlowprotein.htm">Low Protein</a></li>
+                        <li class="file"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/morevlopro.htm">Articles on Very Low Protein</a></li>
+                    </ol>
+                </li>
+                <li>
+                    <label for="subfolder11"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/swelling.htm">Swelling</a></label> <input type="checkbox" id="subfolder11" /> 
+                </li>
+                <li>
+                    <label for="subfolder12"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/itching.htm">Itching</a></label> <input type="checkbox" id="subfolder12" /> 
+                </li>
+                <li>
+                    <label for="subfolder13"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/PKDitchy.htm">More on Itching</a></label> <input type="checkbox" id="subfolder13" /> 
+                </li>
+                <li>
+                    <label for="subfolder14"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/pkdbirths.htm">PKD Births Choices</a></label> <input type="checkbox" id="subfolder14" /> 
+                </li>
+            </ol>
+        </li>   
+        <li>
+            <label for="folder4"><a href="http://www.pkdiet.com/pages/pkd/pkdtrials.htm">PKD Trials</a></label> <input type="checkbox" id="folder4" /> 
+            <ol>
+                <li>
+                    <label for="subfolder15"><a href="http://www.pkdiet.com/pages/pkd/pkdhalt.htm">HALT</a></label> <input type="checkbox" id="subfolder15" /> 
+                </li>
+                <li>
+                    <label for="subfolder16"><a href="http://www.pkdiet.com/pages/pkd/pkdcrisp.htm">CRISP</a></label> <input type="checkbox" id="subfolder16" /> 
+                </li>
+                <li>
+                    <label for="subfolder17"><a href="tolvaptan.php">Tolvaptan</a></label> <input type="checkbox" id="subfolder17" /> 
+                </li>
+                <li >
+                    <label for="subfolder18"><a href="http://www.pkdiet.com/pages/pkd/water.htm">Water</a></label> <input type="checkbox" id="subfolder18" />
+                    <ol>
+                    <li >  </li>
+                        <li class="file"><input type="checkbox" id="Checkbox1" /></li>
+                        <li class="file"><a href="http://www.pkdiet.com/pages/herbs/food/salt.htm">Himalayan Salt</a></li>
+                        <li class="file"><a href="http://www.pkdiet.com/pages/herbs/food/sole.htm">Solé a Recipe</a></li>
+                        <li class="file"><a href="http://www.pkdiet.com/pages/herbs/food/waterbottled.htm">Bottled Waters</a></li>
+                        <li class="file"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/cystgrowth.htm">Diminish Cyst Growth</a></li>
+                    </ol>
+                </li>
+            </ol>
+        </li>
+        <li>
+            <label for="folder5"><a href="http://www.pkdiet.com/pages/pkd/pkdtx.htm">Transplant</a></label> <input type="checkbox" id="folder5" /> 
+            <ol>
+                <li>
+                    <label for="subfolder19"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/artdonorxchg.htm">Donor Exchange</a></label> <input type="checkbox" id="subfolder19" /> 
+                </li>
+            </ol>
+        </li>   
+        <li>
+            <label for="folder6"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/artdialysis.htm">Dialysis</a></label> <input type="checkbox" checked id="folder6" /> 
+            <ol>
+                <li>
+                    <label for="subfolder20"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/PKDdialysis.htm">Dialysis vs Transplant</a></label> <input type="checkbox" id="subfolder20" /> 
+                </li>
+                <li>
+                    <label for="subfolder21"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/leucine.htm">Leucine</a></label> <input type="checkbox" id="subfolder21" /> 
+                </li>
+                <li>
+                    <label for="subfolder22"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/PKDlowpotassium.htm">Low Potassium</a></label> <input type="checkbox" id="subfolder22" /> 
+                </li>
+                <li>
+                    <label for="subfolder23"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/phosphorus.htm">Phosphorus</a></label> <input type="checkbox" id="subfolder23" /> 
+                </li>
+                <li>
+                    <label for="subfolder24"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/artalbumin.htm">Albumin</a></label> <input type="checkbox" id="subfolder24" /> 
+                </li>
+                <li>
+                    <label for="subfolder25"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/PKDlowsodium.htm">Sodium Low</a></label> <input type="checkbox" id="subfolder25" /> 
+                </li>
+                <li>
+                    <label for="subfolder26"><a href="http://www.pkdiet.com/pages/pkd/pkdarticles/morevlopro.htm">Very Low Protein</a></label> <input type="checkbox" id="subfolder26" /> 
+                </li>
+            </ol>
+        </li>
+        <li>
+            <label for="folder7"><a href="http://www.pkdiet.com/pages/pkd/pkdart.htm">PKD Articles</a></label> <input type="checkbox" id="folder7" /> 
+        </li>
+    </ol>
+</div>       
+<div>                       
+<asp:TreeView ID="someTree" runat="server" ShowCheckBoxes="All">
+        <Nodes>
+            <asp:TreeNode Text="Seguridad"> 
+                <asp:TreeNode Text="Leaf" Value="" />
+                <asp:TreeNode Text="Branch" >
+                    <asp:TreeNode Text="Leaf" />
+                    <asp:TreeNode Text="Leaf" />
+                </asp:TreeNode>
+            </asp:TreeNode>
+            <asp:TreeNode Text="Root">
+                <asp:TreeNode Text="Leaf" />
+                <asp:TreeNode Text="Leaf" />
+                <asp:TreeNode Text="Leaf" />
+                <asp:TreeNode Text="Leaf" />
+            </asp:TreeNode>
+        </Nodes>
+    </asp:TreeView>
+<asp:CheckBoxList ID="CheckBoxList1" runat="server">
+                                    </asp:CheckBoxList>
+</div>--%>
+<div id="tree" runat="server">
+     <ul id="ulconttree" runat="server">
+        <%--<li id="limodulotree" runat="server"><asp:CheckBox ID="CB1DivProyecto1" runat="server"  Text="Seguridad"/>
+            <ul>
+                <li><asp:CheckBox ID="CB1Usuarios" runat="server"  Text="Usuarios"/>
+                    <ul>
+                        <li><asp:CheckBox ID="CB1Usuarios2" runat="server"  Text="Usuarios"/></li>
+                        <li><asp:CheckBox ID="CB1Cuenta" runat="server"  Text="Cuenta"/></li>
+                    </ul>
+                    </li>
+                    <li><asp:CheckBox ID="CB1Grupos" runat="server"  Text="Grupos"/>
+                    </li>
+                    <li><asp:CheckBox ID="CB1Pefiles" runat="server"  Text="Perfiles"/>
+                    </li>
+                    <li><asp:CheckBox ID="CB1Relaciones" runat="server"  Text="Relaciones"/>
+                    </li>
+            </ul>            
+            </li>
+            <li><asp:CheckBox ID="CheckBox9" runat="server"  Text="Seguridad"/>
+            <ul>
+                <li><asp:CheckBox ID="CheckBox32" runat="server"  Text="Seguridad"/>
+                    <ul>
+                        <li><asp:CheckBox ID="CheckBox33" runat="server"  Text="Seguridad"/></li>
+                    </ul>
+                    </li>
+            </ul>
+            <ul>
+                <li><asp:CheckBox ID="CheckBox34" runat="server"  Text="Seguridad"/>
+                    <ul>
+                        <li><asp:CheckBox ID="CheckBox35" runat="server"  Text="Seguridad"/></li>
+                        <li><asp:CheckBox ID="CheckBox36" runat="server"  Text="Seguridad"/></li>
+                        <li><asp:CheckBox ID="CheckBox37" runat="server"  Text="Seguridad"/>
+                            <ul>
+                                <li><asp:CheckBox ID="CheckBox38" runat="server"  Text="Seguridad"/></li>
+                                <li><asp:CheckBox ID="CheckBox39" runat="server"  Text="Seguridad"/></li>
+                            </ul>
+                            </li>
+                        <li><asp:CheckBox ID="CheckBox40" runat="server"  Text="Seguridad"/></li>
+                        <li><asp:CheckBox ID="CheckBox41" runat="server"  Text="Seguridad"/></li>
+                        <li><asp:CheckBox ID="CheckBox42" runat="server"  Text="Seguridad"/></li>
+                    </ul>
+                    </li>
+            </ul>
+            </li>--%>
+            </ul>
+</div>
+ <div><asp:Button ID="ButtonregistraPantalla"
+                             runat="server" Text="Registrar" OnClick="ButtonRegistrarPantallasSeg_Click"  />
+                             <asp:Button ID="ButtonUpdatepantalla"
+                             runat="server" Text="Actualizar" OnClick="ButtonAtualizaPantallasSeg_Click"  />
+                             </div>
+                             <div><asp:Label  ID="LblupdatePantalla"   runat="server"></asp:Label></div>
                     </asp:View>
                 </asp:MultiView>
                 <asp:MultiView ID="MultiView2" runat="server">
@@ -1059,13 +1436,13 @@
                         </p>
                     </asp:View>
                 </asp:MultiView>
-                <p>
+                <div runat="server" id="opcionesRegSeg">
                     <asp:Button ID="Button4seg" validate="required:true" runat="server" Text="Insertar"
                         OnClick="Button4seg_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="Button5seg"
                             validate="required:false" runat="server" Text="Buscar" OnClick="Button5seg_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button
                                 ID="Button6seg" runat="server" validate="required:false" Text="Mostrar todo"
                                 OnClick="Button6seg_Click" />
-                </p>
+                </div>
                 <p>
                     <asp:Button ID="Button1" runat="server" Text="Insertar" OnClick="Button1_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button
                         ID="Button2" runat="server" Text="Buscar" OnClick="Button2_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button
@@ -1204,6 +1581,42 @@
                             <SortedDescendingHeaderStyle BackColor="#575357" />
                         </asp:GridView>
                     </asp:View>
+                    <asp:View ID="ViewSistemaGrid" runat="server">
+                        <asp:GridView ID="GridViewsistema" runat="server" AutoGenerateColumns="False" OnRowEditing="GridView2Seg_RowEditing"
+                            OnRowDeleting="GridView2Seg_RowDeleting" OnPageIndexChanging="GridView2Seg_PageIndexChanging"
+                            OnRowCancelingEdit="GridView2Seg_RowCancelingEdit" OnRowUpdating="GridView2Seg_RowUpdating"
+                            BackColor="White" BorderColor="#DEDFDE" BorderStyle="None" BorderWidth="1px"
+                            CellPadding="4" ForeColor="Black" GridLines="Vertical">
+                            <AlternatingRowStyle BackColor="White" />
+                            <Columns>
+                                <asp:BoundField HeaderText="ID" ReadOnly="True" DataField="IDSistemas" />
+                                <asp:BoundField HeaderText="Clave" ReadOnly="True" DataField="ClaveSistemas" />
+                                <asp:BoundField HeaderText="Nombre" ReadOnly="True" DataField="Nombre" />
+                                <asp:BoundField HeaderText="Descripcion" ReadOnly="True" DataField="Descripcion" />
+                                <asp:BoundField HeaderText="Cliente" ReadOnly="True" DataField="Cliente" />
+                                <asp:BoundField HeaderText="Fecha registro" ReadOnly="True" DataField="FechaRegistro" DataFormatString="{0:yyyy/MM/dd}"
+                                    ApplyFormatInEditMode="true" />
+                                <asp:BoundField HeaderText="Fecha inicio" ReadOnly="True" DataField="FechaInicio" DataFormatString="{0:yyyy/MM/dd}"
+                                    ApplyFormatInEditMode="true" />
+                                <asp:BoundField HeaderText="Fecha fin estimada" ReadOnly="True" DataField="FechaFinEstimada" DataFormatString="{0:yyyy/MM/dd}"
+                                    ApplyFormatInEditMode="true" />
+                                <asp:BoundField HeaderText="Fecha fin real" ReadOnly="True" DataField="FechaFinReal" DataFormatString="{0:yyyy/MM/dd}"
+                                    ApplyFormatInEditMode="true" />
+                                <asp:BoundField HeaderText="Tecnologias" ReadOnly="True" DataField="Tecnologias" />
+                                <asp:CommandField ShowEditButton="true" />
+                                <asp:CommandField ShowDeleteButton="true" />
+                            </Columns>
+                            <FooterStyle BackColor="#CCCC99" />
+                            <HeaderStyle BackColor="#6B696B" Font-Bold="True" ForeColor="White" />
+                            <PagerStyle BackColor="#F7F7DE" ForeColor="Black" HorizontalAlign="Right" />
+                            <RowStyle BackColor="#F7F7DE" />
+                            <SelectedRowStyle BackColor="#CE5D5A" Font-Bold="True" ForeColor="White" Width="10px" />
+                            <SortedAscendingCellStyle BackColor="#FBFBF2" />
+                            <SortedAscendingHeaderStyle BackColor="#848384" />
+                            <SortedDescendingCellStyle BackColor="#EAEAD3" />
+                            <SortedDescendingHeaderStyle BackColor="#575357" />
+                        </asp:GridView>
+                    </asp:View>
                 </asp:MultiView>
             </div>
         </div>
@@ -1213,5 +1626,6 @@
         </div>
     </div>
     </form>
+    
 </body>
 </html>

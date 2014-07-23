@@ -12,19 +12,74 @@ using System.Web.Security;
 using ProyectosWeb.BusinessLogic.general;
 using ProyectosWeb.Models;
 using ProyectosWeb.BusinessLogic.Seguridad;
+using System.Configuration;
 
 
 namespace ProyectosWeb.Views.Login
 {
     public partial class Inicio : System.Web.UI.Page
     {
-        private static SqlConnection conn = new SqlConnection("Data Source=172.16.1.31;Initial Catalog=ProyectosGestion;Persist Security Info=True;User ID=sa;Password=Adminpwd20");
+        //private static SqlConnection conn = new SqlConnection("Data Source=172.16.1.31;Initial Catalog=ProyectosGestion;Persist Security Info=True;User ID=sa;Password=Adminpwd20");        
+        
+        static string connStr = ConfigurationManager.ConnectionStrings["ProyectosGestionConnectionString"].ConnectionString;
+        private static SqlConnection conn = new SqlConnection(connStr);
         private UsuarioFacade _usuarioFacade = new UsuarioFacade(conn);
         private EnvioEmail _enviarEmail = new EnvioEmail();
+        private int usRestore;
+        private ControlarConexion control = new ControlarConexion(conn);
+        private SistemasBL _sistemasBl = new SistemasBL(conn);
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+            _sistemasBl.DropDownBindSistemas(DropDownList1);
+
+            string path = HttpContext.Current.Request.Url.AbsoluteUri;
+            if (path.Contains("?"))
+            {
+                string[] split = path.Split(new Char[] { '=' });
+                string emailex = split[1].Substring(0, 5);
+                usRestore = (split[2].Length > 0 ? int.Parse(split[2]) : 0);
+
+                if (emailex.Equals("email") && usRestore > 0)
+                {
+                    Usuario us2 = _usuarioFacade.getUsuario(usRestore);
+
+                    DateTime ahora = DateTime.Now;
+                    double horasTrancurridas = (ahora - us2.tiempoExpiracion).TotalHours;
+                    if (horasTrancurridas < 3)
+                    {
+                        if (us2.linkCliked != 1)
+                        {
+                            LabUserRestore.Text = us2.nombre;
+                            LabelNav.Text = "Restablecer Contraseña";
+                            MultiView1.ActiveViewIndex = 2;
+
+                            if (us2.linkCliked == 0)
+                            {
+
+                                int exito = _usuarioFacade.setLinkCliked(usRestore, int.Parse(hidClicks.Value.ToString()));
+                                hidClicks.Value = (int.Parse(hidClicks.Value.ToString()) + 1).ToString();
+                            }
+                        }
+                        else
+                        {
+                            LabelNav.Text = "Link Expirado";
+                            MultiView1.ActiveViewIndex = 3;
+                        }
+                    }
+                    else
+                    {
+
+                        LabelNav.Text = "Link Expirado";
+                        MultiView1.ActiveViewIndex = 3;
+                    }
+                }
+                else if (split[1].Contains("emailRestore"))
+                {
+                   
+                }
+
+            }
 
             if (Request.Form.AllKeys.Length > 0)
             {
@@ -33,10 +88,11 @@ namespace ProyectosWeb.Views.Login
                     MultiView1.ActiveViewIndex = 1;
                 }
             }
-            else {
+            else if(!LabelNav.Text.Equals("Link Expirado")&&!LabelNav.Text.Equals("Restablecer Contraseña")){
                 LabelNav.Text = "Iniciar Sesión";
                 MultiView1.ActiveViewIndex = 0;
             }
+           
         }
 
         protected void linkIniciaSesion(object sender, EventArgs e)
@@ -74,7 +130,8 @@ namespace ProyectosWeb.Views.Login
             String returnValue = string.Empty;
             msgusu.Text = "";
             msgpass.Text = "";
-            conn.Open();
+
+            control.abrirConexion();
             try
             {
                 SqlCommand cmSql = conn.CreateCommand();
@@ -96,8 +153,10 @@ namespace ProyectosWeb.Views.Login
 
                         bool passwordIsCorrect = BCrypt.Net.BCrypt.Verify(PasswordUsuario.Value.ToString(), drDatos["contraseña"].ToString());
                         if (passwordIsCorrect)
-                        {                          
-                            string[] roles = { "Admin", d };
+                        {
+                            string valor = Hidsistemaval.Value;                             
+                            
+                            string[] roles = { valor.Trim(), "" };
 
                             GenericIdentity userIdentity = new GenericIdentity(d);                            
 
@@ -121,6 +180,8 @@ namespace ProyectosWeb.Views.Login
                                   new HttpCookie(FormsAuthentication.FormsCookieName, encTicket);
                                 Response.Cookies.Add(faCookie);
 
+
+                                conn.Close();
                                 //// And send the user where they were heading
                                 //string redirectUrl =
                                 //  FormsAuthentication.GetRedirectUrl(d, false);
@@ -147,8 +208,39 @@ namespace ProyectosWeb.Views.Login
             {
                 returnValue = "error";
             }
-            conn.Close();
 
+            if (conn.State == ConnectionState.Open)
+            {
+                control.cerrarConexion();
+            }            
+        }
+
+        protected void SeleccionDropDownList(Object sender, EventArgs e)
+        {
+            
+        }
+
+        protected void RestablecerPasswordEmail_Click(object sender, EventArgs e)
+        {
+            String passwordHash = BCrypt.Net.BCrypt.HashPassword(PasswordUsRestore.Value.ToString(), BCrypt.Net.BCrypt.GenerateSalt(12));
+
+            if (usRestore > 0)
+            {
+                int exito = _usuarioFacade.UpdatePasswordRestore(usRestore, passwordHash);
+
+                if (exito > 0)
+                {
+                    LabRestorePass.ForeColor = System.Drawing.Color.Green;
+                    LabRestorePass.Text = "Los datos han sido actualizados correctamente";
+                    HyperLinkSesion.Visible = true;
+                }
+                else
+                {
+                    LabRestorePass.ForeColor = System.Drawing.Color.Red;
+                    LabRestorePass.Text = "No se ha podido actualizar la Información";
+                }
+                ClientScript.RegisterStartupScript(this.GetType(), "setTimeout", "setTimeout(function () {$('[id$=LabRestorePass]').fadeOut();}, 7000);", true);
+            }
         }
 
         [System.Web.Services.WebMethod]
@@ -206,9 +298,9 @@ namespace ProyectosWeb.Views.Login
         public static string accesAjax(string referencia, string param, String email)
         {
             string returnValue = string.Empty;
+            conn.Open();
             try
-            {
-                conn.Open();
+            {                
                 SqlCommand cmSql = conn.CreateCommand();
                 cmSql.CommandText = "Select * from " + referencia + " where  " + param + "=@parm2";
                 cmSql.Parameters.Add("@parm2", SqlDbType.VarChar);
@@ -226,14 +318,16 @@ namespace ProyectosWeb.Views.Login
                         returnValue = "true";
                     }
                 }
-                conn.Close();
+                
             }
             catch
             {
                 returnValue = "error";
             }
+            conn.Close();
             return returnValue;
 
         }
+
     }
 }

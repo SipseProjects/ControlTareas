@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using ProyectosWeb.Models.Seguridad;
 
 namespace ProyectosWeb.Models
 {
@@ -16,6 +17,7 @@ namespace ProyectosWeb.Models
         public Persona persona= new Persona();
         public DateTime tiempoExpiracion;
         public int linkCliked;
-
+        public List<Perfil> PerfilesUsu = new List<Perfil>();
+        public List<Grupo> GruposUsu = new List<Grupo>();
     }
 }

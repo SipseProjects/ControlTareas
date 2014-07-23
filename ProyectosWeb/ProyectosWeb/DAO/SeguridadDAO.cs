@@ -5,12 +5,16 @@ using System.Web;
 using System.Data.SqlClient;
 using System.Data;
 using System.Diagnostics;
+using System.Configuration;
+
 namespace ProyectosWeb.DAO
 {
       
     public class SeguridadDAO
     {
-        private SqlConnection conn = new SqlConnection("Data Source=172.16.1.31;Initial Catalog=ProyectosGestion;Persist Security Info=True;User ID=sa;Password=Adminpwd20");
+        static string connStr = ConfigurationManager.ConnectionStrings["ProyectosGestionConnectionString"].ConnectionString;
+
+        private SqlConnection conn = new SqlConnection(connStr);
 
         public  DataSet getDataset(string command)
         {          

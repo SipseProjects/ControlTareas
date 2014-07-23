@@ -1,0 +1,82 @@
+﻿
+	   ol.tree
+{
+    padding: 0 0 0 30px;
+    width: 130px;
+
+}
+ol.tree a {
+    color:#996637;
+    font-family: Tunga, sans-serif;
+    font-size: 12px;
+}
+
+    li 
+    { 
+        position: relative; 
+        margin-left: -15px;
+    }
+    li.file
+    {
+        margin-left: -1px !important;
+    }
+        li.file a
+        {
+            color:#996637;
+            font-family: Tunga, sans-serif;
+            font-size: 12px;
+            padding-left: 21px;
+            text-decoration: none;
+            display: block;
+        }
+
+        li.file a:visited
+        {
+            color:#996637;
+            font-family: Tunga, sans-serif;
+            font-size: 12px;
+            padding-left: 21px;
+            text-decoration: none;
+            display: block;
+        }
+
+    li input
+    {
+        position: absolute;
+        left: 0;
+        margin-left: 0;
+        z-index: 2;
+        cursor: pointer;
+        height: 1em;
+        width: 1em;
+        top: 0;
+        color:blue;
+    }
+        li input + ol
+        {
+            background: url(images/toggle-small-expand.png) 40px 0 no-repeat;
+            margin: -0.938em 0 0 -44px;
+            
+            height: 1em;
+        }
+        li input + ol > li { height: 0; overflow: hidden; margin-left: -14px !important; padding-left: 1px; }
+    li label
+    {
+        cursor: pointer;
+        display: block;
+        padding-left: 17px;
+        color:#996637;
+        font-family: Tunga, sans-serif;
+        font-size: 12px;
+    }
+
+    li input:checked + ol
+    {
+        background: url(images/toggle-small.png) 40px 5px no-repeat;
+        margin: -1.25em 0 0 -44px; 
+        padding: 1.563em 0 0 80px;
+        height: auto;
+    }
+        li input:checked + ol > li { height: auto; margin: 0 0 0.125em;}
+        li input:checked + ol > li:last-child { margin: 0 0 0.063em;}
+

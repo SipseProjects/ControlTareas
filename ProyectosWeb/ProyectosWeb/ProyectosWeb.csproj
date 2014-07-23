@@ -82,6 +82,10 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\expandabletree.css" />
+    <Content Include="jquery-tree-checkboxes\minified\images\anchor.gif" />
+    <Content Include="jquery-tree-checkboxes\minified\jquery.tree.min.css" />
+    <Content Include="jquery-tree-checkboxes\minified\jquery.tree.min.js" />
     <Content Include="Views\Login\Login.aspx" />
     <Content Include="CapturaTareas.aspx" />
     <Content Include="LoginSources\css\bootstrap-responsive.min.css" />
@@ -146,16 +150,21 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\general\ControlarConexion.cs" />
     <Compile Include="BusinessLogic\general\EnvioEmail.cs" />
     <Compile Include="BusinessLogic\Seguridad\GruposBL.cs" />
     <Compile Include="BusinessLogic\Seguridad\PerfilBL.cs" />
     <Compile Include="BusinessLogic\Seguridad\PersonaBL.cs" />
+    <Compile Include="BusinessLogic\Seguridad\SistemasBL.cs" />
     <Compile Include="BusinessLogic\Seguridad\UsuarioBL.cs" />
     <Compile Include="DAO\SeguridadDAO.cs" />
     <Compile Include="DAO\SeguridadDAOS\GrupoDAO.cs" />
     <Compile Include="DAO\SeguridadDAOS\PerfilDAO.cs" />
     <Compile Include="DAO\SeguridadDAOS\PersonaDAO.cs" />
+    <Compile Include="DAO\SeguridadDAOS\SistemasDAO.cs" />
     <Compile Include="DAO\SeguridadDAOS\UsuarioDAO.cs" />
+    <Compile Include="Models\Seguridad\PerfilesUsuarios.cs" />
+    <Compile Include="Models\Seguridad\Sistema.cs" />
     <Compile Include="Views\Login\Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -212,7 +221,19 @@
     <None Include="LoginSources\phones.psd" />
     <None Include="LoginSources\README.md" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj">
+      <Project>{97F1ACC6-5ACA-4834-B78B-B7FEAE88AC92}</Project>
+      <Name>BusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Modelos\Models.csproj">
+      <Project>{13AB34D8-DCB0-4813-A0E1-4C4FA1F740FD}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <ProjectExtensions>

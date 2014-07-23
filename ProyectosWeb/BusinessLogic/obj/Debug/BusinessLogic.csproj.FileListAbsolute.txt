@@ -1,0 +1,9 @@
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\BusinessLogic\bin\Debug\BusinessLogic.dll
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\BusinessLogic\bin\Debug\BusinessLogic.pdb
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\BusinessLogic\bin\Debug\DAOS.dll
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\BusinessLogic\bin\Debug\Models.dll
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\BusinessLogic\bin\Debug\DAOS.pdb
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\BusinessLogic\bin\Debug\Models.pdb
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\BusinessLogic\obj\Debug\BusinessLogic.csprojResolveAssemblyReference.cache
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\BusinessLogic\obj\Debug\BusinessLogic.dll
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\BusinessLogic\obj\Debug\BusinessLogic.pdb
