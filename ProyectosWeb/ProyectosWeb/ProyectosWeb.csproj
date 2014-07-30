@@ -82,7 +82,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="css\expandabletree.css" />
+    <Content Include="css\Seguridad\Seguridad.css" />
     <Content Include="jquery-tree-checkboxes\minified\images\anchor.gif" />
     <Content Include="jquery-tree-checkboxes\minified\jquery.tree.min.css" />
     <Content Include="jquery-tree-checkboxes\minified\jquery.tree.min.js" />

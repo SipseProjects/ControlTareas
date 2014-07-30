@@ -12,26 +12,26 @@ namespace BusinessLogic.Seguridad
 {
     public class PantallaBL
     {
-        private PantallaDAO _modulodao;
+        private PantallaDAO _pantalladao;
         public PantallaBL(SqlConnection con)
         {
-            _modulodao = new PantallaDAO(con);
+            _pantalladao = new PantallaDAO(con);
         }
         public List<Pantalla> getPantallas()
         {
-            return _modulodao.getPantallas();
+            return _pantalladao.getPantallas();
         }
         public DbQueryResult registrarPantalla(Pantalla pantalla)
         {
-            return _modulodao.registrarPantalla(pantalla);
+            return _pantalladao.registrarPantalla(pantalla);
         }
         public DbQueryResult UpdatePantalla(Pantalla pantalla)
         {
-            return _modulodao.UpdatePantalla(pantalla);
+            return _pantalladao.UpdatePantalla(pantalla);
         }
         public Pantalla getPantalla(String nombre, String idasp)
         {
-            return _modulodao.getPantalla(nombre, idasp);
+            return _pantalladao.getPantalla(nombre, idasp);
         }
     }
 }

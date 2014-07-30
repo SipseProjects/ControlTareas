@@ -40,6 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Seguridad\ControlAcceso\CAUsuarioBL.cs" />
+    <Compile Include="Seguridad\SistemasModulosBL.cs" />
+    <Compile Include="Seguridad\UsuariosModulosBL.cs" />
+    <Compile Include="Seguridad\UsuariosOpcionesBL.cs" />
+    <Compile Include="Seguridad\UsuariosPantallasBL.cs" />
+    <Compile Include="Seguridad\PerfilesOpcionesBL.cs" />
+    <Compile Include="Seguridad\PerfilesPantallasBL.cs" />
+    <Compile Include="Seguridad\PerfilesModulosBL.cs" />
+    <Compile Include="Seguridad\OpcionBL.cs" />
     <Compile Include="Seguridad\PantallaBL.cs" />
     <Compile Include="Seguridad\ModuloBL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -54,6 +63,7 @@
       <Name>Models</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

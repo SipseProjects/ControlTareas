@@ -18,7 +18,6 @@ using ProyectosWeb.BusinessLogic.Seguridad;
 using System.Security.Principal;
 using System.Web.Security;
 using System.Configuration;
-using System.Web.UI.HtmlControls;
 using ProyectosWeb.Models.Seguridad;
 using System.Globalization;
 using BusinessLogic.Seguridad;
@@ -41,20 +40,33 @@ namespace ProyectosWeb
         
         private SeguridadDAO accesDao = new SeguridadDAO(); 
         String PageIndex,PrevIndex;
-        private int idusuarioSeleccionado;
+        private int idusuarioSeleccionado;     
      
-       private  long j=0;
-       DateTime hours;
        BackgroundWorker bw = new BackgroundWorker();
 
        ModuloBL _modulosBl = new ModuloBL(conn);
        PantallaBL _pantallaBL = new PantallaBL(conn);
+       OpcionBL _opcionBL = new OpcionBL(conn);
+
+       PerfilesModulosBL _PerfilesModulosBL = new PerfilesModulosBL(conn);
+       PerfilesPantallasBL _PerfilesPantallasBL = new PerfilesPantallasBL(conn);
+       PerfilesOpcionesBL _PerfilesOpcionesBL = new PerfilesOpcionesBL(conn);
+
+       UsuariosModulosBL _UsuariosModulosBL = new UsuariosModulosBL(conn);
+       UsuariosPantallasBL _UsuariosPantallasBL = new UsuariosPantallasBL(conn);
+       UsuariosOpcionesBL _UsuariosOpcionesBL = new UsuariosOpcionesBL(conn);
+       SistemasModulosBL _SistemasModulosBL = new SistemasModulosBL(conn);
+        
+
+        
 
       private const string litreepant = "litreepant";
       private const string litreeop = "litreeop";
       private const string litreepop = "litreepop";
       private const string Modtree = "Modtree";
       private const string litreesubop = "litreesubop";
+      private const string limod = "limod";
+       private const string redirectinicio="/Views/Login/Inicio.aspx";
 
       private int contCBKSTotal;
       private int subOpcionul;
@@ -65,55 +77,41 @@ namespace ProyectosWeb
             // Get the authentication cookie
             string cookieName = FormsAuthentication.FormsCookieName;
             HttpCookie authCookie = Context.Request.Cookies[cookieName];
-            if (authCookie == null)
+            if (authCookie != null)
             {
+                String userName = Context.User.Identity.Name;
+                usuarioLogin.Text = userName + ", ";
+                Usuario uslog = _usuarioFacade.getUsuarioLogeado(userName);
+                if (uslog.PerfilesUsu.Count > 0)
+                {
+                    List<PerfilesModulos> acceso = _PerfilesModulosBL.getPerfilesModulos(uslog.PerfilesUsu[0].idPerfil, 0);
+                    for (int pm = 0; pm < acceso.Count; pm++)
+                    {
+                        PerfilesModulos pmodulo = acceso[pm];
+                        FindControl(pmodulo.modulo.h3Id).Visible = bool.Parse(pmodulo.divVisible);
+                        FindControl(pmodulo.modulo.divId).Visible = bool.Parse(pmodulo.divVisible);
 
-                //FindControl("DivProyecto1").Visible = false;
-                //FindControl("Proyecto1").Visible = false;
+                    }
+                    //List<PerfilesPantallas> accesopantalla = _PerfilesPantallasBL.getPerfilesPantallas(uslog.PerfilesUsu[0].idPerfil, 0);
+                    //for (int pm = 0; pm < accesopantalla.Count; pm++)
+                    //{
+                    //    PerfilesPantallas ppantalla = accesopantalla[pm];
+                    //    FindControl(ppantalla.pantalla.idAsp).Visible = bool.Parse(ppantalla.visible);
+                    //}
+                    //List<PerfilesOpciones> accesoopcion = _PerfilesOpcionesBL.getPerfilesOpciones(uslog.PerfilesUsu[0].idPerfil, 0);
+                    //for (int pm = 0; pm < accesoopcion.Count; pm++)
+                    //{
+                    //    PerfilesOpciones popcion = accesoopcion[pm];
+                    //    FindControl(popcion.opcion.idAsp).Visible = bool.Parse(popcion.visible);
+                    //}
+                }
+                else {
+                    Response.Redirect(redirectinicio);
+                }
 
+                
 
-                //foreach (Control c in accordion.Controls)
-                //{
-                //    try
-                //    {
-                //        //if (c.GetType() == typeof(LiteralControl))
-                //        //    Response.Write(((LiteralControl)c).Text);
-                //        //else
-                //        //    if (c.GetType() == typeof(TextBox))
-                //        //        Response.Write(((TextBox)c).Text);
-                //        //    else
-                //        //        if (c.GetType() == typeof(TextBox))
-                //        //            Response.Write(((TextBox)c).Text);
-                //        //        else
-                //        if (c.GetType() == typeof(HtmlGenericControl) && ((HtmlGenericControl)c).TagName.ToLower().Equals("h3"))
-                //        {
-                //            Response.Write(((HtmlGenericControl)c).InnerText);
-                //            Response.Write(((HtmlGenericControl)c).ClientID);
-                //        }
-
-                //        if (c.GetType() == typeof(HtmlGenericControl) && ((HtmlGenericControl)c).TagName.ToLower().Equals("div"))
-                //        {
-                //            Response.Write(((HtmlGenericControl)c).InnerText);
-                //            Response.Write(((HtmlGenericControl)c).ClientID);
-                //        }
-                //    }
-                //    catch {
-
-                //        if (c.GetType() == typeof(HtmlGenericControl) && ((HtmlGenericControl)c).TagName.ToLower().Equals("h3"))
-                //        {
-                //            Response.Write(((HtmlGenericControl)c).ClientID);
-                //        }
-
-                //        if (c.GetType() == typeof(HtmlGenericControl) && ((HtmlGenericControl)c).TagName.ToLower().Equals("div"))
-                //        {
-                //            Response.Write(((HtmlGenericControl)c).ClientID);
-                //        }
-                //        //////Response.Write(((HtmlGenericControl)c).ClientID);
-                //        //if (c.GetType() == typeof(HtmlGenericControl) && ((HtmlGenericControl)c).TagName.ToLower().Equals("h3"))
-                //        //Response.Write(((HtmlGenericControl)c).ClientID);
-                //    }   
-                //}
-
+                //(GridView2Seg.Columns[10]).Visible = false;
 
                 //Desactivar Modulo Seguridad
                 MultiView1Seg.ActiveViewIndex = -1;
@@ -126,9 +124,7 @@ namespace ProyectosWeb
                 
                 //!Context.User.Identity.AuthenticationType.ToLower().Equals("ntlm")
 
-                String  userName = Context.User.Identity.Name;
-                usuarioLogin.Text = userName + ", ";
-                Usuario uslog = _usuarioFacade.getUsuarioLogeado(userName);
+                
 
                 int linkButtonTareas = 0;
                 if (Request.Form["__EVENTTARGET"] != null)
@@ -201,7 +197,22 @@ namespace ProyectosWeb
                         else if (PageIndex.Equals("Pantallas"))
                         {
                             MultiView1Seg.ActiveViewIndex = 10;
-                            llenarTree(false);
+                            llenarTree(false,false);
+                        }
+                        else if (PageIndex.Equals("Opciones"))
+                        {
+                            MultiView1Seg.ActiveViewIndex = 10;
+                            llenarTree(true,false);
+                        }
+                        else if (PageIndex.Equals("Acceso por Perfiles") || PageIndex.Equals("Acceso por Usuarios"))
+                        {
+                            MultiView1Seg.ActiveViewIndex = 11;
+                            llenarTree(true,true);
+                        }
+                        else if (PageIndex.Equals("Sistemas y Módulos"))
+                        {
+                            MultiView1Seg.ActiveViewIndex = 12;
+                            llenarTree(false,false);
                         }
                         
                     }
@@ -266,7 +277,7 @@ namespace ProyectosWeb
                 }
             }
             else {
-                Response.Redirect("/Views/Login/Inicio.aspx");
+                Response.Redirect(redirectinicio);
             }   
         }
 
@@ -387,7 +398,7 @@ namespace ProyectosWeb
                 ((BoundField)GridView2Seg.Columns[8]).DataField = "Email";
                 GridView2Seg.Columns[9].HeaderText = "Telefono";
                 ((BoundField)GridView2Seg.Columns[9]).DataField = "Telefono";
-                gvbindSeg();                        
+                gvbindSeg();                   
         }
         protected void CuentaUsuarioOnClick(object sender, EventArgs e)
         {
@@ -684,26 +695,59 @@ namespace ProyectosWeb
             MultiView2SegGrid.ActiveViewIndex = -1;
             activarbotonSeg(false);
             MultiView1Seg.ActiveViewIndex = 10;
-            llenarTree(false); 
+            llenarTree(false,false); 
         }
 
 
         protected void ControlAccesOpcionesOnClick(object sender, EventArgs e)
         {
             actualizaPagina("Opciones");
-            //LblupdatePantalla.Text = "";
+            LblupdatePantalla.Text = "";
             MultiView2SegGrid.ActiveViewIndex = -1;
             activarbotonSeg(false);
             MultiView1Seg.ActiveViewIndex = 10;
-            llenarTree(true); 
+            llenarTree(true,false); 
+        }
+        
+        protected void RelAccesoPerfilesOnClick(object sender, EventArgs e)
+        {
+            actualizaPagina("Acceso por Perfiles");
+            LblStatusAccePerfil.Text = "";
+            MultiView2SegGrid.ActiveViewIndex = -1;
+            _perfilBL.DropDownBinPerfiles(DropDownAccesoRelaciones);
+            activarbotonSeg(false);
+            MultiView1Seg.ActiveViewIndex = 11;
+            llenarTree(true,true); 
+        }
+
+        protected void RelAccesoModSistemaOnClick(object sender, EventArgs e)
+        {
+            actualizaPagina("Sistemas y Módulos");
+            //LblStatusAccePerfil.Text = "";
+            MultiView2SegGrid.ActiveViewIndex = -1;
+            _sistemaBL.DropDownBindSistemas(DropDownListModSis);
+            activarbotonSeg(false);
+            MultiView1Seg.ActiveViewIndex = 12;
+            llenarTree(false,false); 
+        }
+
+        protected void RelAccesoUsuariosOnClick(object sender, EventArgs e)
+        {
+            actualizaPagina("Acceso por Usuarios");
+            LblStatusAccePerfil.Text = "";
+            MultiView2SegGrid.ActiveViewIndex = -1;
+            _perfilBL.DropDownBinPerfiles(DropDownAccesoRelaciones);
+            activarbotonSeg(false);
+            MultiView1Seg.ActiveViewIndex = 11;
+            llenarTree(true,true);
+            _usuarioFacade.DropDownBinUsuarios(DropDownAccesoRelaciones);
         }
 
         public void cambiarNomEtiquetaRelaciones(string nombre, string nombre2)
         { 
         LabelUsuariosSeg.Text=nombre;
         LabelGrupAsigSeg.Text = nombre2 + " Asignados";
-        LabelGruposSeg.Text = nombre2 + " No Asignados";
-   
+        LabelGruposSeg.Text = nombre2 + " No Asignados";   
         }
 
         protected void SeleccionDropDownList(Object sender, EventArgs e)
@@ -730,7 +774,36 @@ namespace ProyectosWeb
                 }
                 HidUsuSeleccionadoSeg.Value = "" + idseleccionado;
             }
+            }        
+
+        protected void SeleccionDropDownListAcceso(Object sender, EventArgs e)
+        {
+            string valor = DropDownAccesoRelaciones.SelectedValue;
+           
+            if (valor.Trim().Length > 0)
+            {
+                int idseleccionado = int.Parse(valor);
+                HidUsuSeleccionadoSeg.Value = "" + idseleccionado;
+
+                if (PageIndex.Equals("Acceso por Perfiles") || PageIndex.Equals("Acceso por Usuarios"))
+                {
+                    llenarTree(true, true);
+                }                                
             }
+        }
+
+        protected void SeleccionDropDownModuloSistema(Object sender, EventArgs e)
+        {
+            string valor = DropDownListModSis.SelectedValue;
+           
+            if (valor.Trim().Length > 0)
+            {
+                int idseleccionado = int.Parse(valor);
+                HidUsuSeleccionadoSeg.Value = "" + idseleccionado;
+               llenarTree(false, false);                                                
+            }
+        }
+
         protected void SeleccionUsuarioOnClick(object sender, EventArgs e)
         {
             if (DropDownListadoSeg.SelectedItem != null)
@@ -1399,20 +1472,33 @@ namespace ProyectosWeb
            }
         }
 
-        private void agregarCheckboxmodulos(Modulo modulo,int conul,bool subop) {
+        private void agregarCheckboxmodulos(Modulo modulo,int conul,bool subop,Control principal, bool relAccesoPerfil) {
             HtmlGenericControl li = new HtmlGenericControl("li");
-            li.ID = "limod"+modulo.Nombre;
-            FindControl("ulconttree").Controls.Add(li);
+            li.ID = limod+modulo.Nombre;
+         
+            principal.Controls.Add(li);
             CheckBox v = new CheckBox();
             v.Text = modulo.Nombre;
             v.ID = "CB1tree"+Modtree+"," + modulo.idModulo;
             li.Controls.Add(v);
+            
+            if (PageIndex.Equals("Sistemas y Módulos"))
+            {
+                sistemasModulosEnDB(v, int.Parse(HidUsuSeleccionadoSeg.Value), modulo.idModulo);
+            }else{
+            if (PageIndex.Equals("Acceso por Perfiles")) {
+                perfilesModulosEnDB(v, int.Parse(HidUsuSeleccionadoSeg.Value), modulo.idModulo);
+            }
+            else if (PageIndex.Equals("Acceso por Usuarios")) {
+                UsuariosModulosEnDB(v, int.Parse(HidUsuSeleccionadoSeg.Value), modulo.idModulo);
+            };
+            
             agregarCheckboxPantallas(li, modulo,conul,subop);
+            }
         }
         private void agregarCheckboxPantallas(HtmlGenericControl licont,Modulo modulo, int conul,bool subop)
         {           
-            Control cd = FindControl(modulo.divId);
-            
+            Control cd = FindControl(modulo.divId);            
              
             int cont = 0;
             int op = 0;
@@ -1422,6 +1508,10 @@ namespace ProyectosWeb
             int tieneop = 0;
             int subOpcion = 0;
             subOpcionul = 0;
+            int auxop4 = 0;
+            int auxp4 = 0;
+            HtmlGenericControl ulp4 = new HtmlGenericControl("ul");
+            HtmlGenericControl liop5 = new HtmlGenericControl("li");
             foreach (Control c in cd.Controls)
             {
                 valido = 0;
@@ -1434,7 +1524,7 @@ namespace ProyectosWeb
                     if (c.GetType() == typeof(LinkButton))
                     {
                         pantalla = ((LinkButton)c).Text.Trim() + "";
-                        pantalaId ="" + ((LinkButton)c).ClientID;
+                        pantalaId = "" + ((LinkButton)c).ClientID;
                         opcionp = "" + ((LinkButton)c).CommandName;
                         valido = 1;                      
                     }
@@ -1442,24 +1532,54 @@ namespace ProyectosWeb
                     {
                         hidopcionpant.Value = "" + ((Label)c).Text.Trim();
                         hidpantallaid.Value = "" + ((Label)c).ClientID;
+                        opcionp = "" + ((Label)c).Attributes["CommandName"];
                         valido = 1;
-                        opsub = 0;                      
+                        opsub = 0;                        
                     }
                     if (c.GetType() == typeof(Label) || c.GetType() == typeof(LinkButton))
                     {
-                        tieneop++;
+                        tieneop++;                    
+                    }
+                    if (c.GetType() == typeof(HtmlGenericControl) && ((HtmlGenericControl)c).TagName.ToLower().Equals("li"))
+                    {
+                        //hidLiidButton.Value = "" + ((HtmlGenericControl)c).ClientID;
+                        //hidpantallaid.Value = "" + ((HtmlGenericControl)c).ClientID;
+                        //pantalaId = "" + ((HtmlGenericControl)c).ClientID;
+                        //tieneop++;
+
+                        
                     }
                 }
                 catch
                 {
                 }
+                
                 if(tieneop==1){
                     HtmlGenericControl ul = new HtmlGenericControl("ul");
                     ul.ID = "ultree" + "" + conul + "" + modulo.idModulo;
                     licont.Controls.Add(ul);
                     tieneop++;
                 }
-                if (opcionp.Trim().Equals("sub"))
+
+                if (opcionp.Trim().Contains("op4"))
+                {
+                    cont++;
+                    ulp4 = new HtmlGenericControl("ul");
+                    ulp4.ID = "ultreep4" + "" + tieneop + "" + modulo.idModulo;
+                    liop5 = new HtmlGenericControl("li");
+                    liop5.ID = litreepant + "" + cont + "" + modulo.idModulo;
+                    CheckBox vop = new CheckBox();
+                    vop.Text = hidopcionpant.Value;
+                    vop.ID = hidpantallaid.Value + "," + cont + "," + modulo.idModulo;
+                    liop5.Controls.Add(vop);
+                    ulp4.Controls.Add(liop5);
+                    pantallasRegistradas(vop, hidopcionpant.Value, hidpantallaid.Value);
+                    auxp4 = tieneop;
+                    opsub = 2;
+                    op++;                    
+                }
+
+                if (opcionp.Trim().Contains("sub") || opcionp.Trim().Contains("op5"))
                 {
                     opsub++;
                     HtmlGenericControl li;
@@ -1467,43 +1587,51 @@ namespace ProyectosWeb
                     {
                         cont++;
                         li = new HtmlGenericControl("li");                   
-                        li.ID = litreepant + "" + cont + "" + modulo.idModulo;
-                        FindControl("ultree" + "" + conul + "" + modulo.idModulo).Controls.Add(li);
+                        li.ID = litreepant + "" + cont + "" + modulo.idModulo;                        
+                            FindControl("ultree" + "" + conul + "" + modulo.idModulo).Controls.Add(li);                       
                         CheckBox v = new CheckBox();
                         v.Text = hidopcionpant.Value;                          
                         v.ID = hidpantallaid.Value + "," + "" + cont + "" + opsub + "," + modulo.idModulo;
-                        pantallasRegistradas(v,hidopcionpant.Value, hidpantallaid.Value);
-                        li.Controls.Add(v);
+                        pantallasRegistradas(v,hidopcionpant.Value, hidpantallaid.Value);                        
+                            li.Controls.Add(v);                                                
                         aux = cont;
                     }
                     else {
 
                         li = (FindControl(litreepant + "" + aux + "" + modulo.idModulo) as HtmlGenericControl);
                     }
-
                     
-                    if (pantalla.Trim().Length > 0)
-                    {
-                        op++;
-                        cont++;
-                        HtmlGenericControl ulop = new HtmlGenericControl("ul");
-                        ulop.ID = "ultreeop" + "" + op + "" + modulo.idModulo;
-                        li.Controls.Add(ulop);
-                        HtmlGenericControl liop = new HtmlGenericControl("li");             
-                        liop.ID = litreepant + "" + cont + "" + modulo.idModulo;
-                        ulop.Controls.Add(liop);
-                        CheckBox vop = new CheckBox();
-                        vop.Text = pantalla;                                    
-                        vop.ID = pantalaId + "," + op + "," + modulo.idModulo;
-                        pantallasRegistradas(vop,pantalla,pantalaId);
-                        liop.Controls.Add(vop);
+                        if (pantalla.Trim().Length > 0)
+                        {
+                            op++;
+                            cont++;
+                            HtmlGenericControl ulop = new HtmlGenericControl("ul");
+                            ulop.ID = "ultreeop" + "" + op + "" + modulo.idModulo;
+                            if (opcionp.Trim().Contains("op5"))
+                            {
+                                li.Controls.Add(ulp4);
+                                liop5.Controls.Add(ulop);
+                            }
+                            else{
+                            li.Controls.Add(ulop);
+                             }
+                            HtmlGenericControl liop = new HtmlGenericControl("li");                            
+                            liop.ID = litreepant + "" + cont + "" + modulo.idModulo;                            
+                                ulop.Controls.Add(liop);                            
+                            CheckBox vop = new CheckBox();
+                            vop.Text = pantalla;
+                            vop.ID = pantalaId + "," + op + "," + modulo.idModulo;                            
+                            //vop.ID = hidLiidButton.Value + "," + op + "," + modulo.idModulo;
+                            pantallasRegistradas(vop, pantalla, pantalaId);
+                            liop.Controls.Add(vop);
 
-                        if(subop){
-                            agregarCheckboxOpciones(liop, pantalla, modulo.idModulo);
-                        }
-                    }
+                            if (subop)
+                            {
+                                    agregarCheckboxOpciones(liop, pantalla, modulo.idModulo, opcionp, vop.ID, pantalaId);                                
+                            }
+                        }                                       
                 }
-                else if ((pantalla.Trim().Length > 0 )&&valido == 1)
+                else if (!opcionp.Trim().Contains("sub")&&!opcionp.Trim().Contains("op5")&&(pantalla.Trim().Length > 0) && valido == 1)
                 {                    
                     cont++;
                     HtmlGenericControl li = new HtmlGenericControl("li");
@@ -1514,6 +1642,11 @@ namespace ProyectosWeb
                     v.ID = pantalaId + "," + cont + "," + modulo.idModulo;
                     pantallasRegistradas(v,pantalla,pantalaId);
                     li.Controls.Add(v);
+
+                    if (subop)
+                    {
+                        agregarCheckboxOpciones(li, pantalla, modulo.idModulo, opcionp, v.ID,"");
+                    }
                 }
                 
             }
@@ -1521,110 +1654,514 @@ namespace ProyectosWeb
             hidcontchecks.Value = contCBKSTotal.ToString();
            
         }
+        private HtmlGenericControl agregarOpcionCHKBOX(String idLiUlparent, String idLi, String nomChkbox, String idChkbox)
+        {
+            HtmlGenericControl li = new HtmlGenericControl("li");
+            li.ID = idLi;
+            FindControl(idLiUlparent).Controls.Add(li);
+            CheckBox v = new CheckBox();
+            v.Text = nomChkbox;
+            v.ID = idChkbox;
+            li.Controls.Add(v);
+            return li;
+        }
+        private void agregarSubOpcionCHKBOX(String ulId, HtmlGenericControl liParent, String idliSub, String nomCHKBox, String idChkBox)
+        {
+            HtmlGenericControl ulop = new HtmlGenericControl("ul");
+            ulop.ID = ulId;
+            liParent.Controls.Add(ulop);
+            HtmlGenericControl liop = new HtmlGenericControl("li");
+            liop.ID = idliSub;
+            ulop.Controls.Add(liop);
+            CheckBox vop = new CheckBox();
+            vop.Text = nomCHKBox;
+            vop.ID = idChkBox;
+            liop.Controls.Add(vop);
+        }
 
-        private void pantallasRegistradas(CheckBox pregis,String nombre, String idasp) { 
-        
-            Pantalla pid = _pantallaBL.getPantalla(null, idasp);
-            if (pid.idPantalla > 0)
+        private void pantallasRegistradas(CheckBox pregis,String nombre, String idasp) {
+            if (PageIndex != null)
             {
-                pregis.ID = pregis.ID + "," + pid.idPantalla;
-                pregis.Checked = true;
-                pregis.ForeColor = System.Drawing.Color.Green;
+                Pantalla pid = _pantallaBL.getPantalla(null, idasp);
+                if (pid.idPantalla > 0)
+                {
+                    pregis.ID = pregis.ID + "," + pid.idPantalla;
+                    if (PageIndex.Equals("Pantallas"))
+                    {
+                        pregis.Checked = true;
+                        pregis.ForeColor = System.Drawing.Color.Green;
+                    }
+                    else if (PageIndex.Equals("Acceso por Perfiles"))
+                    {
+                        perfilesPantallasEnDB(pregis, int.Parse(HidUsuSeleccionadoSeg.Value), pid.idPantalla);
+                    }else if (PageIndex.Equals("Acceso por Usuarios"))
+                    {
+                        UsuariosPantallasEnDB(pregis, int.Parse(HidUsuSeleccionadoSeg.Value), pid.idPantalla);
+                    }
+
+                    
+                }                
+            }
+        }        
+
+        private void OpcionesRegistradas(CheckBox pregis, String idasp, String idcheckbox)
+        {
+            if (PageIndex != null)
+            {                
+                    Opcion oid = _opcionBL.getOpcion(idasp, idcheckbox);
+                    if (oid.idPantalla > 0)
+                    {
+                        pregis.ID = pregis.ID + "," + oid.idOpcion;
+                        if (PageIndex.Equals("Opciones"))
+                        {
+                        pregis.Checked = true;
+                        pregis.ForeColor = System.Drawing.Color.Green;
+                        }
+                        else if (PageIndex.Equals("Acceso por Perfiles"))
+                        {
+                            perfilesOpcionesEnDB(pregis,oid.idOpcion, int.Parse(HidUsuSeleccionadoSeg.Value));
+                        }
+                        else if (PageIndex.Equals("Acceso por Usuarios"))
+                        {
+                            UsuariosOpcionesEnDB(pregis, oid.idOpcion, int.Parse(HidUsuSeleccionadoSeg.Value));
+                        }
+
+                        
+                }
             }
         }
 
-        private void agregarCheckboxOpciones(HtmlGenericControl liPantalla, String nompantalla, int idmodulo)
+        private void perfilesModulosEnDB(CheckBox regis, int idperfil, int idmodulo)
+        {
+            PerfilesModulos pmod = _PerfilesModulosBL.getPerfilModulo(idperfil, idmodulo);
+            if (pmod.idPerfilModulo > 0)
+            {
+                regis.ID = regis.ID + "," + pmod.idPerfilModulo;
+
+                if (bool.Parse(pmod.divVisible))
+                {
+                    regis.Checked = true;
+                    regis.ForeColor = System.Drawing.Color.Green;
+                }
+            }
+        }
+
+        private void perfilesPantallasEnDB(CheckBox regis, int idperfil, int idpantalla)
+        {
+            PerfilesPantallas ppantalla = _PerfilesPantallasBL.getPerfilPantalla(idperfil, idpantalla);
+            if (ppantalla.idPerfilPantalla > 0)
+            {
+                regis.ID = regis.ID + "," + ppantalla.idPerfilPantalla;
+
+                if (bool.Parse(ppantalla.visible))
+                {
+                    regis.Checked = true;
+                    regis.ForeColor = System.Drawing.Color.Green;
+                }
+            }
+        }
+
+        private void perfilesOpcionesEnDB(CheckBox regis, int idOpcion, int idPerfil)
+        {
+            PerfilesOpciones perfilopcion = _PerfilesOpcionesBL.getPerfilOpcion(idOpcion, idPerfil);
+            if (perfilopcion.idPerfilOpcion > 0)
+            {
+                regis.ID = regis.ID + "," + perfilopcion.idPerfilOpcion;
+
+                if (bool.Parse(perfilopcion.visible))
+                {
+                    regis.Checked = true;
+                    regis.ForeColor = System.Drawing.Color.Green;
+                }
+            }
+        }
+
+        private void UsuariosModulosEnDB(CheckBox regis, int idusuario, int idmodulo)
+        {
+           UsuariosModulos umod = _UsuariosModulosBL.getUsuarioModulo(idusuario, idmodulo);
+           if (umod.idUsuarioModulo > 0)
+            {
+                regis.ID = regis.ID + "," + umod.idUsuarioModulo;
+
+                if (bool.Parse(umod.divVisible))
+                {
+                    regis.Checked = true;
+                    regis.ForeColor = System.Drawing.Color.Green;
+                }
+            }
+        }
+
+        private void UsuariosPantallasEnDB(CheckBox regis, int idusuario, int idpantalla)
+        {
+            UsuariosPantallas usuariopantalla = _UsuariosPantallasBL.getUsuarioPantalla(idusuario, idpantalla);
+            if (usuariopantalla.idUsuarioPantalla > 0)
+            {
+                regis.ID = regis.ID + "," + usuariopantalla.idUsuarioPantalla;
+
+                if (bool.Parse(usuariopantalla.visible))
+                {
+                    regis.Checked = true;
+                    regis.ForeColor = System.Drawing.Color.Green;
+                }
+            }
+        }
+
+        private void UsuariosOpcionesEnDB(CheckBox regis, int idOpcion, int idUsuario)
+        {
+            UsuariosOpciones perfilopcion = _UsuariosOpcionesBL.getUsuarioOpcion(idOpcion, idUsuario);
+            if (perfilopcion.idUsuarioOpcion > 0)
+            {
+                regis.ID = regis.ID + "," + perfilopcion.idUsuarioOpcion;
+
+                if (bool.Parse(perfilopcion.visible))
+                {
+                    regis.Checked = true;
+                    regis.ForeColor = System.Drawing.Color.Green;
+                }
+            }
+        }
+
+        private void sistemasModulosEnDB(CheckBox regis, int idsistema, int idmodulo)
+        {
+            SistemasModulos sismod = _SistemasModulosBL.getSistemaModulo(idsistema, idmodulo);
+            if (sismod.idSistemaModulo > 0)
+            {
+                regis.ID = regis.ID + "," + sismod.idSistemaModulo;
+                    regis.Checked = true;
+                    regis.ForeColor = System.Drawing.Color.Green;                
+            }
+        }
+
+        private void agregarCheckboxOpciones(HtmlGenericControl liPantalla, String nompantalla, int idmodulo, String comando, String idpantalla, String subop3)
         {
             String opcion = "";
-            switch (nompantalla)
-            {            
-                case "Usuarios":
-                    opcion = "opcionesRegSeg"; //MultiView1Seg.Views[0].ClientID;
-                break;
+            if(comando.ToLower().Contains("usuarios")){                   
+                    opcion = "opcionesRegSeg," + MultiView2SegGrid.Views[0].ClientID; 
             }
+            if (comando.ToLower().Contains("grupos"))
+            {
+                opcion = "opcionesRegSeg," + MultiView2SegGrid.Views[1].ClientID;
+            }
+            if (comando.ToLower().Contains("perfiles"))
+            {
+               opcion = "opcionesRegSeg," + MultiView2SegGrid.Views[2].ClientID;
+            }
+            if (comando.ToLower().Contains("relaciones"))
+            {
+                opcion = MultiView1Seg.Views[3].ClientID;
+            }
+            if (comando.ToLower().Contains("sistemas"))
+            {
+                opcion = "opcionesRegSeg," + MultiView2SegGrid.Views[3].ClientID + ",opcionesUpdateSistem";
+            }
+            else if (comando.ToLower().Contains("camodulo"))
+            {
+                opcion = MultiView1Seg.Views[9].ClientID;
+            }
+            else if (comando.ToLower().Contains("capantalla") || comando.ToLower().Contains("caopcion"))
+            {
+                opcion = MultiView1Seg.Views[10].ClientID;
+            }
+            else if (comando.ToLower().Contains("opciontarea"))
+            {
+                opcion = "opcionesRegTarea," + MultiViewTareaGrid.Views[0].ClientID;
+            }
+            else if (comando.ToLower().Contains("op4"))
+            {
+                opcion = subop3;
+            }
+            else if (comando.ToLower().Contains("op5"))
+            {
+                string[] splitidview = comando.Split(new Char[] { ',' });
+                if (splitidview.Length>1)
+                {
+                    opcion = MultiView1Seg.Views[int.Parse(splitidview[1])].ClientID;
+                }                
+            }
+            string[] splitidpantalla = idpantalla.Split(new Char[] { ',' });
+            string idpantallaop = "";
+            if (splitidpantalla.Length > 3)
+            {
+                idpantallaop = splitidpantalla[3];
+            }
+
 
             if (opcion.Trim().Length > 0)
             {
-                Control cd = FindControl(opcion);
+                string[] splitOps = opcion.Split(new Char[] { ',' });
 
-                int ulcontsub = 0;
-                int valido = 0;
-                foreach (Control c in cd.Controls)
+                for (int num = 0; num < splitOps.Length; num++)
                 {
-                    valido = 0;
+                    Control cd = FindControl(splitOps[num]);
 
-                    string subOpcionId = "";
-                    string subOpcion = "";
-                    string opcionp = "";
-                    try
+                    if (cd != null)
                     {
-                        if (c.GetType() == typeof(Button))
+                        int ulcontsub = 0;
+                        if (cd.Controls.Count>0)
                         {
-                            subOpcion = ((Button)c).Text.Trim() + "";
-                            subOpcionId = "" + ((Button)c).ClientID;
-                            opcionp = "" + ((Button)c).CommandName;
-                            valido = 1;
-                        }
-                        if (c.GetType() == typeof(Label))
+                        foreach (Control c in cd.Controls)
                         {
-                            hidopcionpant.Value = "" + ((Label)c).Text.Trim();
-                            hidpantallaid.Value = "" + ((Label)c).ClientID;
-                            valido = 1;
-                        }
-                        if (c.GetType() == typeof(Label) || c.GetType() == typeof(LinkButton))
-                        {
+                            string subOpcionId = "";
+                            string subOpcion = "";
+                            string opcionp = "";
+                            int[] indices = new int[2];
+                            string[] opGrid = new string[2];
+                            try
+                            {
+                                if (c.GetType() == typeof(Button))
+                                {
+                                    subOpcion = ((Button)c).Text.Trim() + ",";
+                                    subOpcionId = ((Button)c).ClientID + ",";
+                                    opcionp = "" + ((Button)c).CommandName;
+                                }
+                                if (c.GetType() == typeof(GridView))
+                                {
+                                    GridView cs = (c as GridView);
+                                    subOpcionId = cs.ClientID + ",";
+                                    int col = cs.Columns.Count;
+                                    if (col > 2)
+                                    {
+                                        if (cs.Columns[col - 1].GetType() == typeof(CommandField))
+                                        {
+                                            subOpcion = "Eliminar";
+                                            subOpcionId = subOpcionId + "" + (col - 1);
+                                        }
+                                        if (cs.Columns[col - 2].GetType() == typeof(CommandField))
+                                        {
+                                            subOpcion = subOpcion + ",Editar";
+                                            subOpcionId = subOpcionId + "," + (col - 2);
+                                        }
 
-                        }
-                    }
-                    catch
-                    {
-                    }
+                                    }
+                                }
+                            }
+                            catch
+                            {
+                            }
 
-                    if (subOpcion.Trim().Length > 0)
-                    {
-                        if (ulcontsub == 0)
-                        {
-                            HtmlGenericControl ulop = new HtmlGenericControl("ul");
-                            ulop.ID = "ultreesubop" + ulcontsub + "" + idmodulo + "" + subOpcionul;
-                            liPantalla.Controls.Add(ulop);                            
+
+                            if (subOpcion.Trim().Length > 0)
+                            {
+                                string[] split = subOpcion.Split(new Char[] { ',' });
+                                string[] splitid = subOpcionId.Split(new Char[] { ',' });
+                                
+                                if (ulcontsub == 0)
+                                {
+                                    HtmlGenericControl ulop = new HtmlGenericControl("ul");
+                                    ulop.ID = "ultreesubop" + ulcontsub + "" + idmodulo + "" + subOpcionul;
+                                    liPantalla.Controls.Add(ulop);
+                                }
+
+                                for (int ps = 0; ps <= (split.Length - 1); ps++)
+                                {
+                                    if (split[ps].Length > 0)
+                                    {
+                                        ulcontsub++;
+                                        
+                                        HtmlGenericControl lisuop = new HtmlGenericControl("li");
+                                        lisuop.ID = litreesubop + "" + countOpcion + "" + idmodulo;
+                                        FindControl("ultreesubop" + "0" + "" + idmodulo + "" + subOpcionul).Controls.Add(lisuop);
+                                        CheckBox vop = new CheckBox();
+                                        vop.Text = split[ps];
+                                        vop.ID = idpantallaop + "," + splitid[0] + "," + splitid[ps + 1] + "," + ulcontsub + "," + subOpcionul;
+                                        OpcionesRegistradas(vop, splitid[0], idpantallaop  + splitid[0]+ splitid[ps + 1] );
+                                        lisuop.Controls.Add(vop);
+                                        countOpcion++;
+                                    }
+                                }
+
+                            }
                         }
-                        ulcontsub++;
+                        }
                         
-                        HtmlGenericControl lisuop = new HtmlGenericControl("li");
-                        lisuop.ID = litreesubop + "" + countOpcion + ""+idmodulo;
-                        FindControl("ultreesubop" + "0" + "" + idmodulo + "" + subOpcionul).Controls.Add(lisuop);
-                        CheckBox vop = new CheckBox();
-                        vop.Text = subOpcion;
-                        vop.ID = idmodulo + ","+subOpcionId + "," + ulcontsub + "," + subOpcionul;
-                        //pantallasRegistradas(vop, pantalla, pantalaId);
-                        lisuop.Controls.Add(vop);
-                        countOpcion++;
-                        
+                        subOpcionul++;
                     }
                 }
-                subOpcionul++;
             }
+            hidcontchecksubop.Value = countOpcion.ToString();
+        }
+
+        private void agregarOpcionSubop(String opcionp, int opsub, String liidop,String ulparentid, String nomCheck,String chkboxid) { 
+                
         }
 
         protected void ButtonAtualizaPantallasSeg_Click(object sender, EventArgs e)
         {            
-            insertUpdatePantallas(false);       
-        }
+            abdCheckBoxTree(false,true,false,false);
+        }        
 
-        private void llenarTree(bool subopciones) {             
-            FindControl(ulconttree.ID).Controls.Clear();
+        private void llenarTree(bool subopciones, bool relAccesoPerfilb) {
+            Control divTree = new Control();
+            if (PageIndex != null)
+            {
+                if (PageIndex.Trim().Equals("Acceso por Perfiles") || PageIndex.Trim().Equals("Acceso por Usuarios"))
+                {
+                    FindControl(ulModSis.ID).Controls.Clear();
+                    FindControl(ulconttree.ID).Controls.Clear();
+                    divTree = FindControl(ulTreeAccePerfil.ID);
+                 divTree.Controls.Clear();
+                }else if ( PageIndex.Trim().Equals("Sistemas y Módulos"))
+                {
+                    FindControl(ulconttree.ID).Controls.Clear();
+                    FindControl(ulTreeAccePerfil.ID).Controls.Clear();
+                    divTree = FindControl(ulModSis.ID);
+                    divTree.Controls.Clear();
+                }
+                else {
+                    FindControl(ulModSis.ID).Controls.Clear();
+                    FindControl(ulTreeAccePerfil.ID).Controls.Clear();
+                   divTree = FindControl(ulconttree.ID);
+                   divTree.Controls.Clear();
+                }
+            }
+
+
             int cont = 0;
             foreach (Modulo d in _modulosBl.getModulos())
             {
                 cont++;
-                agregarCheckboxmodulos(d, cont, subopciones);
+                agregarCheckboxmodulos(d, cont, subopciones, divTree, relAccesoPerfilb);
             }
         }
         protected void ButtonRegistrarPantallasSeg_Click(object sender, EventArgs e)
         {
-            insertUpdatePantallas(true);
+            abdCheckBoxTree(true,false,false,false);
         }
-        private void insertUpdatePantallas(bool registra) {
+        private void abdCheckBoxTree(bool registra, bool actualiza, bool relAccesoperfil, bool relaccesoUs) {
+            if (PageIndex != null)
+            {
+                if (PageIndex.Trim().ToLower().Equals("pantallas"))
+                {
+                    insertUpdatePantallas(registra,actualiza,relAccesoperfil,relaccesoUs);
+                }
+                else if (PageIndex.Trim().ToLower().Equals("opciones"))
+                {
+                    insertUpdateOpciones(registra, actualiza, relAccesoperfil, relaccesoUs);
+                }
+            }
+        }        
+
+        private void RegModulosRelAcceso(bool registra, bool actualiza, bool relAccesoperfil, bool relaccesoUs)
+        {
+            LblStatusAccePerfil.Text = "";
+            int cont = 0;
+            int checkstree = 0;
+            List<String> actualizados = new List<String>();
+           
+            foreach (Modulo d in _modulosBl.getModulos())
+            {
+                cont++;
+                
+                Control c = FindControl(limod + d.Nombre); 
+                    if (c != null)
+                    {
+                        if (c.Controls[0].GetType() == typeof(CheckBox))
+                        {
+                            CheckBox modulo = (c.Controls[0] as CheckBox);
+                            
+                                checkstree++;
+                                string[] split = modulo.ClientID.Split(new Char[] { ',' });
+                                if (split[1].Trim().Length > 0)
+                                {
+                                    if(PageIndex.Equals("Acceso por Perfiles"))
+                                    {
+                                        PerfilesModulos pmodulo = new PerfilesModulos();
+                                        pmodulo.idModulo = int.Parse(split[1]);
+                                        pmodulo.h3Visible = modulo.Checked.ToString();
+                                        pmodulo.divVisible = modulo.Checked.ToString();
+                                        int idSeleecionado = int.Parse(HidUsuSeleccionadoSeg.Value);
+                                        pmodulo.idPerfil = idSeleecionado;
+                                        if (registra)
+                                        {
+                                            if (pmodulo.idPerfil > 0)
+                                            {
+                                                _PerfilesModulosBL.registrarPerfilesModulos(pmodulo);
+
+                                            }
+                                        }
+                                        else if (actualiza && (split.Length > 2))
+                                        {
+                                            if (split[2].Trim().Length > 0)
+                                            {
+                                                pmodulo.idPerfilModulo = int.Parse(split[2]);
+                                                actualizados.Add(_PerfilesModulosBL.UpdatePerfilesModulos(pmodulo).Success + "," + d.Nombre);
+                                            }
+
+                                        }
+                                    }
+                                    else if(PageIndex.Equals("Acceso por Usuarios")) {
+                                        UsuariosModulos umodulo = new UsuariosModulos();
+                                        umodulo.idModulo = int.Parse(split[1]);
+                                        umodulo.h3Visible = modulo.Checked.ToString();
+                                        umodulo.divVisible = modulo.Checked.ToString();
+                                        int idSeleecionado = int.Parse(HidUsuSeleccionadoSeg.Value);
+                                        umodulo.idUsuario = idSeleecionado;
+                                        if (registra)
+                                        {
+                                            if (umodulo.idUsuario > 0)
+                                            {
+                                                _UsuariosModulosBL.registrarUsuariosModulos(umodulo);
+                                            }
+                                        }
+                                        else if (actualiza && (split.Length > 2))
+                                        {
+                                            if (split[2].Trim().Length > 0)
+                                            {
+                                                umodulo.idUsuarioModulo = int.Parse(split[2]);
+                                                actualizados.Add(_UsuariosModulosBL.UpdateUsuariosModulos(umodulo).Success + "," + d.Nombre);
+                                            }
+
+                                        }
+                                    }
+                                    else if (PageIndex.Equals("Sistemas y Módulos"))
+                                    {
+                                        if (modulo.Checked)
+                                        {
+                                        SistemasModulos sistemamodulo = new SistemasModulos();
+                                        sistemamodulo.idModulo = int.Parse(split[1]);
+                                        int idSeleecionado = int.Parse(HidUsuSeleccionadoSeg.Value);
+                                        sistemamodulo.idSistema = idSeleecionado;
+                                        if (registra)
+                                        {
+                                            if (sistemamodulo.idSistema > 0)
+                                            {
+                                                _SistemasModulosBL.registrarSistemasModulos(sistemamodulo);
+                                            }
+                                        }
+                                        else if (actualiza && (split.Length > 2))
+                                        {
+                                            if (split[2].Trim().Length > 0)
+                                            {
+                                                sistemamodulo.idSistemaModulo = int.Parse(split[2]);
+                                                actualizados.Add(_SistemasModulosBL.DeleteSistemasModulos(sistemamodulo).Success + "," + d.Nombre);
+                                            }
+
+                                        }
+                                        }
+                                    }
+                                }
+                            
+                        }                    
+                }
+            }
+            if (PageIndex.Equals("Sistemas y Módulos"))
+            {
+                llenarTree(false, false);
+            }else{
+                insertUpdatePerfilesPantallas(registra, actualiza, true, false);
+                insertUpdatePerfilesOpciones(registra, actualiza, true, false);
+                llenarTree(true, relAccesoperfil);            
+            
+            if (actualiza && (checkstree > 0))
+            {
+                updateMsg(actualizados, LblStatusAccePerfil, "Modulos no actualizados");
+            }
+            }
+            
+        }
+
+        private void insertUpdatePantallas(bool registra, bool actualiza, bool relAccesoperfil, bool relaccesoUs)
+        {
             LblupdatePantalla.Text = "";
             int cont = 0;
             int checkstree = 0;
@@ -1642,22 +2179,22 @@ namespace ProyectosWeb
                     {
                         if (c.Controls[0].GetType() == typeof(CheckBox))
                         {
-                            CheckBox modulo = (c.Controls[0] as CheckBox);
-                            if (!modulo.UniqueID.Contains(Modtree) && modulo.Checked)
+                            CheckBox pantalla = (c.Controls[0] as CheckBox);
+                            if (!pantalla.UniqueID.Contains(Modtree) && pantalla.Checked)
                             {
                                 checkstree++;
-                                string[] split = modulo.ClientID.Split(new Char[] { ',' });
+                                string[] split = pantalla.ClientID.Split(new Char[] { ',' });
                                 if (split[2].Trim().Length > 0)
                                 {
                                     Pantalla panta = new Pantalla();
-                                    panta.nombre = modulo.Text;
-                                    panta.descripcion = modulo.Text;
+                                    panta.nombre = pantalla.Text;
+                                    panta.descripcion = pantalla.Text + " " + (c.Parent.Parent.Controls[0] as CheckBox).Text;
                                     panta.idAsp = split[0];                              
                                     if(registra){                                    
                                         panta.idModulo = int.Parse(split[2]);
                                         _pantallaBL.registrarPantalla(panta);                                        
                                     }else{
-                                        if(split.Length>3){
+                                        if(actualiza&&(split.Length>3)){
                                         if (split[3].Trim().Length > 0)
                                         {
                                             panta.idPantalla = int.Parse(split[3]);
@@ -1673,11 +2210,247 @@ namespace ProyectosWeb
             }
             if (registra)
             {
-                llenarTree(false);
+                llenarTree(false,false);
             }
-            else if(checkstree>0)
+            else if(actualiza&&(checkstree>0))
             {
-                updateMsg(actualizados,LblupdatePantalla, "Las siguientes pantallas no se actualizaron");                
+                updateMsg(actualizados,LblupdatePantalla, "Las siguientes Pantallas no se actualizaron");                
+            }
+        }
+
+        private void insertUpdateOpciones(bool registra, bool actualiza, bool relAccesoperfil,bool relaccesoUs)
+        {
+            LblupdatePantalla.Text = "";
+            int cont = 0;
+            int checkstree = 0;
+            List<String> actualizados = new List<String>();
+
+            foreach (Modulo d in _modulosBl.getModulos())
+            {
+                cont++;
+
+                for (int chk = 0; chk <= int.Parse(hidcontchecksubop.Value); chk++)
+                {
+
+                    Control c = FindControl(litreesubop + "" + chk + "" + d.idModulo);
+                    if (c != null)
+                    {
+                        if (c.Controls[0].GetType() == typeof(CheckBox))
+                        {
+                            CheckBox opciones = (c.Controls[0] as CheckBox);
+                            if (opciones.Checked)
+                            {
+                                checkstree++;
+                                string[] split = opciones.ClientID.Split(new Char[] { ',' });
+                                if (split[1].Trim().Length > 0)
+                                {
+                                    Opcion op = new Opcion();
+                                    op.nombre = opciones.Text;
+                                    op.descripcion = opciones.Text +" "+ (c.Parent.Parent.Controls[0] as CheckBox).Text;
+                                    op.idAsp = split[1];
+                                    op.componenteIndex = split[2].Trim();
+                                    op.chkboxTreeindex = chk;
+                                    op.idcheckbox = split[0] + split[1] + split[2];
+                                    if (split[0].Length > 0)
+                                    {
+                                        op.idPantalla = int.Parse(split[0]);
+                                        if (registra)
+                                        {
+                                            _opcionBL.registrarOpcion(op);
+                                        }
+                                        else
+                                            if (actualiza&&(split.Length > 3))
+                                            {
+                                                if (split[5].Trim().Length > 0)
+                                                {
+                                                    op.idOpcion = int.Parse(split[5]);
+                                                    actualizados.Add(_opcionBL.UpdateOpcion(op).Success + "," + (c.Parent.Parent.Controls[0] as CheckBox).Text + " > " + op.nombre);
+                                                }
+                                            }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (registra)
+            {
+                llenarTree(true,false);
+            }
+            else if (actualiza&&(checkstree > 0))
+            {
+                updateMsg(actualizados, LblupdatePantalla, "Las siguientes Opciones no se actualizaron");
+            }
+        }
+
+        private void insertUpdatePerfilesPantallas(bool registra, bool actualiza, bool relAccesoperfil, bool relaccesoUs)
+        {
+            
+            int cont = 0;
+            int checkstree = 0;
+            List<String> actualizados = new List<String>();
+
+            foreach (Modulo d in _modulosBl.getModulos())
+            {
+                cont++;
+
+                for (int chk = 1; chk <= int.Parse(hidcontchecks.Value); chk++)
+                {
+
+                    Control c = FindControl(litreepant + "" + chk + "" + d.idModulo);
+                    if (c != null)
+                    {
+                        if (c.Controls[0].GetType() == typeof(CheckBox))
+                        {
+                            CheckBox pantalla = (c.Controls[0] as CheckBox);
+
+                            checkstree++;
+                            string[] split = pantalla.ClientID.Split(new Char[] { ',' });
+                            if (split.Length > 3)
+                            {
+                                if (split[3].Trim().Length > 0)
+                                {
+                                    if(PageIndex.Equals("Acceso por Perfiles"))
+                                    {
+                                    PerfilesPantallas ppantalla = new PerfilesPantallas();
+                                    ppantalla.idPantalla = int.Parse(split[3]);
+                                    ppantalla.visible = pantalla.Checked.ToString();
+                                    int idSeleecionado = int.Parse(HidUsuSeleccionadoSeg.Value);
+                                    ppantalla.idPerfil = idSeleecionado;
+
+                                    if (registra)
+                                    {
+                                        if (ppantalla.idPerfil > 0)
+                                        {
+                                            _PerfilesPantallasBL.registrarPerfilesPantallas(ppantalla);
+                                        }
+                                    }
+                                    else if (actualiza && split.Length > 4)
+                                    {
+                                        if (split[4].Trim().Length > 0)
+                                        {
+                                            ppantalla.idPerfilPantalla = int.Parse(split[4]);
+                                            actualizados.Add(_PerfilesPantallasBL.UpdatePerfilesPantallas(ppantalla).Success+","+pantalla.Text);
+                                        }
+                                    }
+                                    }
+                                    else if (PageIndex.Equals("Acceso por Usuarios"))
+                                    {
+                                        UsuariosPantallas usuariopantalla = new UsuariosPantallas();
+                                        usuariopantalla.idPantalla = int.Parse(split[3]);
+                                        usuariopantalla.visible = pantalla.Checked.ToString();
+                                        int idSeleecionado = int.Parse(HidUsuSeleccionadoSeg.Value);
+                                        usuariopantalla.idUsuario = idSeleecionado;
+
+                                        if (registra)
+                                        {
+                                            if (usuariopantalla.idUsuario > 0)
+                                            {
+                                                _UsuariosPantallasBL.registrarUsuariosPantallas(usuariopantalla);
+                                            }
+                                        }
+                                        else if (actualiza && split.Length > 4)
+                                        {
+                                            if (split[4].Trim().Length > 0)
+                                            {
+                                                usuariopantalla.idUsuarioPantalla = int.Parse(split[4]);
+                                                actualizados.Add(_UsuariosPantallasBL.UpdateUsuariosPantallas(usuariopantalla).Success + "," + pantalla.Text);
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+             if (actualiza && (checkstree > 0))
+            {
+                updateMsg(actualizados, LblStatusAccePerfil, "Pantallas no actualizadas");
+            }
+                
+        }
+
+        private void insertUpdatePerfilesOpciones(bool registra, bool actualiza, bool relAccesoperfil, bool relaccesoUs)
+        {          
+            int cont = 0;
+            int checkstree = 0;
+            List<String> actualizados = new List<String>();
+
+            foreach (Modulo d in _modulosBl.getModulos())
+            {
+                cont++;
+
+                for (int chk = 0; chk <= int.Parse(hidcontchecksubop.Value); chk++)
+                {
+
+                    Control c = FindControl(litreesubop + "" + chk + "" + d.idModulo);
+                    if (c != null)
+                    {
+                        if (c.Controls[0].GetType() == typeof(CheckBox))
+                        {
+                            CheckBox opciones = (c.Controls[0] as CheckBox);
+                            
+                                checkstree++;
+                                string[] split = opciones.ClientID.Split(new Char[] { ',' });
+                                if (split.Length > 5)
+                                {
+                                if (split[5].Trim().Length > 0)
+                                {
+                                    if (PageIndex.Equals("Acceso por Perfiles"))
+                                    {
+                                    PerfilesOpciones op = new PerfilesOpciones();
+                                    op.visible = opciones.Checked.ToString();
+                                    int idSeleecionado = int.Parse(HidUsuSeleccionadoSeg.Value);
+                                    op.idPerfil = idSeleecionado;                                    
+                                    op.idOpcion = int.Parse(split[5]);                                                                       
+                                        if (registra)
+                                        {
+                                            _PerfilesOpcionesBL.registrarPerfilesOpciones(op);
+                                        }
+                                        else
+                                            if (actualiza && (split.Length > 6))
+                                            {
+                                                if (split[6].Trim().Length > 0)
+                                                {
+                                                    op.idPerfilOpcion = int.Parse(split[6]);
+                                                    actualizados.Add(_PerfilesOpcionesBL.UpdatePerfilesOpciones(op).Success + "," + (c.Parent.Parent.Controls[0] as CheckBox).Text + " > " + opciones.Text.Trim());
+                                                }
+                                            }
+                                    }
+                                    else if (PageIndex.Equals("Acceso por Usuarios"))
+                                    {
+                                        UsuariosOpciones op = new UsuariosOpciones();
+                                        op.visible = opciones.Checked.ToString();
+                                        int idSeleecionado = int.Parse(HidUsuSeleccionadoSeg.Value);
+                                        op.idUsuario = idSeleecionado;
+                                        op.idOpcion = int.Parse(split[5]);
+                                        if (registra)
+                                        {
+                                            _UsuariosOpcionesBL.registrarUsuariosOpciones(op);
+                                        }
+                                        else
+                                            if (actualiza && (split.Length > 6))
+                                            {
+                                                if (split[6].Trim().Length > 0)
+                                                {
+                                                    op.idUsuarioOpcion = int.Parse(split[6]);
+                                                    actualizados.Add(_UsuariosOpcionesBL.UpdateUsuariosOpciones(op).Success + "," + (c.Parent.Parent.Controls[0] as CheckBox).Text + " > " + opciones.Text.Trim());
+                                                }
+                                            }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (actualiza && (checkstree > 0))
+            {
+                updateMsg(actualizados, LblStatusAccePerfil, "Opciones no actualizados");
             }
         }
 
@@ -1697,12 +2470,20 @@ namespace ProyectosWeb
                     resact++;
                 }
             }
-            if (resact == actualizados.Count)
+
+            if (resact == actualizados.Count && actualizados.Count>0)
             {
                 cambiarTextLabel(lblmsg, "Actualización correcta", System.Drawing.Color.Green);
             }
             else if (resact < 1)
             {
+                if (PageIndex != null)
+                {
+                    if (PageIndex.Equals("Acceso por Perfiles"))
+                    {
+                        falla = falla + " </br>" + lblmsg.Text;
+                    }
+                }
                 cambiarTextLabel(lblmsg, falla, System.Drawing.Color.Red);
             }
         }
@@ -1750,6 +2531,26 @@ namespace ProyectosWeb
         private void cambiarTextLabel(Label lab, String texto, System.Drawing.Color color) {
             lab.Text = texto;
             lab.ForeColor = color;
+        }
+
+        protected void ButtonRegistrarRelAccesoSeg_Click(object sender, EventArgs e)
+        {
+            RegModulosRelAcceso(true,false,true,false);
+        }
+
+        protected void ButtonAtualizaRelAccesoSeg_Click(object sender, EventArgs e)
+        {
+            RegModulosRelAcceso(false, true, true, false);
+        }
+
+        protected void ButtonRegistrarRelAccesoSisModSeg_Click(object sender, EventArgs e)
+        {
+            RegModulosRelAcceso(true, false, false, false);
+        }
+
+        protected void ButtonDeleteRelAccesoSisModSeg_Click(object sender, EventArgs e)
+        {
+            RegModulosRelAcceso(false, true, false, false);
         }
 
         protected void ButtonActualizaUsuSeg_Click(object sender, EventArgs e)

@@ -165,8 +165,7 @@ namespace ProyectosWeb.Views.Login
                             Context.User = userPrincipal;
                            
                             if (Context.User.Identity!=null)
-                            {
-                                //Response.Redirect("../../Main.aspx");
+                            {                              
                                 // Create and tuck away the cookie
                                 FormsAuthenticationTicket authTicket =
                                   new FormsAuthenticationTicket(1,
@@ -180,10 +179,7 @@ namespace ProyectosWeb.Views.Login
                                   new HttpCookie(FormsAuthentication.FormsCookieName, encTicket);
                                 Response.Cookies.Add(faCookie);
 
-
                                 conn.Close();
-                                //// And send the user where they were heading
-                                //string redirectUrl =
                                 //  FormsAuthentication.GetRedirectUrl(d, false);
                                 Response.Redirect("../../Main.aspx");
                             }

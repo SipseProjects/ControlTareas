@@ -11,7 +11,7 @@
         type="text/javascript"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="/Style/Style.css" />
- <%--   <link rel="stylesheet" href="css/expandabletree.css" />--%>
+    <link rel="stylesheet" href="css/Seguridad/Seguridad.css" />
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     
@@ -39,6 +39,13 @@
         $('#tree').tree({
             /* specify here your options */
         });
+        $('#DivTreePerfil').tree({
+
+        });
+        $('#DivTreeModSis').tree({
+
+        });
+        
     });
     //-->
 </script>
@@ -617,6 +624,8 @@
     <asp:HiddenField ID="hidopcionpant" runat="server"  Value="0" />  
     <asp:HiddenField ID="hidcontchecks" runat="server"  Value="0" /> 
     <asp:HiddenField ID="hidpantallaid" runat="server"  Value="" />
+     <asp:HiddenField ID="hidcontchecksubop" runat="server"  Value="0" />   
+     <asp:HiddenField ID="hidLiidButton" runat="server"  Value="" />
 
     <div id="header" align="center">
         <img src="/Img/SolIcon.png" alt="Empresa" height="100px" width="20%" style="float: left;">
@@ -629,33 +638,33 @@
     </div>
     <div id="Container" runat="server">
         <div id="LeftSideMenu">
-            <div id="accordion" runat="server">            
+            <div id="accordion" runat="server">                       
                 <h3 id="Proyecto1" runat="server" align="left">
                     Seguridad</h3>
                 <div id="DivProyecto1" runat="server">
                     <p align="left">
                         Catalogos</p>
                     <ul>
-                        <li ><asp:Label runat="server" ID="lblUsuariosSeg">Usuarios</asp:Label>
-                            <ul>
-                                <li>
-                                    <asp:LinkButton  ID="LinkUsuariosSeg" CommandName="sub" runat="server" OnClick="UsuariosOnClick">Usuarios</asp:LinkButton></li>
-                                <li>
+                        <li id="lblUsuariosSegLi"  ><asp:Label runat="server" ID="lblUsuariosSeg">Usuarios</asp:Label>
+                            <ul>                           
+                                <li id="LinkUsuariosSegLi" >
+                                    <asp:LinkButton  ID="LinkUsuariosSeg" CommandName="subUsuarios" runat="server" OnClick="UsuariosOnClick">Usuarios</asp:LinkButton></li>
+                                <li id="LinkcuentaUsSegLi" >
                                     <asp:LinkButton ID="LinkcuentaUsSeg" CommandName="sub" runat="server" OnClick="CuentaUsuarioOnClick">Cuenta</asp:LinkButton></li>                                                                
                             </ul>
                         </li>
                         <li>
-                            <asp:LinkButton ID="LinkGruposSeg" runat="server" OnClick="GruposOnClick">Grupos</asp:LinkButton></li>
+                            <asp:LinkButton ID="LinkGruposSeg" CommandName="Grupos" runat="server" OnClick="GruposOnClick">Grupos</asp:LinkButton></li>
                         <li>
-                            <asp:LinkButton ID="LinkPerfilesSeg" runat="server" OnClick="PerfilesOnClick">Perfiles</asp:LinkButton></li>
+                            <asp:LinkButton ID="LinkPerfilesSeg" CommandName="Perfiles" runat="server" OnClick="PerfilesOnClick">Perfiles</asp:LinkButton></li>
                         <li ><asp:Label runat="server" ID="lblRelacionesSeg">Relaciones</asp:Label>
                             <ul>
                                 <li>
-                                    <asp:LinkButton ID="LinkRelacionesUsSeg" CommandName="sub" runat="server" OnClick="RelacionesUsuariosOnClick">Usuarios</asp:LinkButton></li>
+                                    <asp:LinkButton ID="LinkRelacionesUsSeg" CommandName="subRelaciones" runat="server" OnClick="RelacionesUsuariosOnClick">Usuarios</asp:LinkButton></li>
                                 <li>
-                                    <asp:LinkButton ID="LinkRelacionesGruSeg" CommandName="sub" runat="server" OnClick="RelacionesGruposOnClick">Grupos</asp:LinkButton></li>
+                                    <asp:LinkButton ID="LinkRelacionesGruSeg" CommandName="subRelaciones" runat="server" OnClick="RelacionesGruposOnClick">Grupos</asp:LinkButton></li>
                                 <li>
-                                    <asp:LinkButton ID="LinkRelacionesPerfSeg" CommandName="sub" runat="server" OnClick="RelacionesPerfilesOnClick">Perfiles</asp:LinkButton></li>
+                                    <asp:LinkButton ID="LinkRelacionesPerfSeg" CommandName="subRelaciones" runat="server" OnClick="RelacionesPerfilesOnClick">Perfiles</asp:LinkButton></li>
                             </ul>
                         </li>
                         <li><a href="#">Fases</a></li>
@@ -666,10 +675,19 @@
                     </ul>
                         <asp:Label runat="server" ID="LblControlAcceso">Control de acceso</asp:Label>
                     <ul>
-                        <li><asp:LinkButton ID="LB2CASistem" runat="server" CommandName="sub" OnClick="ControlAccesSistemaOnClick">Sistemas</asp:LinkButton></li>
-                        <li><asp:LinkButton ID="LB3CAModul" runat="server" CommandName="sub" OnClick="ControlAccesModuloOnClick">Módulos</asp:LinkButton></li>
-                        <li><asp:LinkButton ID="LB4CAWindo" runat="server" CommandName="sub" OnClick="ControlAccesPantallasOnClick">Pantallas</asp:LinkButton></li>
-                        <li><asp:LinkButton ID="LB5CAOption" runat="server" CommandName="sub" OnClick="ControlAccesOpcionesOnClick">Opciones</asp:LinkButton></li>
+                        <li><asp:LinkButton ID="LB2CASistem" runat="server" CommandName="subSistemas" OnClick="ControlAccesSistemaOnClick">Sistemas</asp:LinkButton></li>
+                        <li><asp:LinkButton ID="LB3CAModul" runat="server" CommandName="subCAModulo" OnClick="ControlAccesModuloOnClick">Módulos</asp:LinkButton></li>
+                        <li><asp:LinkButton ID="LB4CAWindo" runat="server" CommandName="subCAPantalla" OnClick="ControlAccesPantallasOnClick">Pantallas</asp:LinkButton></li>
+                        <li><asp:LinkButton ID="LB5CAOption" runat="server" CommandName="subCAOpcion" OnClick="ControlAccesOpcionesOnClick">Opciones</asp:LinkButton></li>
+                        <li ><asp:Label runat="server" CommandName="op4RelAcceso" ID="LBLRelAcceso">Relaciones</asp:Label>
+                            <ul><li>
+                                    <asp:LinkButton ID="LBCASistema" CommandName="op5CASisMod,12" runat="server" OnClick="RelAccesoModSistemaOnClick">Sistemas</asp:LinkButton></li>                               
+                                <li>
+                                    <asp:LinkButton ID="LBCAPerfil" CommandName="op5CAPerfil,11" runat="server" OnClick="RelAccesoPerfilesOnClick">Perfiles</asp:LinkButton></li>
+                                <li>
+                                    <asp:LinkButton ID="LBCAUsu" CommandName="op5CAUsu,11" runat="server" OnClick="RelAccesoUsuariosOnClick">Usuarios</asp:LinkButton></li>
+                               </ul>
+                        </li>                       
                     </ul>
                 </div>
                 <h3 id="Proyecto2" runat="server">
@@ -677,15 +695,15 @@
                 <div id="DivProyecto2" runat="server">
                     <ul>
                         <li>
-                            <asp:LinkButton  ID="LinkProyecto" runat="server" OnClick="ProyectoOnClick">Proyecto</asp:LinkButton></li>
+                            <asp:LinkButton  ID="LinkProyecto" runat="server" CommandName="OpcionTarea" OnClick="ProyectoOnClick">Proyecto</asp:LinkButton></li>
                         <li>
-                            <asp:LinkButton ID="LinkRequerimiento" runat="server" OnClick="RequerimientoOnClick">Requerimiento</asp:LinkButton></li>
+                            <asp:LinkButton ID="LinkRequerimiento" runat="server" CommandName="OpcionTarea" OnClick="RequerimientoOnClick">Requerimiento</asp:LinkButton></li>
                         <li>
-                            <asp:LinkButton ID="LinkCasosUso" runat="server" OnClick="CasosUsoOnClick">Casos de uso</asp:LinkButton></li>
+                            <asp:LinkButton ID="LinkCasosUso" runat="server" CommandName="OpcionTarea" OnClick="CasosUsoOnClick">Casos de uso</asp:LinkButton></li>
                         <li>
-                            <asp:LinkButton ID="LinkComponente" runat="server" OnClick="ComponenteOnClick">Componente</asp:LinkButton></li>
+                            <asp:LinkButton ID="LinkComponente" runat="server" CommandName="OpcionTarea" OnClick="ComponenteOnClick">Componente</asp:LinkButton></li>
                         <li>
-                            <asp:LinkButton ID="LinkTarea" runat="server" OnClick="TareaOnClick">Tarea</asp:LinkButton></li>
+                            <asp:LinkButton ID="LinkTarea" runat="server" CommandName="OpcionTarea" OnClick="TareaOnClick">Tarea</asp:LinkButton></li>
                     </ul>
                 </div>
                 <h3 id="Proyecto3" runat="server">
@@ -899,9 +917,9 @@
                                 </td>
                                 <td>
                                     <div>
-                                        <asp:Button ID="ButtonAgregarGU" OnClientClick="return false" runat="server" Text="<<"
+                                        <asp:Button ID="ButtonAgregarGU" OnClientClick="return false" runat="server" Text="Asignar"
                                             BackColor="#0066FF" ForeColor="White" />
-                                        <asp:Button ID="ButtonEliminarGU" runat="server" OnClientClick="return false" Text=">>"
+                                        <asp:Button ID="ButtonEliminarGU" runat="server" OnClientClick="return false" Text="Desasignar"
                                             BackColor="#0066FF" ForeColor="White" />
                                     </div>
                                     <br />
@@ -1126,7 +1144,7 @@
                    </td>
                             </tr>
                         </table> 
-                        <div>
+                        <div runat="server" id="opcionesUpdateSistem">
                         <asp:Button ID="ButtonUpdateSistema" runat="server" Text="Actualizar"
                         OnClick="ButtonUpdateSistemaseg_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="ButtonCancelSistema"
                              runat="server" Text="Cancelar" OnClick="ButtonCancelSistemaseg_Click" />
@@ -1135,7 +1153,7 @@
                         </div>
                               <table>  
                             <tr>
-                                <td colspan="2">
+                                <td>
                                     <asp:Label  ID="lblUpdateSistema"   runat="server"></asp:Label></td>
                             </tr>
                         </table>                                      
@@ -1204,6 +1222,42 @@
                              runat="server" Text="Actualizar" OnClick="ButtonAtualizaPantallasSeg_Click"  />
                              </div>
                              <div><asp:Label  ID="LblupdatePantalla"   runat="server"></asp:Label></div>
+                    </asp:View>
+                    <asp:View ID="ViewRelAccesoPerfil" runat="server">
+                 <div id="divPerfilAcList" class="PerfilAcList">  
+                  <asp:DropDownList ID="DropDownAccesoRelaciones" AutoPostBack="True" OnSelectedIndexChanged="SeleccionDropDownListAcceso"
+                                        runat="server">
+                                    </asp:DropDownList></div> 
+                                   <div class="contTreePerfil">                                                                 
+<div id="DivTreePerfil" runat="server">
+     <ul id="ulTreeAccePerfil" runat="server">       
+            </ul>
+</div>
+ <div><asp:Button ID="Button5"
+                             runat="server" Text="Asignar" OnClick="ButtonRegistrarRelAccesoSeg_Click"  />
+                             <asp:Button ID="Button6"
+                             runat="server" Text="Actualizar" OnClick="ButtonAtualizaRelAccesoSeg_Click"  />
+                             </div>
+                             <div><asp:Label  ID="LblStatusAccePerfil"   runat="server"></asp:Label></div>
+                             </div>
+                    </asp:View>
+                    <asp:View ID="ViewModuloSistema" runat="server">
+                 <div id="div1" class="PerfilAcList">  
+                  <asp:DropDownList ID="DropDownListModSis" AutoPostBack="True" OnSelectedIndexChanged="SeleccionDropDownModuloSistema"
+                                        runat="server">
+                                    </asp:DropDownList></div> 
+                                   <div class="contTreePerfil">                                                                 
+<div id="DivTreeModSis" runat="server">
+     <ul id="ulModSis" runat="server">       
+            </ul>
+</div>
+ <div><asp:Button ID="ButtonAsignarModSis"
+                             runat="server" Text="Asignar" OnClick="ButtonRegistrarRelAccesoSisModSeg_Click"  />
+                             <asp:Button ID="ButtonDesasignarModSis"
+                             runat="server" Text="DesAsignar" OnClick="ButtonDeleteRelAccesoSisModSeg_Click"  />
+                             </div>
+                             <div><asp:Label  ID="Label6"   runat="server"></asp:Label></div>
+                             </div>
                     </asp:View>
                 </asp:MultiView>
                 <asp:MultiView ID="MultiView2" runat="server">
@@ -1278,11 +1332,11 @@
                                 ID="Button6seg" runat="server" validate="required:false" Text="Mostrar todo"
                                 OnClick="Button6seg_Click" />
                 </div>
-                <p>
+                <div runat="server" id="opcionesRegTarea" >
                     <asp:Button ID="Button1" runat="server" Text="Insertar" OnClick="Button1_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button
                         ID="Button2" runat="server" Text="Buscar" OnClick="Button2_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button
                             ID="Button3" runat="server" Text="Mostrar todo" OnClick="Button3_Click" />
-                </p>
+                </div>
             </div>
             <div id="ContentBot">                
                 <asp:MultiView ID="MultiViewTareaGrid" runat="server">

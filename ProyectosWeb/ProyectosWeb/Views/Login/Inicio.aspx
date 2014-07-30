@@ -40,7 +40,7 @@
 		<div class="container">
 	
 			<a class="brand pull-left" href="#">
-			Solutia Intelligence
+			SICT-App
 			</a>
 	
 			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">

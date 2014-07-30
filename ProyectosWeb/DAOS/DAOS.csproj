@@ -42,6 +42,15 @@
   <ItemGroup>
     <Compile Include="Consultas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Seguridad\ControlAccesoUsuario\CAUsuarioDAO.cs" />
+    <Compile Include="Seguridad\SistemasModulosDAO.cs" />
+    <Compile Include="Seguridad\UsuariosModulosDAO.cs" />
+    <Compile Include="Seguridad\UsuariosOpcionesDAO.cs" />
+    <Compile Include="Seguridad\UsuariosPantallasDAO.cs" />
+    <Compile Include="Seguridad\PerfilesOpcionesDAO.cs" />
+    <Compile Include="Seguridad\PerfilesPantallasDAO.cs" />
+    <Compile Include="Seguridad\PerfilesModulosDAO.cs" />
+    <Compile Include="Seguridad\OpcionDAO.cs" />
     <Compile Include="Seguridad\PantallaDAO.cs" />
     <Compile Include="Seguridad\ModuloDAO.cs" />
   </ItemGroup>

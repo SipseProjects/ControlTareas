@@ -42,8 +42,16 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DBQueryResult.cs" />
+    <Compile Include="Seguridad\SistemasModulos.cs" />
+    <Compile Include="Seguridad\UsuariosModulos.cs" />
+    <Compile Include="Seguridad\UsuariosOpciones.cs" />
+    <Compile Include="Seguridad\UsuariosPantallas.cs" />
+    <Compile Include="Seguridad\PerfilesOpciones.cs" />
     <Compile Include="Seguridad\Modulo.cs" />
+    <Compile Include="Seguridad\Opcion.cs" />
     <Compile Include="Seguridad\Pantalla.cs" />
+    <Compile Include="Seguridad\PerfilesModulos.cs" />
+    <Compile Include="Seguridad\PerfilesPantallas.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
