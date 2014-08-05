@@ -32,12 +32,16 @@ namespace DAOS.Seguridad
 
                  if (!existe)
                    {
-                       cmSql.CommandText = " insert into sistemasmodulos(idmodulo,idsistema) values(@parm1,@parm2)";
+                       cmSql.CommandText = " insert into sistemasmodulos(idmodulo,idsistema,h3visible,divvisible) values(@parm1,@parm2,@parm3,@parm4)";
                        cmSql.Parameters.Add("@parm1", SqlDbType.Int);
                        cmSql.Parameters.Add("@parm2", SqlDbType.Int);
+                       cmSql.Parameters.Add("@parm3", SqlDbType.VarChar);
+                       cmSql.Parameters.Add("@parm4", SqlDbType.VarChar);
 
                        cmSql.Parameters["@parm1"].Value = sistemamodulo.idModulo;
                        cmSql.Parameters["@parm2"].Value = sistemamodulo.idSistema;
+                       cmSql.Parameters["@parm3"].Value = sistemamodulo.h3visible;
+                       cmSql.Parameters["@parm4"].Value = sistemamodulo.divvisible;
                        int exito = cmSql.ExecuteNonQuery();
                        if (exito > 0)
                        {
@@ -56,7 +60,7 @@ namespace DAOS.Seguridad
             _conn.Close();                          
             return resultado;
         }
-        public DbQueryResult DeleteSistemasModulos(SistemasModulos sistemamodulo)
+        public DbQueryResult UpdateSistemasModulos(SistemasModulos sistemamodulo)
         {
             DbQueryResult resultado = new DbQueryResult();
             _conn.Open();
@@ -65,9 +69,17 @@ namespace DAOS.Seguridad
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
 
-                cmSql.CommandText = " delete sistemasmodulos where idsistemamodulo=@parm1";
+                cmSql.CommandText = " update sistemasmodulos set idsistema=@parm2,idmodulo=@parm3,h3visible=@parm4,divvisible=@parm5 where idsistemamodulo=@parm1";
                 cmSql.Parameters.Add("@parm1", SqlDbType.Int);
+                cmSql.Parameters.Add("@parm2", SqlDbType.Int);
+                cmSql.Parameters.Add("@parm3", SqlDbType.Int);
+                cmSql.Parameters.Add("@parm4", SqlDbType.VarChar);
+                cmSql.Parameters.Add("@parm5", SqlDbType.VarChar);
                 cmSql.Parameters["@parm1"].Value = sistemamodulo.idSistemaModulo;
+                cmSql.Parameters["@parm2"].Value = sistemamodulo.idSistema;
+                cmSql.Parameters["@parm3"].Value = sistemamodulo.idModulo;
+                cmSql.Parameters["@parm4"].Value = sistemamodulo.h3visible;
+                cmSql.Parameters["@parm5"].Value = sistemamodulo.divvisible;
                     int exito = cmSql.ExecuteNonQuery();
                     if (exito > 0)
                     {
@@ -110,6 +122,8 @@ namespace DAOS.Seguridad
                             p.idSistemaModulo = int.Parse(drDatos["idsistemamodulo"].ToString());
                             p.idModulo = int.Parse(drDatos["idmodulo"].ToString());                            
                             p.idSistema = int.Parse(drDatos["idsistema"].ToString());
+                            p.h3visible = drDatos["h3visible"].ToString();
+                            p.divvisible = drDatos["divvisible"].ToString();
                             _status.Success = true; 
                     }
                 }
@@ -119,8 +133,7 @@ namespace DAOS.Seguridad
             _conn.Close();
             return p;
         }
-
-        public List<SistemasModulos> getSistemasModulos(int Idsistema, int idmodulo)
+        public List<SistemasModulos> getSistemasModulos(int IdSistema, int idmodulo)
         {
             List<SistemasModulos> listado = new List<SistemasModulos>();
             _status = new DbQueryResult();
@@ -129,14 +142,20 @@ namespace DAOS.Seguridad
             try
             {
                 SqlCommand cmSql = _conn.CreateCommand();
-                if (Idsistema > 0 && idmodulo<1)
+                if (IdSistema > 0 && idmodulo < 1)
                 {
-                cmSql.CommandText = "select * from sistemasmodulos s where s.idsistema in("+Idsistema+") ";
-                }else if(idmodulo>0&&Idsistema>0){
-                    cmSql.CommandText = "select * from sistemasmodulos s where s.idsistema in(" + Idsistema + ") and s.idmodulo=" + idmodulo + "";
+                    cmSql.CommandText = "select pm.idmodulo, pm.idsistemamodulo, pm.idsistema, pm.divvisible, m.idmodulo,m.nombre, m.h3id, m.divid from sistemasmodulos pm"
+                    + " inner join modulos m"
+                    + " on m.idmodulo=pm.idmodulo and pm.idsistema in(" + IdSistema + ") ";
                 }
-                    
-                    SqlDataAdapter da = new SqlDataAdapter(cmSql);
+                else if (idmodulo > 0 && IdSistema > 0)
+                {
+                    cmSql.CommandText = "select pm.idmodulo, pm.idsistemamodulo, pm.idsistema, pm.divvisible, m.idmodulo,m.nombre, m.h3id, m.divid from sistemasmodulos pm"
+                    + " inner join modulos m"
+                    + " on m.idmodulo=pm.idmodulo and pm.idsistema in(" + IdSistema + ") and pm.idmodulo=" + idmodulo + "";
+                }
+
+                SqlDataAdapter da = new SqlDataAdapter(cmSql);
                 DataSet ds = new DataSet();
                 da.Fill(ds);
                 if (ds.Tables.Count > 0)
@@ -149,19 +168,25 @@ namespace DAOS.Seguridad
                             DataRow drDatos = dtDatos.Rows[g1];
                             SistemasModulos pmodulo = new SistemasModulos();
                             pmodulo.idModulo = int.Parse(drDatos["idmodulo"].ToString());
-                            pmodulo.idSistema = int.Parse(drDatos["idperfil"].ToString());
-                            pmodulo.idSistemaModulo = int.Parse(drDatos["idsistemamodulo"].ToString());                            
+                            pmodulo.idSistema = int.Parse(drDatos["idsistema"].ToString());
+                            pmodulo.divvisible = drDatos["divvisible"].ToString();
+                            Modulo mod = new Modulo();
+                            mod.Nombre = drDatos["nombre"].ToString();
+                            mod.h3Id = drDatos["h3Id"].ToString();
+                            mod.divId = drDatos["divId"].ToString();
+                            pmodulo.modulo = mod;
                             listado.Add(pmodulo);
                             _status.Success = true;
                         }
                     }
                 }
             }
-            catch(Exception c) {
-                _status.ErrorMessage = c.Message;
+            catch (Exception e)
+            {
+                _status.ErrorMessage = e.Message;
             }
             _conn.Close();
             return listado;
-        }
+        }        
     }
 }

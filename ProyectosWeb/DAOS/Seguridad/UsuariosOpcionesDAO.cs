@@ -129,24 +129,60 @@ namespace DAOS.Seguridad
             _conn.Close();
             return p;
         }
-        
-        public List<UsuariosOpciones> getUsuariosOpciones(int idUsuario)
+
+        public List<UsuariosOpciones> getUsuariosOpciones(int idUsuario, int idOpcion, int pantallaIndex, int idModulo)
         {
             List<UsuariosOpciones> listado = new List<UsuariosOpciones>();
             _status = new DbQueryResult();
             _status.Success = false;
             _conn.Open();
+            String consulta = "select po.idusuarioopcion,po.idopcion,po.idusuario,po.visible," +
+                    " o.idpantalla, o.nombre,o.descripcion,o.idasp,o.componenteindex," +
+                    " o.chkboxtreeindex, o.estado,o.idcheckbox," +
+                     " p.idmodulo, p.nombre as nomPantalla, p.descripcion as descPantalla, " +
+                         " p.idasp as idaspPantalla, p.estado as estadoPantalla, p.pantallaindex" +
+                        " from usuariosopciones po" +
+                        " inner join opciones o" +
+                        " on o.idopcion=po.idopcion" +
+                        " inner join pantallas p on" +
+                        " p.idpantalla=o.idpantalla" +
+                        " where o.estado=0 ";
             try
             {
                 SqlCommand cmSql = _conn.CreateCommand();
 
-                if(idUsuario>0){
-                 cmSql.CommandText = "select * from usuariosopciones p where p.Estado=0 and p.idusuario=@parm1";
-                cmSql.Parameters.Add("@parm1", SqlDbType.Int);
-                cmSql.Parameters["@parm1"].Value = idUsuario;
-                }else{                                
-                cmSql.CommandText = "select * from usuariosOpciones p where p.Estado=0";
+                if (idUsuario > 0 && idOpcion < 1 && pantallaIndex < 1 && idModulo < 1)
+                {
+                    cmSql.CommandText = consulta + " and po.idusuario=@parm1";
+                    cmSql.Parameters.Add("@parm1", SqlDbType.Int);
+                    cmSql.Parameters["@parm1"].Value = idUsuario;
                 }
+                else if (idOpcion > 0 && idUsuario > 0 && pantallaIndex < 1 && idModulo < 1)
+                {
+                    cmSql.CommandText =
+                      consulta+" and po.idusuario=@parm1 and po.idopcion=@parm2";
+                    cmSql.Parameters.Add("@parm1", SqlDbType.Int);
+                    cmSql.Parameters.Add("@parm2", SqlDbType.Int);
+                    cmSql.Parameters["@parm1"].Value = idUsuario;
+                    cmSql.Parameters["@parm2"].Value = idOpcion;
+                }
+                else if (idUsuario > 0 && idOpcion < 1 && pantallaIndex > 0 && idModulo < 1)
+                {
+                    cmSql.CommandText = consulta + " and po.idusuario=@parm1 and p.pantallaIndex=@parm2";
+                    cmSql.Parameters.Add("@parm1", SqlDbType.Int);
+                    cmSql.Parameters["@parm1"].Value = idUsuario;
+                    cmSql.Parameters.Add("@parm2", SqlDbType.Int);
+                    cmSql.Parameters["@parm2"].Value = pantallaIndex;
+                }
+                else if (idUsuario > 0 && idOpcion < 1 && pantallaIndex < 1 && idModulo > 0)
+                {
+                    cmSql.CommandText = consulta + " and po.idusuario=@parm1 and p.idmodulo=@parm2";
+                    cmSql.Parameters.Add("@parm1", SqlDbType.Int);
+                    cmSql.Parameters["@parm1"].Value = idUsuario;
+                    cmSql.Parameters.Add("@parm2", SqlDbType.Int);
+                    cmSql.Parameters["@parm2"].Value = idModulo;
+                }
+
                 SqlDataAdapter da = new SqlDataAdapter(cmSql);
                 DataSet ds = new DataSet();
                 da.Fill(ds);
@@ -160,20 +196,41 @@ namespace DAOS.Seguridad
                             DataRow drDatos = dtDatos.Rows[g1];
                             UsuariosOpciones p = new UsuariosOpciones();
                             p.idUsuarioOpcion = int.Parse(drDatos["idUsuarioOpcion"].ToString());
-                            p.idUsuario = int.Parse(drDatos["idusuario"].ToString()); 
-                            p.idOpcion= int.Parse(drDatos["idOpcion"].ToString());                            
+                            p.idUsuario = int.Parse(drDatos["idusuario"].ToString());
+                            p.idOpcion = int.Parse(drDatos["idOpcion"].ToString());
                             p.visible = drDatos["visible"].ToString();
+                            Opcion opcion = new Opcion();
+                            opcion.idOpcion = int.Parse(drDatos["idOpcion"].ToString());
+                            opcion.idPantalla = int.Parse(drDatos["idpantalla"].ToString());
+                            opcion.nombre = drDatos["nombre"].ToString();
+                            opcion.idAsp = drDatos["idasp"].ToString();
+                            opcion.descripcion = drDatos["descripcion"].ToString();
+                            opcion.componenteIndex = drDatos["componenteIndex"].ToString();
+                            opcion.chkboxTreeindex = (drDatos["chkboxTreeindex"].ToString().Length > 0 ? int.Parse(drDatos["chkboxTreeindex"].ToString()) : 0);
+                            opcion.idcheckbox = drDatos["idcheckbox"].ToString();
+                            Pantalla panta = new Pantalla();
+                            panta.idPantalla = opcion.idPantalla;
+                            panta.idModulo = int.Parse(drDatos["idmodulo"].ToString());
+                            panta.idAsp = drDatos["idasppantalla"].ToString();
+                            panta.nombre = drDatos["nompantalla"].ToString();
+                            panta.descripcion = drDatos["descpantalla"].ToString();
+                            panta.estado = int.Parse(drDatos["estadopantalla"].ToString());
+                            panta.pantallaIndex = (drDatos["pantallaIndex"].ToString().Length > 0 ? int.Parse(drDatos["pantallaIndex"].ToString()) : 0);
+                            opcion.pantalla = panta;
+                            p.opcion = opcion;
                             listado.Add(p);
+
                             _status.Success = true;
                         }
                     }
                 }
             }
-            catch(Exception e) {
+            catch (Exception e)
+            {
                 _status.ErrorMessage = e.Message;
             }
             _conn.Close();
             return listado;
-        }
+        }        
     }
 }

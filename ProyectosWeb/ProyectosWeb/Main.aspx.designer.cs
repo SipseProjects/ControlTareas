@@ -157,6 +157,15 @@ namespace ProyectosWeb {
         protected global::System.Web.UI.WebControls.HiddenField hidLiidButton;
         
         /// <summary>
+        /// Control hidindexpantalla.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hidindexpantalla;
+        
+        /// <summary>
         /// Control usuarioLogin.
         /// </summary>
         /// <remarks>

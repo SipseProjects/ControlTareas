@@ -17,9 +17,9 @@ namespace BusinessLogic.Seguridad
         {
             _upantallasdao = new UsuariosPantallasDAO(con);
         }
-        public List<UsuariosPantallas> getUsuariosPantallas()
+        public List<UsuariosPantallas> getUsuariosPantallas(int idUsuario,int idPantalla, int idModulo)
         {
-            return _upantallasdao.getUsuariosPantallas();
+            return _upantallasdao.getUsuariosPantallas(idUsuario, idPantalla, idModulo);
         }
         public DbQueryResult registrarUsuariosPantallas(UsuariosPantallas usuariopantalla)
         {

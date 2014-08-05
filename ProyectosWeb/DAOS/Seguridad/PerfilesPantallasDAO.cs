@@ -128,7 +128,7 @@ namespace DAOS.Seguridad
             return p;
         }
 
-        public List<PerfilesPantallas> getPerfilesPantallas(int idPerfil, int idPantalla)
+        public List<PerfilesPantallas> getPerfilesPantallas(int idPerfil, int idPantalla, int idModulo)
         {
             List<PerfilesPantallas> listado = new List<PerfilesPantallas>();
 
@@ -136,7 +136,7 @@ namespace DAOS.Seguridad
             try
             {
                 SqlCommand cmSql = _conn.CreateCommand();
-                if (idPerfil > 0 && idPantalla < 1)
+                if (idPerfil > 0 && idPantalla < 1 && idModulo < 1)
                 {
                     cmSql.CommandText = 
                     "select pp.idperfilpantalla,pp.idpantalla,pp.idperfil,pp.visible,pp.componenteindex,p.idmodulo," +
@@ -147,7 +147,7 @@ namespace DAOS.Seguridad
                     cmSql.Parameters.Add("@parm1", SqlDbType.Int);
                     cmSql.Parameters["@parm1"].Value = idPerfil;
                 }
-                else if (idPantalla > 0 && idPerfil > 0)
+                else if (idPantalla > 0 && idPerfil > 0 && idModulo<1)
                 {
                     cmSql.CommandText =
                       "select pp.idperfilpantalla,pp.idpantalla,pp.idperfil,pp.visible,pp.componenteindex,p.idmodulo," +
@@ -159,7 +159,20 @@ namespace DAOS.Seguridad
                     cmSql.Parameters.Add("@parm2", SqlDbType.Int);
                     cmSql.Parameters["@parm1"].Value = idPerfil;
                     cmSql.Parameters["@parm2"].Value = idPantalla;
-                }                
+                }
+                else if (idModulo > 0 && idPerfil > 0 && idPantalla<1)
+                {
+                    cmSql.CommandText =
+                      "select pp.idperfilpantalla,pp.idpantalla,pp.idperfil,pp.visible,pp.componenteindex,p.idmodulo," +
+                      " p.nombre,p.descripcion,p.idasp, p.estado" +
+                       " from perfilespantallas pp" +
+                      " inner join pantallas p" +
+                      " on pp.idpantalla=p.idpantalla where p.estado=0 and pp.idperfil=@parm1 and p.idmodulo=@parm2";
+                    cmSql.Parameters.Add("@parm1", SqlDbType.Int);
+                    cmSql.Parameters.Add("@parm2", SqlDbType.Int);
+                    cmSql.Parameters["@parm1"].Value = idPerfil;
+                    cmSql.Parameters["@parm2"].Value = idModulo;
+                }
 
                 SqlDataAdapter da = new SqlDataAdapter(cmSql);
                 DataSet ds = new DataSet();

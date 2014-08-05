@@ -13,14 +13,13 @@ using ProyectosWeb.BusinessLogic.general;
 using ProyectosWeb.Models;
 using ProyectosWeb.BusinessLogic.Seguridad;
 using System.Configuration;
+using Models;
 
 
 namespace ProyectosWeb.Views.Login
 {
     public partial class Inicio : System.Web.UI.Page
-    {
-        //private static SqlConnection conn = new SqlConnection("Data Source=172.16.1.31;Initial Catalog=ProyectosGestion;Persist Security Info=True;User ID=sa;Password=Adminpwd20");        
-        
+    {        
         static string connStr = ConfigurationManager.ConnectionStrings["ProyectosGestionConnectionString"].ConnectionString;
         private static SqlConnection conn = new SqlConnection(connStr);
         private UsuarioFacade _usuarioFacade = new UsuarioFacade(conn);
@@ -156,12 +155,13 @@ namespace ProyectosWeb.Views.Login
                         {
                             string valor = Hidsistemaval.Value;                             
                             
-                            string[] roles = { valor.Trim(), "" };
+                            string[] sistema = { valor.Trim(), "" };
 
-                            GenericIdentity userIdentity = new GenericIdentity(d);                            
+                            GenericIdentity userIdentity = new GenericIdentity(d);
 
-                            GenericPrincipal userPrincipal =
-                              new GenericPrincipal(userIdentity, roles);
+                            GlobalDataSingleton.Instance.sistemaID = int.Parse(valor);
+                            
+                            GenericPrincipal userPrincipal = new GenericPrincipal(userIdentity, sistema);
                             Context.User = userPrincipal;
                            
                             if (Context.User.Identity!=null)

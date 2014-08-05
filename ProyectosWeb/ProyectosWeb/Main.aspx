@@ -625,8 +625,8 @@
     <asp:HiddenField ID="hidcontchecks" runat="server"  Value="0" /> 
     <asp:HiddenField ID="hidpantallaid" runat="server"  Value="" />
      <asp:HiddenField ID="hidcontchecksubop" runat="server"  Value="0" />   
-     <asp:HiddenField ID="hidLiidButton" runat="server"  Value="" />
-
+     <asp:HiddenField ID="hidLiidButton" runat="server"  Value="" /> 
+      <asp:HiddenField ID="hidindexpantalla" runat="server"  Value="0" /> 
     <div id="header" align="center">
         <img src="/Img/SolIcon.png" alt="Empresa" height="100px" width="20%" style="float: left;">
         <h1>
@@ -645,47 +645,43 @@
                     <p align="left">
                         Catalogos</p>
                     <ul>
-                        <li id="lblUsuariosSegLi"  ><asp:Label runat="server" ID="lblUsuariosSeg">Usuarios</asp:Label>
+                        <li id="lblUsuariosSegLi" class="liacordion" ><asp:Label runat="server" ID="lblUsuariosSeg">Usuarios</asp:Label>
                             <ul>                           
-                                <li id="LinkUsuariosSegLi" >
-                                    <asp:LinkButton  ID="LinkUsuariosSeg" CommandName="subUsuarios" runat="server" OnClick="UsuariosOnClick">Usuarios</asp:LinkButton></li>
-                                <li id="LinkcuentaUsSegLi" >
-                                    <asp:LinkButton ID="LinkcuentaUsSeg" CommandName="sub" runat="server" OnClick="CuentaUsuarioOnClick">Cuenta</asp:LinkButton></li>                                                                
+                                <li id="LinkUsuariosSegLi" class="liacordion" >
+                                    <asp:LinkButton  ID="LinkUsuariosSeg" CommandName="subUsuarios,,1" runat="server" OnClick="UsuariosOnClick">Usuarios</asp:LinkButton></li>
+                                <li id="LinkcuentaUsSegLi" class="liacordion">
+                                    <asp:LinkButton ID="LinkcuentaUsSeg" CommandName="sub,,2" runat="server" OnClick="CuentaUsuarioOnClick">Cuenta</asp:LinkButton></li>                                                                
                             </ul>
                         </li>
-                        <li>
-                            <asp:LinkButton ID="LinkGruposSeg" CommandName="Grupos" runat="server" OnClick="GruposOnClick">Grupos</asp:LinkButton></li>
-                        <li>
-                            <asp:LinkButton ID="LinkPerfilesSeg" CommandName="Perfiles" runat="server" OnClick="PerfilesOnClick">Perfiles</asp:LinkButton></li>
-                        <li ><asp:Label runat="server" ID="lblRelacionesSeg">Relaciones</asp:Label>
+                        <li class="liacordion" >
+                            <asp:LinkButton ID="LinkGruposSeg" CommandName="Grupos,,3" runat="server" OnClick="GruposOnClick">Grupos</asp:LinkButton></li>
+                        <li class="liacordion">
+                            <asp:LinkButton ID="LinkPerfilesSeg" CommandName="Perfiles,,4" runat="server" OnClick="PerfilesOnClick">Perfiles</asp:LinkButton></li>
+                        <li class="liacordion" ><asp:Label runat="server" ID="lblRelacionesSeg">Relaciones</asp:Label>
                             <ul>
-                                <li>
-                                    <asp:LinkButton ID="LinkRelacionesUsSeg" CommandName="subRelaciones" runat="server" OnClick="RelacionesUsuariosOnClick">Usuarios</asp:LinkButton></li>
-                                <li>
-                                    <asp:LinkButton ID="LinkRelacionesGruSeg" CommandName="subRelaciones" runat="server" OnClick="RelacionesGruposOnClick">Grupos</asp:LinkButton></li>
-                                <li>
-                                    <asp:LinkButton ID="LinkRelacionesPerfSeg" CommandName="subRelaciones" runat="server" OnClick="RelacionesPerfilesOnClick">Perfiles</asp:LinkButton></li>
+                                <li class="liacordion">
+                                    <asp:LinkButton ID="LinkRelacionesUsSeg" CommandName="subRelaciones,,5" runat="server" OnClick="RelacionesUsuariosOnClick">Usuarios</asp:LinkButton></li>
+                                <li class="liacordion">
+                                    <asp:LinkButton ID="LinkRelacionesGruSeg" CommandName="subRelaciones,,6" runat="server" OnClick="RelacionesGruposOnClick">Grupos</asp:LinkButton></li>
+                                <li class="liacordion">
+                                    <asp:LinkButton   ID="LinkRelacionesPerfSeg" CommandName="subRelaciones,,7" runat="server" OnClick="RelacionesPerfilesOnClick">Perfiles</asp:LinkButton></li>
                             </ul>
-                        </li>
-                        <li><a href="#">Fases</a></li>
-                        <li><a href="#">Tipos de persona</a></li>
-                        <li><a href="#">Tecnologia</a></li>
-                        <li><a href="#">Parametros de sistema</a></li>
-                        <li><a href="#">Clientes</a></li>
+                        </li >
+                        <li class="liacordion"><a href="#">Fases</a></li>
                     </ul>
                         <asp:Label runat="server" ID="LblControlAcceso">Control de acceso</asp:Label>
                     <ul>
-                        <li><asp:LinkButton ID="LB2CASistem" runat="server" CommandName="subSistemas" OnClick="ControlAccesSistemaOnClick">Sistemas</asp:LinkButton></li>
-                        <li><asp:LinkButton ID="LB3CAModul" runat="server" CommandName="subCAModulo" OnClick="ControlAccesModuloOnClick">Módulos</asp:LinkButton></li>
-                        <li><asp:LinkButton ID="LB4CAWindo" runat="server" CommandName="subCAPantalla" OnClick="ControlAccesPantallasOnClick">Pantallas</asp:LinkButton></li>
-                        <li><asp:LinkButton ID="LB5CAOption" runat="server" CommandName="subCAOpcion" OnClick="ControlAccesOpcionesOnClick">Opciones</asp:LinkButton></li>
-                        <li ><asp:Label runat="server" CommandName="op4RelAcceso" ID="LBLRelAcceso">Relaciones</asp:Label>
-                            <ul><li>
-                                    <asp:LinkButton ID="LBCASistema" CommandName="op5CASisMod,12" runat="server" OnClick="RelAccesoModSistemaOnClick">Sistemas</asp:LinkButton></li>                               
-                                <li>
-                                    <asp:LinkButton ID="LBCAPerfil" CommandName="op5CAPerfil,11" runat="server" OnClick="RelAccesoPerfilesOnClick">Perfiles</asp:LinkButton></li>
-                                <li>
-                                    <asp:LinkButton ID="LBCAUsu" CommandName="op5CAUsu,11" runat="server" OnClick="RelAccesoUsuariosOnClick">Usuarios</asp:LinkButton></li>
+                        <li class="liacordion"><asp:LinkButton ID="LB2CASistem" runat="server" CommandName="subSistemas,,8" OnClick="ControlAccesSistemaOnClick">Sistemas</asp:LinkButton></li>
+                        <li class="liacordion"><asp:LinkButton ID="LB3CAModul" runat="server" CommandName="subCAModulo,,9" OnClick="ControlAccesModuloOnClick">Módulos</asp:LinkButton></li>
+                        <li class="liacordion"><asp:LinkButton ID="LB4CAWindo" runat="server" CommandName="subCAPantalla,,10" OnClick="ControlAccesPantallasOnClick">Pantallas</asp:LinkButton></li>
+                        <li class="liacordion"><asp:LinkButton ID="LB5CAOption" runat="server" CommandName="subCAOpcion,,11" OnClick="ControlAccesOpcionesOnClick">Opciones</asp:LinkButton></li>
+                        <li class="liacordion"><asp:Label runat="server" CommandName="op4RelAcceso" ID="LBLRelAcceso">Relaciones</asp:Label>
+                            <ul><li class="liacordion">
+                                    <asp:LinkButton ID="LBCASistema" CommandName="op5CASisMod,12,12" runat="server" OnClick="RelAccesoModSistemaOnClick">Sistemas</asp:LinkButton></li>                               
+                                <li class="liacordion">
+                                    <asp:LinkButton ID="LBCAPerfil" class="acordionButton" CommandName="op5CAPerfil,11,13" runat="server" OnClick="RelAccesoPerfilesOnClick">Perfiles</asp:LinkButton></li>
+                                <li class="liacordion">
+                                    <asp:LinkButton ID="LBCAUsu" CommandName="op5CAUsu,11,14" runat="server" OnClick="RelAccesoUsuariosOnClick">Usuarios</asp:LinkButton></li>
                                </ul>
                         </li>                       
                     </ul>
@@ -694,36 +690,36 @@
                     Tarea</h3>
                 <div id="DivProyecto2" runat="server">
                     <ul>
-                        <li>
-                            <asp:LinkButton  ID="LinkProyecto" runat="server" CommandName="OpcionTarea" OnClick="ProyectoOnClick">Proyecto</asp:LinkButton></li>
-                        <li>
-                            <asp:LinkButton ID="LinkRequerimiento" runat="server" CommandName="OpcionTarea" OnClick="RequerimientoOnClick">Requerimiento</asp:LinkButton></li>
-                        <li>
-                            <asp:LinkButton ID="LinkCasosUso" runat="server" CommandName="OpcionTarea" OnClick="CasosUsoOnClick">Casos de uso</asp:LinkButton></li>
-                        <li>
-                            <asp:LinkButton ID="LinkComponente" runat="server" CommandName="OpcionTarea" OnClick="ComponenteOnClick">Componente</asp:LinkButton></li>
-                        <li>
-                            <asp:LinkButton ID="LinkTarea" runat="server" CommandName="OpcionTarea" OnClick="TareaOnClick">Tarea</asp:LinkButton></li>
+                        <li class="liacordion">
+                            <asp:LinkButton  ID="LinkProyecto" runat="server" CommandName="OpcionTarea,,15" OnClick="ProyectoOnClick">Proyecto</asp:LinkButton></li>
+                        <li class="liacordion">
+                            <asp:LinkButton ID="LinkRequerimiento" runat="server" CommandName="OpcionTarea,,16" OnClick="RequerimientoOnClick">Requerimiento</asp:LinkButton></li>
+                        <li class="liacordion">
+                            <asp:LinkButton ID="LinkCasosUso" runat="server" CommandName="OpcionTarea,,17" OnClick="CasosUsoOnClick">Casos de uso</asp:LinkButton></li>
+                        <li class="liacordion">
+                            <asp:LinkButton ID="LinkComponente" runat="server" CommandName="OpcionTarea,,18" OnClick="ComponenteOnClick">Componente</asp:LinkButton></li>
+                        <li class="liacordion">
+                            <asp:LinkButton ID="LinkTarea" runat="server" CommandName="OpcionTarea,,19" OnClick="TareaOnClick">Tarea</asp:LinkButton></li>
                     </ul>
                 </div>
                 <h3 id="Proyecto3" runat="server">
                     Consultas y reporte</h3>
-                <div id="DivProyecto3" runat="server">
+                <div id="DivProyecto3" runat="server"> 
                     <ul>
-                        <li>Horas: planeadas, reales</li>
-                        <li>Avance</li>
-                        <li>Fase</li>
-                        <li>Usuarios-Persona</li>
-                        <li>Cliente</li>
-                        <li>Semaforo de proyectos</li>
-                        <li>Retrasos</li>
+                        <li class="liacordion">Horas: planeadas, reales</li>
+                        <li class="liacordion">Avance</li>
+                        <li class="liacordion">Fase</li>
+                        <li class="liacordion">Usuarios-Persona</li>
+                        <li class="liacordion">Cliente</li>
+                        <li class="liacordion">Semaforo de proyectos</li>
+                        <li class="liacordion">Retrasos</li>
                     </ul>
                 </div>
                 <h3 id="Proyecto4" runat="server">
                     Seguimiento de tarea</h3>
                 <div id="DivProyecto4" runat="server">
                     <ul>
-                        <li>Actualizar tarea</li>
+                        <li class="liacordion">Actualizar tarea</li>
                     </ul>
                 </div>
             </div>
@@ -1254,7 +1250,7 @@
  <div><asp:Button ID="ButtonAsignarModSis"
                              runat="server" Text="Asignar" OnClick="ButtonRegistrarRelAccesoSisModSeg_Click"  />
                              <asp:Button ID="ButtonDesasignarModSis"
-                             runat="server" Text="DesAsignar" OnClick="ButtonDeleteRelAccesoSisModSeg_Click"  />
+                             runat="server" Text="Actualizar" OnClick="ButtonDeleteRelAccesoSisModSeg_Click"  />
                              </div>
                              <div><asp:Label  ID="Label6"   runat="server"></asp:Label></div>
                              </div>

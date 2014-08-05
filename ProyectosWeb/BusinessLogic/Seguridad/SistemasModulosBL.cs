@@ -17,7 +17,7 @@ namespace BusinessLogic.Seguridad
         {
             _sistemamodulodao = new SistemasModulosDAO(con);
         }
-        public List<SistemasModulos> getSsitemasModulos(int idSistema, int idmodulo)
+        public List<SistemasModulos> getSistemasModulos(int idSistema, int idmodulo)
         {
             return _sistemamodulodao.getSistemasModulos(idSistema, idmodulo);
         }
@@ -25,9 +25,9 @@ namespace BusinessLogic.Seguridad
         {
             return _sistemamodulodao.registrarSistemasModulos(sistemamodulo);
         }
-        public DbQueryResult DeleteSistemasModulos(SistemasModulos sistemamodulo)
+        public DbQueryResult UpdateSistemasModulos(SistemasModulos sistemamodulo)
         {
-            return _sistemamodulodao.DeleteSistemasModulos(sistemamodulo);
+            return _sistemamodulodao.UpdateSistemasModulos(sistemamodulo);
         }
         public SistemasModulos getSistemaModulo(int idsistema, int idmodulo)
         {

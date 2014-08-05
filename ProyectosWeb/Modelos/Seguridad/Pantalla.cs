@@ -13,5 +13,6 @@ namespace Models.Seguridad
        public String descripcion;
        public String idAsp;
        public int estado;
+       public int pantallaIndex;
     }
 }

@@ -13,6 +13,7 @@ namespace DAOS.Seguridad
     {
         private SqlConnection _conn;
         private Consultas _consultas;
+        private DbQueryResult _status;
         public UsuariosModulosDAO(SqlConnection conn)
         {
            _conn=conn;
@@ -134,19 +135,21 @@ namespace DAOS.Seguridad
         public List<UsuariosModulos> getUsuariosModulos(int IdUsuario, int idmodulo)
         {
             List<UsuariosModulos> listado = new List<UsuariosModulos>();
+            _status=new DbQueryResult();
+            _status.Success=false;
             _conn.Open();
             try
             {
                 SqlCommand cmSql = _conn.CreateCommand();
                 if (IdUsuario > 0 && idmodulo < 1)
                 {
-                cmSql.CommandText = "select pm.idmodulo, pm.idperfilmodulo, pm.idperfil, pm.divvisible, m.idmodulo,m.nombre, m.h3id, m.divid from usuariosmodulos pm"
+                cmSql.CommandText = "select pm.idmodulo, pm.idusuariomodulo, pm.idusuario, pm.divvisible, m.idmodulo,m.nombre, m.h3id, m.divid from usuariosmodulos pm"
                 +" inner join modulos m"
-                +" on m.idmodulo=pm.idmodulo and pm.idperfil in("+IdUsuario+") ";
+                +" on m.idmodulo=pm.idmodulo and pm.idusuario in("+IdUsuario+") ";
                 }else if(idmodulo>0&&IdUsuario>0){
-                    cmSql.CommandText = "select pm.idmodulo, pm.idperfilmodulo, pm.idperfil, pm.divvisible, m.idmodulo,m.nombre, m.h3id, m.divid from usuariosmodulos pm"
+                    cmSql.CommandText = "select pm.idmodulo, pm.idusuariomodulo, pm.idusuario, pm.divvisible, m.idmodulo,m.nombre, m.h3id, m.divid from usuariosmodulos pm"
                     + " inner join modulos m"
-                    + " on m.idmodulo=pm.idmodulo and pm.idperfil in(" + IdUsuario + ") and pm.idmodulo="+idmodulo+"";
+                    + " on m.idmodulo=pm.idmodulo and pm.idusuario in(" + IdUsuario + ") and pm.idmodulo="+idmodulo+"";
                 }
                     
                     SqlDataAdapter da = new SqlDataAdapter(cmSql);
@@ -170,12 +173,13 @@ namespace DAOS.Seguridad
                             mod.divId = drDatos["divId"].ToString();
                             pmodulo.modulo = mod;
                             listado.Add(pmodulo);
+                            _status.Success = true;
                         }
                     }
                 }
             }
-            catch { 
-            
+            catch(Exception e) {
+                _status.ErrorMessage = e.Message;
             }
             _conn.Close();
             return listado;

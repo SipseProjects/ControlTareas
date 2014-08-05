@@ -130,40 +130,78 @@ namespace DAOS.Seguridad
             return p;
         }
         
-        public List<PerfilesOpciones> getPerfilesOpciones(int idPerfil, int idOpcion)
+        public List<PerfilesOpciones> getPerfilesOpciones(int idPerfil, int idOpcion, int pantallaIndex, int idModulo)
         {
             List<PerfilesOpciones> listado = new List<PerfilesOpciones>();
             _status = new DbQueryResult();
             _status.Success = false;
             _conn.Open();
+            String consulta = "select po.idperfilopcion,po.idopcion,po.idperfil,po.visible," +
+                    " o.idpantalla, o.nombre,o.descripcion,o.idasp,o.componenteindex," +
+                    " o.chkboxtreeindex, o.estado,o.idcheckbox," +
+                     " p.idmodulo, p.nombre as nomPantalla, p.descripcion as descPantalla, " +
+                         " p.idasp as idaspPantalla, p.estado as estadoPantalla, p.pantallaindex" +
+                        " from perfilesopciones po" +
+                        " inner join opciones o" +
+                        " on o.idopcion=po.idopcion" +
+                        " inner join pantallas p on" +
+                        " p.idpantalla=o.idpantalla" +
+                        " where o.estado=0 ";
             try
             {
                 SqlCommand cmSql = _conn.CreateCommand();
 
-                if (idPerfil > 0 && idOpcion < 1)
+                if (idPerfil > 0 && idOpcion < 1 && pantallaIndex < 1 && idModulo<1)
                 {
-                    cmSql.CommandText =
-                   "select po.idperfilopcion,po.idopcion,po.idperfil,po.visible,o.idpantalla" +
-                        " p.nombre.p.descripcion,p.idasp,p.componenteindex,p.chkboxtreeindex," +
-                        " p.estado,p.idcheckbox from perfilesopciones po" +
-                        " inner join opciones o" +
-                        " on o.idopcion=po.idopcion where o.estado=0 and po.idperfil=@parm1";
+                    cmSql.CommandText = consulta+" and po.idperfil=@parm1";
                     cmSql.Parameters.Add("@parm1", SqlDbType.Int);
                     cmSql.Parameters["@parm1"].Value = idPerfil;
                 }
-                else if (idOpcion > 0 && idPerfil > 0)
+                else if (idOpcion > 0 && idPerfil > 0 && idModulo<1 && pantallaIndex < 1)
                 {
                     cmSql.CommandText =
-                      "select po.idperfilopcion,po.idopcion,po.idperfil,po.visible,o.idpantalla"+
-                        " p.nombre.p.descripcion,p.idasp,p.componenteindex,p.chkboxtreeindex,"+
-                        " p.estado,p.idcheckbox from perfilesopciones po"+
-                        " inner join opciones o"+
-                        " on o.idopcion=po.idopcion where o.estado=0 and po.idperfil=@parm1 and po.idopcion=@parm2";
+                      "select po.idperfilopcion,po.idopcion,po.idperfil,po.visible," +
+                        " o.idpantalla, o.nombre,o.descripcion,o.idasp,o.componenteindex," +
+                        " o.chkboxtreeindex, o.estado,o.idcheckbox," +
+                        " p.idmodulo, p.nombre as nomPantalla, p.descripcion as descPantalla, "+
+                         " p.idasp as idaspPantalla, p.estado as estadoPantalla, p.pantallaindex"+
+                        " from perfilesopciones po inner join opciones o" +
+                        " on o.idopcion=po.idopcion "+
+                        " inner join pantallas p on" +
+                        " p.idpantalla=o.idpantalla" +
+                        " where o.estado=0 and po.idperfil=@parm1 and po.idopcion=@parm2";
                     cmSql.Parameters.Add("@parm1", SqlDbType.Int);
                     cmSql.Parameters.Add("@parm2", SqlDbType.Int);
                     cmSql.Parameters["@parm1"].Value = idPerfil;
                     cmSql.Parameters["@parm2"].Value = idOpcion;
-                }      
+                }
+                else if (idPerfil > 0 && idOpcion < 1 && pantallaIndex > 0 && idModulo < 1)
+                {
+                    cmSql.CommandText = consulta + " and po.idperfil=@parm1 and p.pantallaIndex=@parm2";
+                    cmSql.Parameters.Add("@parm1", SqlDbType.Int);
+                    cmSql.Parameters["@parm1"].Value = idPerfil;
+                    cmSql.Parameters.Add("@parm2", SqlDbType.Int);
+                    cmSql.Parameters["@parm2"].Value = pantallaIndex;
+                }
+                else if (idPerfil > 0 && idOpcion < 1 && pantallaIndex > 0 && idModulo >0)
+                {
+                    cmSql.CommandText = consulta + " and po.idperfil=@parm1 and p.pantallaIndex=@parm2 and p.idmodulo=@parm3";
+                    cmSql.Parameters.Add("@parm1", SqlDbType.Int);
+                    cmSql.Parameters["@parm1"].Value = idPerfil;
+                    cmSql.Parameters.Add("@parm2", SqlDbType.Int);
+                    cmSql.Parameters["@parm2"].Value = pantallaIndex;
+                    cmSql.Parameters.Add("@parm2", SqlDbType.Int);
+                    cmSql.Parameters["@parm3"].Value = idModulo;
+                }
+                else if (idPerfil > 0 && idOpcion < 1 && pantallaIndex < 1 && idModulo > 0)
+                {
+                    cmSql.CommandText = consulta + " and po.idperfil=@parm1 and p.idmodulo=@parm3";
+                    cmSql.Parameters.Add("@parm1", SqlDbType.Int);
+                    cmSql.Parameters["@parm1"].Value = idPerfil;
+                    cmSql.Parameters.Add("@parm3", SqlDbType.Int);
+                    cmSql.Parameters["@parm3"].Value = idModulo;
+                }
+     
                 SqlDataAdapter da = new SqlDataAdapter(cmSql);
                 DataSet ds = new DataSet();
                 da.Fill(ds);
@@ -189,6 +227,15 @@ namespace DAOS.Seguridad
                             opcion.componenteIndex = drDatos["componenteIndex"].ToString();
                             opcion.chkboxTreeindex = (drDatos["chkboxTreeindex"].ToString().Length>0 ? int.Parse(drDatos["chkboxTreeindex"].ToString()):0);
                             opcion.idcheckbox = drDatos["idcheckbox"].ToString();
+                            Pantalla panta = new Pantalla();
+                            panta.idPantalla = opcion.idPantalla;
+                            panta.idModulo = int.Parse(drDatos["idmodulo"].ToString());
+                            panta.idAsp = drDatos["idasppantalla"].ToString();
+                            panta.nombre = drDatos["nompantalla"].ToString();
+                            panta.descripcion = drDatos["descpantalla"].ToString();
+                            panta.estado = int.Parse(drDatos["estadopantalla"].ToString());
+                            panta.pantallaIndex = (drDatos["pantallaIndex"].ToString().Length > 0 ? int.Parse(drDatos["pantallaIndex"].ToString()) : 0);
+                            opcion.pantalla = panta;
                             p.opcion = opcion;
                             listado.Add(p);
 

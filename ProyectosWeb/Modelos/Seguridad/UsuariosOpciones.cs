@@ -11,5 +11,6 @@ namespace Models.Seguridad
        public int idUsuario;
        public int idOpcion;
        public String visible;
+       public Opcion opcion = new Opcion();
     }
 }

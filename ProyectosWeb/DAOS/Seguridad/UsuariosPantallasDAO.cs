@@ -13,6 +13,7 @@ namespace DAOS.Seguridad
     {
         private SqlConnection _conn;
         private Consultas _consultas;
+        private DbQueryResult _status;
         public UsuariosPantallasDAO(SqlConnection conn)
         {
            _conn=conn;
@@ -127,15 +128,53 @@ namespace DAOS.Seguridad
             _conn.Close();
             return p;
         }
-
-        public List<UsuariosPantallas> getUsuariosPantallas()
+        public List<UsuariosPantallas> getUsuariosPantallas(int idUsuario, int idPantalla, int idModulo)
         {
             List<UsuariosPantallas> listado = new List<UsuariosPantallas>();
+             _status=new DbQueryResult();
+             _status.Success = false;
             _conn.Open();
             try
             {
                 SqlCommand cmSql = _conn.CreateCommand();
-                cmSql.CommandText = "select * from usuariospantallas p where p.Estado=0";
+                if (idUsuario > 0 && idPantalla < 1 && idModulo < 1)
+                {
+                    cmSql.CommandText =
+                    "select pp.idusuariopantalla,pp.idpantalla,pp.idusuario,pp.visible,pp.componenteindex,p.idmodulo," +
+                    " p.nombre,p.descripcion,p.idasp, p.estado" +
+                     " from usuariospantallas pp" +
+                    " inner join pantallas p" +
+                    " on pp.idpantalla=p.idpantalla where p.estado=0 and pp.idusuario=@parm1";
+                    cmSql.Parameters.Add("@parm1", SqlDbType.Int);
+                    cmSql.Parameters["@parm1"].Value = idUsuario;
+                }
+                else if (idPantalla > 0 && idUsuario > 0 && idModulo < 1)
+                {
+                    cmSql.CommandText =
+                      "select pp.idusuariopantalla,pp.idpantalla,pp.idusuario,pp.visible,pp.componenteindex,p.idmodulo," +
+                      " p.nombre,p.descripcion,p.idasp, p.estado" +
+                       " from usuariospantallas pp" +
+                      " inner join pantallas p" +
+                      " on pp.idpantalla=p.idpantalla where p.estado=0 and pp.idusuario=@parm1 and pp.idpantalla=@parm2";
+                    cmSql.Parameters.Add("@parm1", SqlDbType.Int);
+                    cmSql.Parameters.Add("@parm2", SqlDbType.Int);
+                    cmSql.Parameters["@parm1"].Value = idUsuario;
+                    cmSql.Parameters["@parm2"].Value = idPantalla;
+                }
+                else if (idPantalla < 1 && idUsuario > 0 && idModulo > 0)
+                {
+                    cmSql.CommandText =
+                      "select pp.idusuariopantalla,pp.idpantalla,pp.idusuario,pp.visible,pp.componenteindex,p.idmodulo," +
+                      " p.nombre,p.descripcion,p.idasp, p.estado" +
+                       " from usuariospantallas pp" +
+                      " inner join pantallas p" +
+                      " on pp.idpantalla=p.idpantalla where p.estado=0 and pp.idusuario=@parm1 and p.idmodulo=@parm2";
+                    cmSql.Parameters.Add("@parm1", SqlDbType.Int);
+                    cmSql.Parameters.Add("@parm2", SqlDbType.Int);
+                    cmSql.Parameters["@parm1"].Value = idUsuario;
+                    cmSql.Parameters["@parm2"].Value = idModulo;
+                }
+
                 SqlDataAdapter da = new SqlDataAdapter(cmSql);
                 DataSet ds = new DataSet();
                 da.Fill(ds);
@@ -147,22 +186,31 @@ namespace DAOS.Seguridad
                         for (int g1 = 0; g1 < ds.Tables[0].Rows.Count; g1++)
                         {
                             DataRow drDatos = dtDatos.Rows[g1];
-                            UsuariosPantallas p = new UsuariosPantallas();
-                            p.idPantalla = int.Parse(drDatos["idpantalla"].ToString());
-                            p.idUsuario = int.Parse(drDatos["idperfil"].ToString());
-                            p.idUsuarioPantalla = int.Parse(drDatos["idusuariopantalla"].ToString());
-                            p.visible = drDatos["visible"].ToString();
-                            p.componenteIndex = drDatos["componenteIndex"].ToString();
-                            listado.Add(p);
+                            UsuariosPantallas u = new UsuariosPantallas();
+                            u.idPantalla = int.Parse(drDatos["idpantalla"].ToString());
+                            u.idUsuario = int.Parse(drDatos["idusuario"].ToString());
+                            u.idUsuarioPantalla = int.Parse(drDatos["idusuariopantalla"].ToString());
+                            u.visible = drDatos["visible"].ToString();
+                            u.componenteIndex = drDatos["componenteIndex"].ToString();
+                            Pantalla pantalla = new Pantalla();
+                            pantalla.idPantalla = int.Parse(drDatos["idpantalla"].ToString());
+                            pantalla.idModulo = int.Parse(drDatos["idmodulo"].ToString());
+                            pantalla.idAsp = drDatos["idasp"].ToString();
+                            pantalla.nombre = drDatos["nombre"].ToString();
+                            pantalla.descripcion = drDatos["descripcion"].ToString();
+                            u.pantalla = pantalla;
+                            listado.Add(u);
+                            _status.Success = true;
                         }
                     }
                 }
             }
-            catch { 
-            
+            catch(Exception e)
+            {
+                _status.ErrorMessage = e.Message;
             }
             _conn.Close();
             return listado;
-        }
+        }       
     }
 }

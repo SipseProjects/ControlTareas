@@ -40,8 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlobalDataSingleton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DBQueryResult.cs" />
+    <Compile Include="Seguridad\ControlAcceso\GrupoLogin.cs" />
+    <Compile Include="Seguridad\ControlAcceso\PerfilLogin.cs" />
+    <Compile Include="Seguridad\ControlAcceso\PersonaLogin.cs" />
+    <Compile Include="Seguridad\ControlAcceso\UsuarioLogin.cs" />
     <Compile Include="Seguridad\SistemasModulos.cs" />
     <Compile Include="Seguridad\UsuariosModulos.cs" />
     <Compile Include="Seguridad\UsuariosOpciones.cs" />
@@ -53,6 +58,7 @@
     <Compile Include="Seguridad\PerfilesModulos.cs" />
     <Compile Include="Seguridad\PerfilesPantallas.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

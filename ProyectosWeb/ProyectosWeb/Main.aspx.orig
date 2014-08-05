@@ -1,0 +1,393 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Main.aspx.cs" Inherits="ProyectosWeb.Main" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+   
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+   <link rel="stylesheet" href="/Style/Style.css" />
+  
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script>
+        $(function () {
+<<<<<<< HEAD
+            $("#accordion").accordion();
+        });     
+    </script>
+    <script type="text/javascript">
+        Sys.debug = true;
+        Sys.require(Sys.components.filteredTextBox, function () {
+            $("#TextBoxTelefono").filteredTextBox({
+                FilterType: Sys.Extended.UI.FilterTypes.Numbers
+            });
+            $("#TextBoxNomUsuario").filteredTextBox({
+                ValidChars: " ",
+                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+            });
+            $("#TextBoxApellidos").filteredTextBox({                                   
+                ValidChars: " ",
+                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+            });
+            $("#TextBoxNomGrupo").filteredTextBox({
+                ValidChars: " ",
+                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+            });
+            $("#TextBoxNomPerfil").filteredTextBox({
+                ValidChars: " ",
+                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+            });
+            $("#TextBoxUsuarioUpdate").filteredTextBox({
+                InValidChars: " ",
+                ValidChars: ".",
+                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+            });
+            $("#PasswordUsUpdate").filteredTextBox({
+                InValidChars: " ",
+                ValidChars: ".",
+                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+            });
+            $("#PasswordConfirmUpdate").filteredTextBox({
+                InValidChars: " ",
+                ValidChars: ".",
+                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+            });
+            $("#TextBoxUsuario").filteredTextBox({
+                InValidChars: " ",
+                ValidChars: ".",
+                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+            });
+            $("#PasswordUs").filteredTextBox({
+                InValidChars: " ",
+                ValidChars: ".",
+                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+            });
+            $("#PasswordConfirm").filteredTextBox({
+                InValidChars: " ",
+                ValidChars: ".",
+                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+            });
+            $("#PasswordUsRestore").filteredTextBox({
+                InValidChars: " ",
+                ValidChars: ".",
+                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+            });
+            $("#PasswordUsRestoreConfirm").filteredTextBox({
+                InValidChars: " ",
+                ValidChars: ".",
+                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+            });
+            $("#TextBoxEmailRegistrado").filteredTextBox({
+                InValidChars: " ",
+                ValidChars: ".@",
+                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+            });
+
+        }); 
+    </script>
+    <script type="text/javascript" src="validacion/jquery.validate.js"></script>
+    <script type="text/javascript">
+        $(function () {           
+
+            $('#ButtonAgregarGU').bind('click', function () {
+                var options = $('[id*=ListBoxGruposSeg] option:selected');
+                for (var i = 0; i < options.length; i++) {
+                    var opt = $(options[i]).clone();
+                    $(options[i]).remove();     
+                    $('[id*=ListBoxGruposAsigSeg]').append(opt);
+                }
+            }); 
+            $('#ButtonEliminarGU').bind('click', function () {
+                var options = $('[id*=ListBoxGruposAsigSeg] option:selected');
+                for (var i = 0; i < options.length; i++) {
+                    var opt = $(options[i]).clone();
+                    $(options[i]).remove();
+                    $('[id*=ListBoxGruposSeg]').append(opt);
+                }
+            });
+        });
+
+        $(document).ready(function () {
+
+            $('#<%=ButtonGuardarGU.ClientID%>').bind("click", function () {
+                $("[id*=ListBoxGruposAsigSeg] option").attr("selected", "selected");
+                $("[id*=ListBoxGruposSeg] option").attr("selected", "selected");
+            });
+
+            var g = $('#<%=LabelNav.ClientID%>').text();
+
+            var usuarioDisponible = "No";
+
+            $('#<%= PasswordConfirm.ClientID%>').keyup(function () {
+                var pass = $("#<%=PasswordUs.ClientID%>");
+                var confpass = $('#<%= PasswordConfirm.ClientID%>');
+                confirmarPass(confpass, pass);
+            });
+
+            $('#<%= PasswordConfirmUpdate.ClientID%>').keyup(function () {
+                var pass = $("#<%=PasswordUsUpdate.ClientID%>");
+                var confpass = $('#<%= PasswordConfirmUpdate.ClientID%>');
+                confirmarPass(confpass, pass);
+            });
+
+            $('#<%= PasswordUsRestoreConfirm.ClientID%>').keyup(function () {
+                var pass = $("#<%=PasswordUsRestore.ClientID%>");
+                var confpass = $('#<%= PasswordUsRestoreConfirm.ClientID%>');
+                confirmarPass(confpass, pass);
+            });
+
+            function confirmarPass(confpass, pass) {
+                if (confpass.val().length > 0) {
+                    if (confpass.val() == pass.val()) {
+                        confpass.css("border-color", "green");
+                    } else {
+                        confpass.css("border-color", "red");
+                    }
+                }
+            }
+
+            $('#<%= TextBoxUsuario.ClientID%>').keyup(function () {
+                var usuariot = $("#<%=TextBoxUsuario.ClientID%>");
+                var sc = $("#<%=validarUsuario.ClientID%>");
+                var hid = $('#<%=HiddenValidUser.ClientID %>');
+                validarUs(usuariot, hid, sc, sc);
+
+            });
+            
+
+            $('#<%= TextBoxUsuarioUpdate.ClientID%>').keyup(function () {
+                var usuariot = $("#<%=TextBoxUsuarioUpdate.ClientID%>");
+                var sc = $("#<%=validarUsuarioUpdate.ClientID%>");
+                var hid = $('#<%=HidValidUserUpdate.ClientID %>');
+                $("[id$=msgactualizado]").fadeIn();
+                validarUs(usuariot, hid, sc, sc);
+
+=======
+            $("#accordion").accordion({ collapsible: true,
+                animated: 'slide',
+                autoHeight: false,
+                navigation: true
+>>>>>>> Integracion2
+            });
+
+
+
+        });
+  </script>
+  <script>
+      function fireFileClick() {
+          var objfile = document.getElementById("<%= FileExcel.ClientID %>");
+          objfile.click();
+
+
+          var objTextBox = document.getElementById("<%= FileExcel.ClientID %>");
+          objTextBox.value = objfile.value;
+      }
+  </script>
+
+
+    <script>
+        $(function () {
+            $("#TextBoxFechaInicio").datepicker({ dateFormat: "yy-mm-dd" });
+            $("#TextBoxFechaFinEst").datepicker({ dateFormat: "yy-mm-dd" });
+            $("#TextBoxFechaFinReal").datepicker({ dateFormat: "yy-mm-dd" });
+        });
+    </script>
+</head>
+<body runat="server">
+<form id="BodyForm" runat="server">
+<asp:HiddenField ID="hidAccordionIndex" runat="server" Value="0" />
+  <script>
+      
+</script>
+
+    <div id="header" align="center">
+    <img src="/Img/SolIcon.png" alt="Empresa" height="100px" width="20%" style="float:left;">  
+    <h1 align="center">Sistema de captura de tareas</h1>
+    </div>
+<div id="Container" runat="server">
+
+    <div id="LeftSideMenu">
+
+<div id="accordion" runat="server">
+
+    <h3 id="Proyecto1" runat="server" align="left">Tarea</h3>
+      <div id="DivProyecto2"> 
+  <ul>
+  <li><asp:LinkButton ID="LinkProyecto" runat="server" onclick="ProyectoOnClick"  >Proyecto</asp:LinkButton></li>
+  <li><asp:LinkButton ID="LinkRequerimiento" runat="server" onclick="RequerimientoOnClick">Requerimiento</asp:LinkButton></li>
+  <li><asp:LinkButton ID="LinkCasosUso" runat="server" onclick="CasosUsoOnClick">Casos de uso</asp:LinkButton></li>
+  <li><asp:LinkButton ID="LinkComponente" runat="server" onclick="ComponenteOnClick">Componente</asp:LinkButton></li>
+  <li><asp:LinkButton ID="LinkTarea" runat="server" onclick="TareaOnClick">Tarea</asp:LinkButton></li>
+  </ul>
+  </div>
+  <h3 id="Proyecto2" runat="server">Seguridad</h3>
+           <div id="DivProyecto1" runat="server">
+        <p align="left">Catalogos</p>
+        <ul>
+        <li><a href="#">Usuarios</a></li>
+        <li><a href="#">Grupos</a></li>
+        <li><a href="#">Perfiles</a></li>
+        <li><a href="#">Relaciones</a></li>
+        <li><a href="#">Fases</a></li>
+        <li><a href="#">Tipos de persona</a></li>
+        <li><a href="#">Tecnologia</a></li>
+        <li><a href="#">Parametros de sistema</a></li>
+        <li><a href="#">Clientes</a></li>
+        </ul>
+        <p align="left">Control de acceso</p>
+        <ul>
+        <li>Proyecto</li>
+        <li>Modulos</li>
+        <li>Pantallas</li>
+        <li>Opciones</li>
+        </ul>
+        </div>
+  
+
+  <h3 id="Proyecto3" runat="server">Consultas y reporte</h3>
+  <div id="DivProyecto3" runat="server">
+  <ul>
+  <li>Horas: planeadas, reales</li>
+  <li>Avance</li>
+  <li>Fase</li>
+  <li>Usuarios-Persona</li>
+  <li>Cliente</li>
+  <li>Semaforo de proyectos</li>
+  <li>Retrasos</li>
+  </ul>
+  </div>
+    <h3 id="Proyecto4" runat="server">Seguimiento de tarea</h3>
+  <div id="DivProyecto4" runat="server">
+  <ul>
+  <li>Actualizar tarea</li>
+  </ul>
+  </div>
+</div>
+
+
+    </div>
+
+
+    <div id ="Content" runat="server">   
+       <p align="center"> 
+           <asp:Label ID="Label1" runat="server" Text="Gestor de " Font-Bold="True"></asp:Label>
+           <asp:Label ID="LabelNav" runat="server" Font-Bold="True"></asp:Label></p>
+    <div id="ContentTop" runat="server">
+    <table id="TableCont" align="center" style="width:100%;">
+    <tr>
+    <td>Clave : <br /><asp:TextBox ID="TextBoxClave" runat="server"></asp:TextBox></td>
+    <td>Cliente : <br /><asp:TextBox ID="TextBoxCliente" runat="server"></asp:TextBox></td>
+    <td>Fecha de Inicio : <br /><asp:TextBox ID="TextBoxFechaInicio" runat="server"></asp:TextBox></td>
+    </tr>
+    <tr>
+    <td>Descripcion : <br /><asp:TextBox ID="TextBoxDescripcion" runat="server"></asp:TextBox></td>    
+    <td>Estado :  <br />
+        <asp:DropDownList ID="DropDownList1" runat="server">
+        <asp:ListItem>Activo</asp:ListItem>
+        <asp:ListItem>Suspendido</asp:ListItem>
+        <asp:ListItem>Finalizado</asp:ListItem>
+        </asp:DropDownList> </td>
+    <td>Fecha fin estimada : <br /><asp:TextBox ID="TextBoxFechaFinEst" runat="server"></asp:TextBox></td>
+    </tr>
+    <tr>
+    <td>Nombre : <br /><asp:TextBox ID="TextBoxNombre" runat="server"></asp:TextBox></td>
+    <td>
+        <asp:Label ID="LabelDependencia" runat="server" Text=""></asp:Label><br /><asp:DropDownList ID="DropDownListDep" runat="server">
+        </asp:DropDownList><br />
+        Usuarios : <br /><asp:DropDownList ID="DropDownList2" runat="server">
+        <asp:ListItem>Juan Ramirez</asp:ListItem>
+        <asp:ListItem>Daniel Cafe</asp:ListItem>
+        <asp:ListItem>Pedro Perez</asp:ListItem>
+        </asp:DropDownList>
+    </td>
+    <td>Fecha fin real : <br /><asp:TextBox ID="TextBoxFechaFinReal" runat="server"></asp:TextBox><br /><br /><asp:FileUpload ID="FileExcel" runat="server" /></td>
+    </tr>
+    
+    
+    </table>
+
+    <p><asp:Label ID="LabelHrs" runat="server" Text="Registrar horas : "></asp:Label> <asp:DropDownList ID="DropDownListHoras" runat="server">
+    <asp:ListItem>1</asp:ListItem>
+    <asp:ListItem>2</asp:ListItem>
+    <asp:ListItem>3</asp:ListItem>
+    <asp:ListItem>4</asp:ListItem>
+    <asp:ListItem>5</asp:ListItem>
+    <asp:ListItem>6</asp:ListItem>
+    <asp:ListItem>7</asp:ListItem>
+    <asp:ListItem>8</asp:ListItem>
+    <asp:ListItem>9</asp:ListItem>
+    <asp:ListItem>10</asp:ListItem>
+    <asp:ListItem>11</asp:ListItem>
+    <asp:ListItem>12</asp:ListItem>
+    <asp:ListItem>13</asp:ListItem>
+    <asp:ListItem>14</asp:ListItem>
+    <asp:ListItem>15</asp:ListItem>
+    <asp:ListItem>16</asp:ListItem>
+    </asp:DropDownList>
+
+    </p>
+ 
+        
+    <p>
+        <asp:Button ID="Button1" runat="server" Text="Insertar" 
+            onclick="Button1_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button
+            ID="Button2" runat="server" Text="Buscar" onclick="Button2_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="Button3"
+                runat="server" Text="Mostrar todo" onclick="Button3_Click" /> </p>
+    </div>
+    <div id="ContentBot">
+    
+        <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" OnRowEditing="GridView1_RowEditing" OnRowDeleting="GridView1_RowDeleting" 
+        OnPageIndexChanging="GridView1_PageIndexChanging" OnRowCancelingEdit="GridView1_RowCancelingEdit" OnRowUpdating="GridView1_RowUpdating"
+             BackColor="White" BorderColor="#DEDFDE" BorderStyle="None" BorderWidth="1px" 
+            CellPadding="4" ForeColor="Black" GridLines="Vertical">
+            <AlternatingRowStyle BackColor="White" />
+        <columns>
+
+            <asp:BoundField HeaderText="ID" ReadOnly="True" DataField="IDProyectos" />
+            <asp:BoundField HeaderText="Clave" DataField="ClaveProyecto" />
+            <asp:BoundField HeaderText="Nombre" DataField="Nombre" />
+            <asp:BoundField HeaderText="Descripcion" DataField="Descripcion" />
+            <asp:BoundField HeaderText="Cliente" DataField="Cliente" />
+            <asp:BoundField HeaderText="Fecha registro" DataField="FechaRegistro" 
+                dataformatstring="{0:yyyy/MM/dd}" applyformatineditmode="true" 
+                ReadOnly="True" />
+            <asp:BoundField HeaderText="Fecha inicio" DataField="FechaInicio" dataformatstring="{0:yyyy/MM/dd}" applyformatineditmode="true" />
+            <asp:BoundField HeaderText="Fecha fin estimada" DataField="FechaFinEstimada" dataformatstring="{0:yyyy/MM/dd}" applyformatineditmode="true" />
+            <asp:BoundField HeaderText="Fecha fin real" DataField="FechaFinReal" dataformatstring="{0:yyyy/MM/dd}" applyformatineditmode="true" />
+            <asp:BoundField HeaderText="Tecnologias" DataField="Tecnologias" />
+
+        <asp:CommandField ShowEditButton="true" />
+        <asp:CommandField ShowDeleteButton="true" />
+        </columns>
+            <FooterStyle BackColor="#CCCC99" />
+            <HeaderStyle BackColor="#6B696B" Font-Bold="True" ForeColor="White" />
+            <PagerStyle BackColor="#F7F7DE" ForeColor="Black" HorizontalAlign="Right" />
+            <RowStyle BackColor="#F7F7DE" />
+            <SelectedRowStyle BackColor="#CE5D5A" Font-Bold="True" ForeColor="White" 
+                Width="10px" />
+            <SortedAscendingCellStyle BackColor="#FBFBF2" />
+            <SortedAscendingHeaderStyle BackColor="#848384" />
+            <SortedDescendingCellStyle BackColor="#EAEAD3" />
+            <SortedDescendingHeaderStyle BackColor="#575357" />
+        </asp:GridView>
+    </div> 
+    </div>
+    <div id="RightSideMenu">
+    
+    </div>
+</div>
+</form>
+</body>
+</html>

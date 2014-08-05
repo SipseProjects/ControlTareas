@@ -31,15 +31,17 @@ namespace DAOS.Seguridad
 
                  if (!existe)
                    {
-                       cmSql.CommandText = " insert into pantallas(nombre,descripcion,idasp,idmodulo) values(@parm1,@parm2,@parm3,@parm4)";
+                       cmSql.CommandText = " insert into pantallas(nombre,descripcion,idasp,idmodulo,pantallaindex) values(@parm1,@parm2,@parm3,@parm4,@parm5)";
                        cmSql.Parameters.Add("@parm1", SqlDbType.VarChar);
                        cmSql.Parameters.Add("@parm2", SqlDbType.VarChar);
                        cmSql.Parameters.Add("@parm3", SqlDbType.VarChar);
                        cmSql.Parameters.Add("@parm4", SqlDbType.Int);
+                       cmSql.Parameters.Add("@parm5", SqlDbType.Int);
                        cmSql.Parameters["@parm1"].Value = pantalla.nombre.Trim();
                        cmSql.Parameters["@parm2"].Value = pantalla.descripcion.Trim();
                        cmSql.Parameters["@parm3"].Value = pantalla.idAsp.Trim();
                        cmSql.Parameters["@parm4"].Value = pantalla.idModulo;
+                       cmSql.Parameters["@parm5"].Value = pantalla.pantallaIndex;
                        int exito = cmSql.ExecuteNonQuery();
                        if (exito > 0)
                        {
@@ -67,16 +69,18 @@ namespace DAOS.Seguridad
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
 
-                
-                cmSql.CommandText = " update pantallas set nombre=@parm1, descripcion=@parm2, idasp=@parm3 where idpantalla=@parm4";
+
+                cmSql.CommandText = " update pantallas set nombre=@parm1, descripcion=@parm2, idasp=@parm3, pantallaIndex=@parm5 where idpantalla=@parm4";
                     cmSql.Parameters.Add("@parm1", SqlDbType.VarChar);
                     cmSql.Parameters.Add("@parm2", SqlDbType.VarChar);
                     cmSql.Parameters.Add("@parm3", SqlDbType.VarChar);
                     cmSql.Parameters.Add("@parm4", SqlDbType.Int);
+                    cmSql.Parameters.Add("@parm5", SqlDbType.Int);
                     cmSql.Parameters["@parm1"].Value = pantalla.nombre.Trim();
                     cmSql.Parameters["@parm2"].Value = pantalla.descripcion.Trim();
                     cmSql.Parameters["@parm3"].Value = pantalla.idAsp.Trim();
                     cmSql.Parameters["@parm4"].Value = pantalla.idPantalla;
+                    cmSql.Parameters["@parm5"].Value = pantalla.pantallaIndex;
                     int exito = cmSql.ExecuteNonQuery();
                     if (exito > 0)
                     {

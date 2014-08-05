@@ -17,9 +17,9 @@ namespace BusinessLogic.Seguridad
         {
             _ppantallasdao = new PerfilesPantallasDAO(con);
         }
-        public List<PerfilesPantallas> getPerfilesPantallas(int idperfil,int idpantalla)
+        public List<PerfilesPantallas> getPerfilesPantallas(int idperfil, int idpantalla, int idModulo)
         {
-            return _ppantallasdao.getPerfilesPantallas(idperfil,idpantalla);
+            return _ppantallasdao.getPerfilesPantallas(idperfil,idpantalla, idModulo);
         }
         public DbQueryResult registrarPerfilesPantallas(PerfilesPantallas ppantalla)
         {

@@ -132,12 +132,17 @@ C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\P
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\AjaxControlToolkit.dll
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\AjaxMin.dll
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\BCrypt.Net.dll
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\BusinessLogic.dll
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\HtmlAgilityPack.dll
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\Microsoft.Data.Edm.dll
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\Microsoft.Data.OData.dll
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\Microsoft.WindowsAzure.Configuration.dll
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\Microsoft.WindowsAzure.Storage.dll
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\Models.dll
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\System.Spatial.dll
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\DAOS.dll
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\BusinessLogic.pdb
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\Models.pdb
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\HtmlAgilityPack.pdb
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\HtmlAgilityPack.xml
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\Microsoft.Data.Edm.xml
@@ -145,6 +150,7 @@ C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\P
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\Microsoft.WindowsAzure.Storage.pdb
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\Microsoft.WindowsAzure.Storage.xml
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\System.Spatial.xml
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\DAOS.pdb
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\ar\AjaxControlToolkit.resources.dll
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\cs\AjaxControlToolkit.resources.dll
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\de\AjaxControlToolkit.resources.dll

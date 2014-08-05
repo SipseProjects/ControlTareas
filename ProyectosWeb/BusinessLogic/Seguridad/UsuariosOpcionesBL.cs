@@ -17,9 +17,9 @@ namespace BusinessLogic.Seguridad
         {
             _usuarioopciondao = new UsuariosOpcionesDAO(con);
         }
-        public List<UsuariosOpciones> getUsuariosOpciones(int idUsuario)
+        public List<UsuariosOpciones> getUsuariosOpciones(int idUsuario, int idOpcion,int pantallaIndex, int idModulo)
         {
-            return _usuarioopciondao.getUsuariosOpciones(idUsuario);
+            return _usuarioopciondao.getUsuariosOpciones(idUsuario, idOpcion, pantallaIndex, idModulo);
         }
         public DbQueryResult registrarUsuariosOpciones(UsuariosOpciones usuariosOpciones)
         {

@@ -12,6 +12,6 @@ namespace Models.Seguridad
        public int idUsuario;
        public String visible;
        public String componenteIndex;
-
+       public Pantalla pantalla = new Pantalla();
     }
 }

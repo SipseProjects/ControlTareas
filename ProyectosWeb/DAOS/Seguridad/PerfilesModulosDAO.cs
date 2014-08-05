@@ -147,15 +147,8 @@ namespace DAOS.Seguridad
                     cmSql.CommandText = "select pm.idmodulo, pm.idperfilmodulo, pm.idperfil, pm.divvisible, m.idmodulo,m.nombre, m.h3id, m.divid from perfilesmodulos pm"
                     + " inner join modulos m"
                     + " on m.idmodulo=pm.idmodulo and pm.idperfil in(" + IdPerfil + ") and pm.idmodulo="+idmodulo+"";
-                }
-                    
-                    SqlDataAdapter da = new SqlDataAdapter(cmSql);
-
-                    //SqlDataReader ded = cmSql.ExecuteReader();
-
-                    //while (ded.Read()) { 
-                    
-                    //}
+                }                    
+                SqlDataAdapter da = new SqlDataAdapter(cmSql);                
 
                 DataSet ds = new DataSet();
                 da.Fill(ds);

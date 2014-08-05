@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Seguridad\ControlAcceso\CAUsuarioBL.cs" />
+    <Compile Include="Seguridad\ControlAcceso\ControlAcessoUsuarioBL.cs" />
     <Compile Include="Seguridad\SistemasModulosBL.cs" />
     <Compile Include="Seguridad\UsuariosModulosBL.cs" />
     <Compile Include="Seguridad\UsuariosOpcionesBL.cs" />

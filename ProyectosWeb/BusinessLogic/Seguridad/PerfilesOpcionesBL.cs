@@ -17,9 +17,9 @@ namespace BusinessLogic.Seguridad
         {
             _perfilopciondao = new PerfilesOpcionesDAO(con);
         }
-        public List<PerfilesOpciones> getPerfilesOpciones(int idPerfil, int idopcion)
+        public List<PerfilesOpciones> getPerfilesOpciones(int idPerfil, int idopcion, int pantallaIndex, int idModulo)
         {
-            return _perfilopciondao.getPerfilesOpciones(idPerfil,idopcion);
+            return _perfilopciondao.getPerfilesOpciones(idPerfil,idopcion, pantallaIndex,idModulo);
         }
         public DbQueryResult registrarPerfilesOpciones(PerfilesOpciones perfilesOpciones)
         {
