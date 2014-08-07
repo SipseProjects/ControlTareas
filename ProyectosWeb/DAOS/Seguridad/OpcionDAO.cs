@@ -124,7 +124,9 @@ namespace DAOS.Seguridad
                             p.idPantalla = int.Parse(drDatos["idpantalla"].ToString());                            
                             p.nombre = drDatos["nombre"].ToString();
                             p.idAsp = drDatos["idasp"].ToString();
-                            p.componenteIndex =drDatos["componenteIndex"].ToString();                           
+                            p.componenteIndex = drDatos["componenteIndex"].ToString(); 
+                            p.estado = (drDatos["estado"].ToString().Length > 0 ? int.Parse(drDatos["estado"].ToString()) : 0);
+                          
                     }
                 }
             }catch(Exception e){
@@ -133,7 +135,30 @@ namespace DAOS.Seguridad
             _conn.Close();
             return p;
         }
-
+        public DbQueryResult DeleteOpcion(int idOpcion)
+        {
+            DbQueryResult resultado = new DbQueryResult();
+            _conn.Open();
+            try
+            {
+                resultado.Success = false;
+                SqlCommand cmSql = _conn.CreateCommand();
+                cmSql.CommandText = " update opciones   set estado=1 where idopcion=@parm4";
+                cmSql.Parameters.Add("@parm4", SqlDbType.Int);
+                cmSql.Parameters["@parm4"].Value = idOpcion;
+                int exito = cmSql.ExecuteNonQuery();
+                if (exito > 0)
+                {
+                    resultado.Success = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                resultado.ErrorMessage = ex.Message;
+            }
+            _conn.Close();
+            return resultado;
+        }
         public List<Pantalla> getPantallas()
         {
             List<Pantalla> listado = new List<Pantalla>();

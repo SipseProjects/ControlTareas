@@ -29,8 +29,13 @@ namespace BusinessLogic.Seguridad
         {
             return _modulodao.UpdateModulo(modulo);
         }
-        public Modulo getModulo(String nombre, String h3Id, String divId) {
-            return _modulodao.getModulo(nombre, h3Id, divId);
+        public DbQueryResult DeleteModulo(Modulo modulo)
+        {
+            return _modulodao.DeleteModulo(modulo);
+        }
+        public Modulo getModulo(String nombre, String h3Id, String divId, int idModulo)
+        {
+            return _modulodao.getModulo(nombre, h3Id, divId,idModulo);
         }
     }
 }

@@ -29,6 +29,11 @@ namespace BusinessLogic.Seguridad
         {
             return _pantalladao.UpdatePantalla(pantalla);
         }
+        public DbQueryResult DeletePantalla(int idpantalla)
+        {
+            return _pantalladao.DeletePantalla(idpantalla);
+        }
+        
         public Pantalla getPantalla(String nombre, String idasp)
         {
             return _pantalladao.getPantalla(nombre, idasp);

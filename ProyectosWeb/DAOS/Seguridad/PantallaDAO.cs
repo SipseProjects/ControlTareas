@@ -95,6 +95,37 @@ namespace DAOS.Seguridad
             return resultado;
         }
 
+        public DbQueryResult DeletePantalla(int IdPantalla)
+        {
+            DbQueryResult resultado = new DbQueryResult();
+            _conn.Open();
+            try
+            {
+                resultado.Success = false;
+                SqlCommand cmSql = _conn.CreateCommand();
+                cmSql.CommandText = 
+                                       " update pantallas   set estado=1 where idpantalla=@parm4" +
+                                    " update op  set op.estado=1" +
+                                    " from  pantallas as p" +
+                                    " inner join opciones op" +
+                                    " on op.idpantalla=p.idpantalla" +
+                                    " where p.idpantalla=@parm4";
+                cmSql.Parameters.Add("@parm4", SqlDbType.Int);
+                cmSql.Parameters["@parm4"].Value = IdPantalla;
+                int exito = cmSql.ExecuteNonQuery();
+                if (exito > 0)
+                {
+                    resultado.Success = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                resultado.ErrorMessage = ex.Message;
+            }
+            _conn.Close();
+            return resultado;
+        }
+
         public Pantalla getPantalla(String nombre, String idAsp) {
             Pantalla p = new Pantalla();            
             _conn.Open();
@@ -124,7 +155,8 @@ namespace DAOS.Seguridad
                             p.idPantalla = int.Parse(drDatos["idpantalla"].ToString());
                             p.idModulo = int.Parse(drDatos["idmodulo"].ToString());
                             p.nombre = drDatos["nombre"].ToString();
-                            p.idAsp = drDatos["idasp"].ToString();                                                   
+                            p.idAsp = drDatos["idasp"].ToString();
+                        p.estado = (drDatos["estado"].ToString().Length>0 ? int.Parse(drDatos["estado"].ToString()):0);                           
                     }
                 }
             }catch(Exception e){

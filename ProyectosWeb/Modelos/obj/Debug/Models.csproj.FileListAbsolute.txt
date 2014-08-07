@@ -2,3 +2,4 @@ C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\M
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\Modelos\bin\Debug\Models.pdb
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\Modelos\obj\Debug\Models.dll
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\Modelos\obj\Debug\Models.pdb
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\Modelos\obj\Debug\Models.csprojResolveAssemblyReference.cache

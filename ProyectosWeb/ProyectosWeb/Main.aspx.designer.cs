@@ -1183,6 +1183,15 @@ namespace ProyectosWeb {
         protected global::System.Web.UI.WebControls.Button Button4;
         
         /// <summary>
+        /// Control ButtonEliminaModulo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonEliminaModulo;
+        
+        /// <summary>
         /// Control LabUpdateModulo.
         /// </summary>
         /// <remarks>
@@ -1235,6 +1244,15 @@ namespace ProyectosWeb {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button ButtonUpdatepantalla;
+        
+        /// <summary>
+        /// Control ButtonDeletePantallaOpcion.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonDeletePantallaOpcion;
         
         /// <summary>
         /// Control LblupdatePantalla.

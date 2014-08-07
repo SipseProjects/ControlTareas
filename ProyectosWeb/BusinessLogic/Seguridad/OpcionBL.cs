@@ -29,6 +29,10 @@ namespace BusinessLogic.Seguridad
         {
             return _opciondao.UpdateOpcion(opcion);
         }
+        public DbQueryResult DeleteOpcion(int idOpcion)
+        {
+            return _opciondao.DeleteOpcion(idOpcion);
+        }
         public Opcion getOpcion(String idasp, String descripcion)
         {
             return _opciondao.getOpcion(idasp, descripcion);

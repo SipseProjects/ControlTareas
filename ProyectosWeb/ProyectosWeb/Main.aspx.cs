@@ -63,6 +63,13 @@ namespace ProyectosWeb
       private int countOpcion;      
       private UsuarioLogin uslogin;
       private String userName;
+      private eliminarCheckboxs eliminarOp = new eliminarCheckboxs();
+
+        private int checkboxParent=0;
+        private String analizador = "";
+        private int subTotalCHK=0;
+       private  int indexParentEliminar;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             // Get the authentication cookie
@@ -89,22 +96,23 @@ namespace ProyectosWeb
                     List<UsuariosPantallas> accesoUsuariopantalla = _sistemamodulo.usuariosPantallas;
                     List<PerfilesPantallas> accesopantalla = _sistemamodulo.perfilesPantallas;
                     if (accesoUsuariopantalla.Count < 1 && accesopantalla.Count < 1 && !userName.ToLower().Equals(admin))
+                    {
+                        Response.Redirect(redirectinicio);
+                    }
+                    else
+                    {
+                        for (int pm = 0; pm < accesoUsuariopantalla.Count; pm++)
                         {
-                            Response.Redirect(redirectinicio);
+                            UsuariosPantallas ppantalla = accesoUsuariopantalla[pm];
+                            FindControl(ppantalla.pantalla.idAsp).Visible = bool.Parse(ppantalla.visible);
                         }
-                        else {
-                            for (int pm = 0; pm < accesoUsuariopantalla.Count; pm++)
-                            {
-                                UsuariosPantallas ppantalla = accesoUsuariopantalla[pm];
-                                FindControl(ppantalla.pantalla.idAsp).Visible = bool.Parse(ppantalla.visible);
-                            }
 
-                            for (int pm = 0; pm < accesopantalla.Count; pm++)
-                            {
-                                PerfilesPantallas ppantalla = accesopantalla[pm];
-                                FindControl(ppantalla.pantalla.idAsp).Visible = bool.Parse(ppantalla.visible.ToLower());
-                            }
+                        for (int pm = 0; pm < accesopantalla.Count; pm++)
+                        {
+                            PerfilesPantallas ppantalla = accesopantalla[pm];
+                            FindControl(ppantalla.pantalla.idAsp).Visible = bool.Parse(ppantalla.visible.ToLower());
                         }
+                    }
                 }else {
                     Response.Redirect(redirectinicio);
                 }
@@ -745,7 +753,7 @@ namespace ProyectosWeb
             for (int i = 0; i < modulos.Count; i++)
             {
                 string[] split = identidicadorhtml[i].Split(new Char[] { ',' });
-                Modulo m= _modulosBl.getModulo(null,split[1], modulos[i]);
+                Modulo m= _modulosBl.getModulo(null,split[1], modulos[i],0);
                 if (m.idModulo>0)
                 {
                     table2.Rows.Add(split[1] + "," + modulos[i] + "," + m.idModulo, split[0]);
@@ -758,7 +766,8 @@ namespace ProyectosWeb
             listado.DataTextField = "nombre";
             listado.DataValueField = "idmodulo";
             listado.DataBind();
-            actualizaCheckBoxListModulo(listado);            
+            actualizaCheckBoxListModulo(listado);
+            
         }
 
         private void actualizaCheckBoxListModulo(CheckBoxList listado)
@@ -771,8 +780,22 @@ namespace ProyectosWeb
                 {
                     if (split[2].Length > 0)
                     {
-                        listado.Items[i].Selected = true;
-                        listado.Items[i].Attributes.Add("style", "color: green;");
+                        
+                        Modulo modulo = _modulosBl.getModulo(null, null, null, int.Parse(split[2]));
+
+                        if (modulo.idModulo > 1)
+                        {
+                            if (modulo.estado == 0)
+                            {
+                                listado.Items[i].Selected = true;
+                                listado.Items[i].Attributes.Add("style", "color: green;");
+                            }
+                            else if (modulo.estado > 0)
+                            {
+                                listado.Items[i].Attributes.Add("style", "color: red;");
+                            }
+                        }
+
                     }
                 }
             }
@@ -1573,11 +1596,18 @@ namespace ProyectosWeb
                if (CheckBoxListModulo.Items[i].Selected)
                {
                string[] split = CheckBoxListModulo.Items[i].Value.Split(new Char[] { ',' });
-               Modulo modulo = _modulosBl.getModulo(null,split[0], split[1]); 
+               Modulo modulo = _modulosBl.getModulo(null,split[0], split[1],0); 
                
                if (modulo.idModulo > 1)
-               {                          
-                       CheckBoxListModulo.Items[i].Attributes.Add("style", "color: green;");                   
+               {
+                   if (modulo.estado == 0)
+                   {
+                       CheckBoxListModulo.Items[i].Attributes.Add("style", "color: green;");
+                   }
+                   else if (modulo.estado > 0)
+                   {
+                       CheckBoxListModulo.Items[i].Attributes.Add("style", "color: red;");
+                   }
                }
                }
            }
@@ -1653,10 +1683,7 @@ namespace ProyectosWeb
                     {
                         tieneop++;                    
                     }
-                    if (c.GetType() == typeof(HtmlGenericControl) && ((HtmlGenericControl)c).TagName.ToLower().Equals("li"))
-                    {
-                        //hidLiidButton.Value = "" + ((HtmlGenericControl)c).ClientID;                      
-                    }
+                    
                 }
                 catch
                 {
@@ -1805,8 +1832,12 @@ namespace ProyectosWeb
                     pregis.ID = pregis.ID + "," + pid.idPantalla;
                     if (PageIndex.Equals("Pantallas"))
                     {
-                        pregis.Checked = true;
-                        pregis.ForeColor = System.Drawing.Color.Green;
+                        if(pid.estado>0){
+                            pregis.ForeColor = System.Drawing.Color.Red;
+                        }else{
+                            pregis.Checked = true;
+                            pregis.ForeColor = System.Drawing.Color.Green;                            
+                        }
                     }
                     else if (PageIndex.Equals("Acceso por Perfiles"))
                     {
@@ -1831,8 +1862,12 @@ namespace ProyectosWeb
                         pregis.ID = pregis.ID + "," + oid.idOpcion;
                         if (PageIndex.Equals("Opciones"))
                         {
-                        pregis.Checked = true;
-                        pregis.ForeColor = System.Drawing.Color.Green;
+                            if(oid.estado>0){
+                             pregis.ForeColor = System.Drawing.Color.Red;
+                            }else{
+                                pregis.Checked = true;
+                                pregis.ForeColor = System.Drawing.Color.Green;
+                            }
                         }
                         else if (PageIndex.Equals("Acceso por Perfiles"))
                         {
@@ -1841,9 +1876,7 @@ namespace ProyectosWeb
                         else if (PageIndex.Equals("Acceso por Usuarios"))
                         {
                             UsuariosOpcionesEnDB(pregis, oid.idOpcion, int.Parse(HidUsuSeleccionadoSeg.Value));
-                        }
-
-                        
+                        }                        
                 }
             }
         }
@@ -2107,8 +2140,14 @@ namespace ProyectosWeb
 
         protected void ButtonAtualizaPantallasSeg_Click(object sender, EventArgs e)
         {            
-            abdCheckBoxTree(false,true,false,false);
-        }        
+            abdCheckBoxTree(false,true,false,false,false);
+        }
+
+        protected void ButtonDeletePantallaOpcion_Click(object sender, EventArgs e)
+        {            
+            abdCheckBoxTree(false,false,false,false,true);
+        }
+        
 
         private void llenarTree(bool subopciones, bool relAccesoPerfilb) {
             Control divTree = new Control();
@@ -2138,26 +2177,39 @@ namespace ProyectosWeb
             divTree.Controls.Clear();            
 
             int cont = 0;
+            
+            if(PageIndex.Trim().Equals("Acceso por Perfiles") || PageIndex.Trim().Equals("Acceso por Usuarios")){
+                for (int sm = 0; sm < _sistemamodulo.sistemasModulos.Count; sm++)
+                {
+                    cont++;
+                    Modulo d = _sistemamodulo.sistemasModulos[sm].modulo;
+                    if (bool.Parse(_sistemamodulo.sistemasModulos[sm].divvisible) && bool.Parse(_sistemamodulo.sistemasModulos[sm].h3visible))
+                    {
+                    agregarCheckboxmodulos(d, cont, subopciones, divTree, relAccesoPerfilb);
+                    }
+                }
+            }else{
             foreach (Modulo d in _modulosBl.getModulos())
             {
                 cont++;
                 agregarCheckboxmodulos(d, cont, subopciones, divTree, relAccesoPerfilb);
             }
+            }
         }
         protected void ButtonRegistrarPantallasSeg_Click(object sender, EventArgs e)
         {
-            abdCheckBoxTree(true,false,false,false);
+            abdCheckBoxTree(true,false,false,false,false);
         }
-        private void abdCheckBoxTree(bool registra, bool actualiza, bool relAccesoperfil, bool relaccesoUs) {
+        private void abdCheckBoxTree(bool registra, bool actualiza, bool relAccesoperfil, bool relaccesoUs, bool delete) {
             if (PageIndex != null)
             {
                 if (PageIndex.Trim().ToLower().Equals("pantallas"))
                 {
-                    insertUpdatePantallas(registra,actualiza,relAccesoperfil,relaccesoUs);
+                    insertUpdatePantallas(registra, actualiza, relAccesoperfil, relaccesoUs, delete);
                 }
                 else if (PageIndex.Trim().ToLower().Equals("opciones"))
                 {
-                    insertUpdateOpciones(registra, actualiza, relAccesoperfil, relaccesoUs);
+                    insertUpdateOpciones(registra, actualiza, relAccesoperfil, relaccesoUs, delete);
                 }
             }
         }        
@@ -2281,7 +2333,7 @@ namespace ProyectosWeb
             
         }
 
-        private void insertUpdatePantallas(bool registra, bool actualiza, bool relAccesoperfil, bool relaccesoUs)
+        private void insertUpdatePantallas(bool registra, bool actualiza, bool relAccesoperfil, bool relaccesoUs, bool delete)
         {
             LblupdatePantalla.Text = "";
             int cont = 0;
@@ -2301,7 +2353,7 @@ namespace ProyectosWeb
                         if (c.Controls[0].GetType() == typeof(CheckBox))
                         {
                             CheckBox pantalla = (c.Controls[0] as CheckBox);
-                            if (!pantalla.UniqueID.Contains(Modtree) && pantalla.Checked)
+                            if (!pantalla.UniqueID.Contains(Modtree) && pantalla.Checked &&(delete==false))
                             {
                                 checkstree++;
                                 string[] split = pantalla.ClientID.Split(new Char[] { ',' });
@@ -2312,22 +2364,29 @@ namespace ProyectosWeb
                                     panta.descripcion = pantalla.Text + " " + (c.Parent.Parent.Controls[0] as CheckBox).Text;
                                     panta.idAsp = split[0];
                                     panta.pantallaIndex = int.Parse(split[3]);
-
                                     if(registra){                                    
                                         panta.idModulo = int.Parse(split[2]);
                                         _pantallaBL.registrarPantalla(panta);                                        
                                     }else{
-                                        if(actualiza&&(split.Length>4)){
-                                        if (split[4].Trim().Length > 0)
-                                        {
-                                            panta.idPantalla = int.Parse(split[4]);
-                                         actualizados.Add(_pantallaBL.UpdatePantalla(panta).Success+","+panta.nombre);
-                                        }
+                                        if(split.Length>4){
+                                            if (split[4].Trim().Length > 0)
+                                            {
+                                                panta.idPantalla = int.Parse(split[4]);
+                                                if (actualiza)
+                                                {                                                    
+                                                    actualizados.Add(_pantallaBL.UpdatePantalla(panta).Success + "," + panta.nombre);
+                                                }                                               
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
+                            if (delete)
+                            {
+                                eliminarPantallasOpciones(c);
+                            }
+                        }                        
+                           
                     }
                 }
             }
@@ -2340,8 +2399,145 @@ namespace ProyectosWeb
                 updateMsg(actualizados,LblupdatePantalla, "Las siguientes Pantallas no se actualizaron");                
             }
         }
+        private void eliminarPantallasOpciones(Control c) {            
+                CheckBox pantalla = (c.Controls[0] as CheckBox);
+                if (pantalla.Checked)
+                {
+                    eliminarOp = new eliminarCheckboxs();
+                    subTotalCHK = 0;
+                    eliminarCheckboxs listado = EliminarChkBoxRecursivo(c.Controls);
+                    int totalchkhijo = 0;
+                    for (int cp = listado.subopcParentList.Count - 1; cp >= 0; cp--)
+                    {
 
-        private void insertUpdateOpciones(bool registra, bool actualiza, bool relAccesoperfil,bool relaccesoUs)
+                        for (int ch = 0; ch < listado.subopcParentList[cp].subopcParent.Count; ch++)
+                        {
+                            CheckBox chkhijo = listado.subopcParentList[cp].subopcParent[ch].opciones;
+                            if (chkhijo.Checked)
+                            {
+                                totalchkhijo++;
+                                EliminaOpcionesTree(chkhijo.ClientID);
+                            }
+                        }
+                        if (listado.subopcParentList[cp].subopcParent.Count == totalchkhijo)
+                        {
+                            totalchkhijo = 0;
+                            EliminaOpcionesTree(listado.subopcParentList[cp].opciones.ClientID);
+                        }
+                    }
+                }
+            
+        }
+
+        private void EliminaOpcionesTree(String idComponente) {
+            string[] split = idComponente.Split(new Char[] { ',' });
+            if(PageIndex.Equals("Pantallas")){
+            if (split.Length > 4)
+            {
+                if (split[4].Trim().Length > 0)
+                {
+                    _pantallaBL.DeletePantalla(int.Parse(split[4]));
+                }
+            }
+            }
+            else if (PageIndex.Equals("Opciones"))
+            {
+                if (split.Length > 5)
+                {
+                    if (split[5].Trim().Length > 0)
+                    {
+                        _opcionBL.DeleteOpcion(int.Parse(split[5]));
+                    }
+                }
+            }
+        }
+
+       public class eliminarCheckboxs{
+       public int checkeds;
+       public int nocheckeds;
+       public List<CheckBox> opciones=new List<CheckBox>();
+       public List<String> jerarquia = new List<string>();
+       public List<CheckBox> subopc = new List<CheckBox>();
+       public List<CheckBox> subopcParent = new List<CheckBox>();
+            public List<eliminarSubCheckboxs> subopcParentList = new List<eliminarSubCheckboxs>();
+            
+        }
+
+        public class eliminarSubCheckboxs
+        {
+            public CheckBox opciones = new CheckBox();
+            public List<eliminarSubCheckboxsParent> subopcParent = new List<eliminarSubCheckboxsParent>();
+        }
+        public class eliminarSubCheckboxsParent
+        {
+            public CheckBox opciones = new CheckBox();
+        }
+
+        private eliminarCheckboxs EliminarChkBoxRecursivo(ControlCollection controles) {
+          
+            for (int c = 0; c < controles.Count;c++)
+            {
+                Control con=controles[c];
+                if (con.GetType() == typeof(HtmlGenericControl) && (con as HtmlGenericControl).TagName.ToLower().Equals("ul"))
+                {
+                    subTotalCHK = 2;
+                    EliminarChkBoxRecursivo(con.Controls);                    
+                }
+                if (con.GetType() == typeof(HtmlGenericControl) && (con as HtmlGenericControl).TagName.ToLower().Equals("li"))
+                {
+                 ControlCollection   subcontroles = con.Controls;
+                    for (int co = 0; co < subcontroles.Count; co++)
+                    {
+                        Control controlUl = subcontroles[co];
+                        if (controlUl.GetType() == typeof(HtmlGenericControl) && (controlUl as HtmlGenericControl).TagName.ToLower().Equals("ul"))
+                        {
+                            subTotalCHK = 0;
+                        }
+                    }
+                    EliminarChkBoxRecursivo(con.Controls);
+                }
+                if (con.GetType() == typeof(CheckBox))
+                {                    
+                    if ((subTotalCHK!=2))
+                    {
+                        eliminarOp.opciones.Add(con as CheckBox);
+                        eliminarSubCheckboxs cd=new eliminarSubCheckboxs();
+                        cd.opciones=(con as CheckBox);
+                        eliminarOp.subopcParentList.Add(cd);
+                        indexParentEliminar= eliminarOp.subopcParentList.Count-1;
+                    }
+                    else
+                    {
+                        eliminarOp.subopcParent.Add(con as CheckBox);
+                        eliminarSubCheckboxsParent cd = new eliminarSubCheckboxsParent();
+                        cd.opciones=(con as CheckBox);
+                        eliminarOp.subopcParentList[indexParentEliminar].subopcParent.Add(cd);                       
+                    }                                       
+                }
+            }
+            return eliminarOp;
+        }
+
+         private string AnalizarJerarquia(Control control) {
+             if (control.Parent.Controls[0].GetType() != typeof(View))
+             {
+                 if (checkboxParent!=0 &&(checkboxParent % 3) == 0)
+                 {
+                     if (control.Parent.Controls[0].Controls[0].GetType() == typeof(CheckBox))
+                     {
+                         analizador = (control.Parent.Controls[0].Controls[0] as CheckBox).ClientID + "," + (checkboxParent / 3) + "," + subTotalCHK;
+                     }
+                 }
+                 if (control.Parent.Controls.Count > 0)
+                 {
+                     checkboxParent++;
+                     AnalizarJerarquia(control.Parent);
+                 }                 
+             }            
+            return analizador;
+        }
+
+        private void insertUpdateOpciones(bool registra, bool actualiza, bool relAccesoperfil, bool relaccesoUs, bool delete)
         {
             LblupdatePantalla.Text = "";
             int cont = 0;
@@ -2365,7 +2561,7 @@ namespace ProyectosWeb
                             {
                                 checkstree++;
                                 string[] split = opciones.ClientID.Split(new Char[] { ',' });
-                                if (split[1].Trim().Length > 0)
+                                if (split[1].Trim().Length > 0 && delete==false)
                                 {
                                     Opcion op = new Opcion();
                                     op.nombre = opciones.Text;
@@ -2382,7 +2578,7 @@ namespace ProyectosWeb
                                             _opcionBL.registrarOpcion(op);
                                         }
                                         else
-                                            if (actualiza&&(split.Length > 3))
+                                            if (actualiza&&(split.Length > 5))
                                             {
                                                 if (split[5].Trim().Length > 0)
                                                 {
@@ -2393,7 +2589,12 @@ namespace ProyectosWeb
                                     }
                                 }
                             }
+                            if (delete)
+                            {
+                                eliminarPantallasOpciones(c);
+                            }
                         }
+                        
                     }
                 }
             }
@@ -2623,7 +2824,7 @@ namespace ProyectosWeb
                 cambiarTextLabel(lblmsg, falla, System.Drawing.Color.Red);
             }
         }
-
+        
         protected void ButtonAtualizaModuloSeg_Click(object sender, EventArgs e)
         {
             LabUpdateModulo.Text = "";
@@ -2645,7 +2846,7 @@ namespace ProyectosWeb
                             modulo.descripcion = item.Text;
                             modulo.h3Id = split[0];
                             modulo.divId = split[1];
-                            Modulo modCambio = _modulosBl.getModulo(item.Text, split[0], split[1]);
+                            Modulo modCambio = _modulosBl.getModulo(item.Text, split[0], split[1],0);
                             if (modCambio.idModulo==0) {
                                 actualizado = _modulosBl.UpdateModulo(modulo).Success;
                             }                          
@@ -2667,6 +2868,28 @@ namespace ProyectosWeb
         private void cambiarTextLabel(Label lab, String texto, System.Drawing.Color color) {
             lab.Text = texto;
             lab.ForeColor = color;
+        }
+
+        protected void ButtonEliminaModuloSeg_Click(object sender, EventArgs e)
+        {
+            LabUpdateModulo.Text = "";
+            foreach (ListItem item in CheckBoxListModulo.Items)
+            {
+                if (item.Selected)
+                {
+                    string[] split = item.Value.Split(new Char[] { ',' });
+                    if (split.Length > 2)
+                    {
+                        if (split[2].Length > 0)
+                        {
+                            Modulo modulo = new Modulo();
+                            modulo.idModulo = int.Parse(split[2]);
+                            _modulosBl.DeleteModulo(modulo);                           
+                        }
+                    }
+                }
+            }
+            updateListadoModulo();
         }
 
         protected void ButtonRegistrarRelAccesoSeg_Click(object sender, EventArgs e)
@@ -2924,12 +3147,17 @@ namespace ProyectosWeb
                 {
                     idtabla = PageIndex;
                     cell = GridViewsistema.Rows[e.RowIndex].Cells[0];
+                    _sistemaBL.DeleteSistema(Convert.ToInt32(cell.Text));
                 }
 
-            conn.Open();
-            SqlCommand cmd = new SqlCommand("update " + PageIndex + " set Estado='1' where ID" + idtabla + "=" + Convert.ToInt32(cell.Text), conn);
-            cmd.ExecuteNonQuery();
-            conn.Close();
+            if (!PageIndex.Equals("Sistemas"))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("update " + PageIndex + " set Estado='1' where ID" + idtabla + "=" + Convert.ToInt32(cell.Text), conn);
+                cmd.ExecuteNonQuery();
+                conn.Close();
+            }
+
             ViewState["Index"] = PageIndex;
             gvbindSeg();
 

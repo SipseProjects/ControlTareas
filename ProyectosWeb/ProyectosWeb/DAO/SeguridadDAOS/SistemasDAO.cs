@@ -62,6 +62,7 @@ namespace ProyectosWeb.DAO.SeguridadDAOS
 
         public List<Sistema> getSistemas()
         {
+           
             _conn.Open();
             List<Sistema> listado = new List<Sistema>();
             SqlCommand cmSql = _conn.CreateCommand();
@@ -90,6 +91,52 @@ namespace ProyectosWeb.DAO.SeguridadDAOS
             }
             _conn.Close();
             return listado;
+        }
+        public DbQueryResult DeleteSistema(int idSistema)
+        {
+            DbQueryResult resultado = new DbQueryResult();
+            _conn.Open();
+            try
+            {
+                resultado.Success = false;
+                SqlCommand cmSql = _conn.CreateCommand();
+                cmSql.CommandText =
+                "update sistemas  set estado=1 where idsistemas=@parm4"
+                + " update modulos  set estado=1 where idmodulo in (select idmodulo from sistemasmodulos sm"
+                + " inner join sistemas s"
+                + " on  s.idsistemas=sm.idsistema"
+                + " where s.idsistemas=@parm4)"
+                + " update p  set p.estado=1"
+                + " from modulos as m"
+                + " inner join pantallas as p"
+                + " on p.idmodulo=m.idmodulo where p.idmodulo in (select idmodulo from sistemasmodulos sm"
+                + " inner join sistemas s"
+                + " on  s.idsistemas=sm.idsistema"
+                + " where s.idsistemas=@parm4)"
+                + " update op  set op.estado=1"
+                + " from modulos as m"
+                + " inner join pantallas as p"
+                + " on p.idmodulo=m.idmodulo "
+                + " inner join opciones op"
+                + " on op.idpantalla=p.idpantalla"
+                + " where m.idmodulo in (select idmodulo from sistemasmodulos sm"
+                + " inner join sistemas s"
+                + " on  s.idsistemas=sm.idsistema"
+                + " where s.idsistemas=@parm4)";
+                cmSql.Parameters.Add("@parm4", SqlDbType.Int);
+                cmSql.Parameters["@parm4"].Value = idSistema;
+                int exito = cmSql.ExecuteNonQuery();
+                if (exito > 0)
+                {
+                    resultado.Success = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                resultado.ErrorMessage = ex.Message;
+            }
+            _conn.Close();
+            return resultado;
         }
     }
 }

@@ -24,6 +24,11 @@ namespace ProyectosWeb.BusinessLogic.Seguridad
          return   _sistemasDao.UpdateSistemas(sis);
         }
 
+        public DbQueryResult DeleteSistema(int idSistema)
+        {
+            return _sistemasDao.DeleteSistema(idSistema);
+        }
+
         public List<Sistema> getSistemas()
         {
             return _sistemasDao.getSistemas();

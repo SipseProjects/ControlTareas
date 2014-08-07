@@ -90,20 +90,65 @@ namespace DAOS.Seguridad
             return resultado;
         }
 
-        public Modulo getModulo(String nombre, String h3Id, String divId) {
+        public DbQueryResult DeleteModulo(Modulo modulo)
+        {
+            DbQueryResult resultado = new DbQueryResult();
+            _conn.Open();
+            try
+            {
+                resultado.Success = false;
+                SqlCommand cmSql = _conn.CreateCommand();
+                cmSql.CommandText = " update modulos  set estado=1 where idmodulo=@parm4" +
+                                    " update p  set p.estado=1"+
+                                     " from modulos as m"+
+                                    " inner join pantallas as p"+
+                                    " on p.idmodulo=m.idmodulo where p.idmodulo=@parm5" +
+                                    " update op  set op.estado=1"+
+                                    " from modulos as m"+
+                                    " inner join pantallas as p"+
+                                    " on p.idmodulo=m.idmodulo "+
+                                    " inner join opciones op"+
+                                    " on op.idpantalla=p.idpantalla"+
+                                    " where m.idmodulo=@parm6";               
+                cmSql.Parameters.Add("@parm4", SqlDbType.Int);
+                cmSql.Parameters["@parm4"].Value = modulo.idModulo;
+                cmSql.Parameters.Add("@parm5", SqlDbType.Int);
+                cmSql.Parameters["@parm5"].Value = modulo.idModulo;
+                cmSql.Parameters.Add("@parm6", SqlDbType.Int);
+                cmSql.Parameters["@parm6"].Value = modulo.idModulo;
+                int exito = cmSql.ExecuteNonQuery();
+                if (exito > 0)
+                {
+                    resultado.Success = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                resultado.ErrorMessage = ex.Message;
+            }
+            _conn.Close();
+            return resultado;
+        }
+
+        public Modulo getModulo(String nombre, String h3Id, String divId, int idModulo) {
             Modulo p = new Modulo();            
             _conn.Open();
             try
             {
                 SqlCommand cmSql = _conn.CreateCommand();
-                if (nombre!=null)
+                if (nombre != null && idModulo <1)
                 {
                     cmSql.CommandText = "select * from modulos m where m.h3id='" + h3Id.Trim() + "' and m.divid='" + divId.Trim() + "' and m.nombre='" + nombre.Trim() + "'";
                 }else
-                if (h3Id != null && nombre == null)
+                    if (h3Id != null && nombre == null && idModulo < 1)
                 {
                     cmSql.CommandText = "select * from modulos m where m.h3id='" + h3Id.Trim() + "' and m.divid='" + divId.Trim() + "'";
                 }
+                    else
+                        if (h3Id == null && nombre == null && idModulo > 0 && divId == null)
+                        {
+                            cmSql.CommandText = "select * from modulos m where m.idmodulo=" + idModulo + "";
+                        }
                 
                 SqlDataAdapter da = new SqlDataAdapter(cmSql);
                 DataSet ds = new DataSet();
@@ -119,7 +164,8 @@ namespace DAOS.Seguridad
                             p.idModulo = int.Parse(drDatos["idmodulo"].ToString());
                             p.Nombre = drDatos["nombre"].ToString();
                             p.h3Id = drDatos["h3Id"].ToString();
-                            p.divId = drDatos["divId"].ToString();                                                    
+                            p.divId = drDatos["divId"].ToString();
+                            p.estado = (drDatos["estado"].ToString().Length > 0 ? int.Parse(drDatos["estado"].ToString()) : 0);                            
                     }
                 }
             }catch(Exception e){

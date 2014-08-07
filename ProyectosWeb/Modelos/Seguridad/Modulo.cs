@@ -12,5 +12,6 @@ namespace Models.Seguridad
        public String descripcion;
        public String h3Id;
        public String divId;
+       public int estado;
     }
 }

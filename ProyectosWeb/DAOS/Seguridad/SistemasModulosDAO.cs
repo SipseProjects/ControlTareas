@@ -170,7 +170,9 @@ namespace DAOS.Seguridad
                             pmodulo.idModulo = int.Parse(drDatos["idmodulo"].ToString());
                             pmodulo.idSistema = int.Parse(drDatos["idsistema"].ToString());
                             pmodulo.divvisible = drDatos["divvisible"].ToString();
+                            pmodulo.h3visible = drDatos["divvisible"].ToString();
                             Modulo mod = new Modulo();
+                            mod.idModulo = pmodulo.idModulo;
                             mod.Nombre = drDatos["nombre"].ToString();
                             mod.h3Id = drDatos["h3Id"].ToString();
                             mod.divId = drDatos["divId"].ToString();

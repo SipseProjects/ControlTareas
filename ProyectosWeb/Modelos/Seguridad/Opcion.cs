@@ -15,6 +15,7 @@ namespace Models.Seguridad
        public String componenteIndex;
        public int chkboxTreeindex;
        public String idcheckbox;
+       public int estado;
        public Pantalla pantalla = new Pantalla();
     }
 }

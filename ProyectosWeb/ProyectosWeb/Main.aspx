@@ -633,7 +633,7 @@
             Encabezado</h1> 
             <p align="right">
             <asp:Label ID="usuarioLogin" runat="server" Text=""></asp:Label>
-            <asp:LinkButton ID="LinkButton1" OnClick="cerrarSesiononclick" runat="server" >Cerrar Sesión</asp:LinkButton>
+            <asp:LinkButton ID="LinkButton1" OnClick="cerrarSesiononclick" runat="server" >Salir</asp:LinkButton>
             </p>
     </div>
     <div id="Container" runat="server">
@@ -1162,6 +1162,8 @@
                              runat="server" Text="Registrar" OnClick="ButtonGuardarModuloSeg_Click"  />
                              <asp:Button ID="Button4"
                              runat="server" Text="Actualizar" OnClick="ButtonAtualizaModuloSeg_Click"  />
+                             <asp:Button ID="ButtonEliminaModulo"
+                             runat="server" Text="Eliminar" OnClick="ButtonEliminaModuloSeg_Click"  />
                              </div>
                              <div><asp:Label  ID="LabUpdateModulo"   runat="server"></asp:Label></div>                              
                     </asp:View>
@@ -1216,6 +1218,8 @@
                              runat="server" Text="Registrar" OnClick="ButtonRegistrarPantallasSeg_Click"  />
                              <asp:Button ID="ButtonUpdatepantalla"
                              runat="server" Text="Actualizar" OnClick="ButtonAtualizaPantallasSeg_Click"  />
+                             <asp:Button ID="ButtonDeletePantallaOpcion"
+                             runat="server" Text="Eliminar" OnClick="ButtonDeletePantallaOpcion_Click"  />
                              </div>
                              <div><asp:Label  ID="LblupdatePantalla"   runat="server"></asp:Label></div>
                     </asp:View>
