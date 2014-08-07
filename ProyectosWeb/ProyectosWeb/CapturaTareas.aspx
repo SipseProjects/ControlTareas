@@ -111,6 +111,24 @@
 
     <div id ="Content" runat="server">   
    <h3 align="center">Captura de tareas</h3>
+   <br />
+   <h3>Cronometro de Tareas</h3>
+<asp:scriptmanager ID="Scriptmanager1" runat="server"></asp:scriptmanager>
+<asp:UpdatePanel ID="UpdatePanel1" runat="server">
+  <ContentTemplate>
+    <asp:Label ID="Label1" runat="server" Font-Size="XX-Large" Text="00:00:00"></asp:Label><br />
+    <asp:Timer ID="tm1" Interval="1000" runat="server" ontick="tm1_Tick" />
+      <asp:Button ID="ButtonIniciar" runat="server" Text="Iniciar" 
+          onclick="ButtonIniciar_Click" Height="50px" />
+      <asp:Button ID="ButtonReset" runat="server" 
+          Text="Resetear" onclick="ButtonReset_Click" Height="50px" />
+      <asp:Button ID="ButtonEnviar" runat="server" Text="Registrar tiempo" Height="50px" 
+          Width="110px" onclick="ButtonEnviar_Click" />
+  </ContentTemplate>
+  <Triggers>
+    <asp:AsyncPostBackTrigger ControlID="tm1" EventName="Tick" />
+  </Triggers>
+</asp:UpdatePanel>
    <h4>Actualizar Tareas por archivo :</h4><br />
         <asp:FileUpload ID="FileUploadTareas" runat="server" /><br />
         <asp:Button ID="ButtonUpload" runat="server" Text="Subir archivo" 

@@ -1539,5 +1539,10 @@ namespace ProyectosWeb
              GenericPrincipal userPrincipal =new GenericPrincipal(userIdentity, roles);
              Context.User = userPrincipal;
          }
+
+         protected void LinkButton1_Click(object sender, EventArgs e)
+         {
+             Response.Redirect("CapturaTareas.aspx");
+         }
     }
 }

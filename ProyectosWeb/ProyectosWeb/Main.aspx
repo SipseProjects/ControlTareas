@@ -624,7 +624,7 @@
                     Seguimiento de tarea</h3>
                 <div id="DivProyecto4" runat="server">
                     <ul>
-                        <li>Actualizar tarea</li>
+                        <li><asp:LinkButton ID="LinkButton1" runat="server" onclick="LinkButton1_Click">Actualizar Tarea</asp:LinkButton></li>
                     </ul>
                 </div>
             </div>
