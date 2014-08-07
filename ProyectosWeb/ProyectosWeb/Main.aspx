@@ -633,7 +633,7 @@
             Encabezado</h1> 
             <p align="right">
             <asp:Label ID="usuarioLogin" runat="server" Text=""></asp:Label>
-            <asp:LinkButton ID="LinkButton1" OnClick="cerrarSesiononclick" runat="server" >Salir</asp:LinkButton>
+            <asp:LinkButton ID="LinkButtonSalir" OnClick="cerrarSesiononclick" runat="server" >Salir</asp:LinkButton>
             </p>
     </div>
     <div id="Container" runat="server">
