@@ -1824,6 +1824,7 @@ namespace ProyectosWeb
         }
 
         private void pantallasRegistradas(CheckBox pregis,String nombre, String idasp) {
+            
             if (PageIndex != null)
             {
                 Pantalla pid = _pantallaBL.getPantalla(null, idasp);
@@ -1832,6 +1833,7 @@ namespace ProyectosWeb
                     pregis.ID = pregis.ID + "," + pid.idPantalla;
                     if (PageIndex.Equals("Pantallas"))
                     {
+                        pregis.ForeColor = System.Drawing.Color.Blue;
                         if(pid.estado>0){
                             pregis.ForeColor = System.Drawing.Color.Red;
                         }else{
@@ -1855,13 +1857,17 @@ namespace ProyectosWeb
         private void OpcionesRegistradas(CheckBox pregis, String idasp, String idcheckbox)
         {
             if (PageIndex != null)
-            {                
+            {
+                if (PageIndex.Equals("Opciones"))
+                {
+                    pregis.ForeColor = System.Drawing.Color.Blue;                    
+                }
                     Opcion oid = _opcionBL.getOpcion(idasp, idcheckbox);
                     if (oid.idPantalla > 0)
                     {
                         pregis.ID = pregis.ID + "," + oid.idOpcion;
                         if (PageIndex.Equals("Opciones"))
-                        {
+                        {                            
                             if(oid.estado>0){
                              pregis.ForeColor = System.Drawing.Color.Red;
                             }else{
@@ -2452,15 +2458,8 @@ namespace ProyectosWeb
             }
         }
 
-       public class eliminarCheckboxs{
-       public int checkeds;
-       public int nocheckeds;
-       public List<CheckBox> opciones=new List<CheckBox>();
-       public List<String> jerarquia = new List<string>();
-       public List<CheckBox> subopc = new List<CheckBox>();
-       public List<CheckBox> subopcParent = new List<CheckBox>();
-            public List<eliminarSubCheckboxs> subopcParentList = new List<eliminarSubCheckboxs>();
-            
+       public class eliminarCheckboxs{       
+            public List<eliminarSubCheckboxs> subopcParentList = new List<eliminarSubCheckboxs>();            
         }
 
         public class eliminarSubCheckboxs
@@ -2499,16 +2498,14 @@ namespace ProyectosWeb
                 if (con.GetType() == typeof(CheckBox))
                 {                    
                     if ((subTotalCHK!=2))
-                    {
-                        eliminarOp.opciones.Add(con as CheckBox);
+                    {                        
                         eliminarSubCheckboxs cd=new eliminarSubCheckboxs();
                         cd.opciones=(con as CheckBox);
                         eliminarOp.subopcParentList.Add(cd);
                         indexParentEliminar= eliminarOp.subopcParentList.Count-1;
                     }
                     else
-                    {
-                        eliminarOp.subopcParent.Add(con as CheckBox);
+                    {                        
                         eliminarSubCheckboxsParent cd = new eliminarSubCheckboxsParent();
                         cd.opciones=(con as CheckBox);
                         eliminarOp.subopcParentList[indexParentEliminar].subopcParent.Add(cd);                       
