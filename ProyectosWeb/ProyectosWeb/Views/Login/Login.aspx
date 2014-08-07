@@ -90,11 +90,11 @@
 <link href="/LoginSources/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
 <link href="/LoginSources/css/styles.css" rel="stylesheet" type="text/css" />
 <link href="/LoginSources/css/media-queries.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="/LoginSources/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="LoginSources/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 
 <meta name="viewport" content="width=device-width" />
  
-<link rel="shortcut icon" href="/LoginSources/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="LoginSources/favicon.ico" type="image/x-icon">
 
 <link href='http://fonts.googleapis.com/css?family=Exo:400,800' rel='stylesheet' type='text/css'>
 
@@ -305,12 +305,12 @@
 </div>
 
 <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
-<script src="/LoginSources/js/bootstrap.min.js"></script>
-<script src="/LoginSources/js/bootstrap-collapse.js"></script>
-<script src="/LoginSources/js/bootstrap-scrollspy.js"></script>
-<script src="/LoginSources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
-<script src="/LoginSources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-<script src="/LoginSources/js/init.js"></script>
-<script type="text/javascript" src="/validacion/jquery.validate.js"></script>
+<script src="LoginSources/js/bootstrap.min.js"></script>
+<script src="LoginSources/js/bootstrap-collapse.js"></script>
+<script src="LoginSources/js/bootstrap-scrollspy.js"></script>
+<script src="LoginSources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script src="LoginSources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script src="LoginSources/js/init.js"></script>
+<script type="text/javascript" src="validacion/jquery.validate.js"></script>
 </body>
 </asp:Content>

@@ -55,7 +55,7 @@ namespace ProyectosWeb
       private const string Modtree = "Modtree";
       private const string litreesubop = "litreesubop";
       private const string limod = "limod";
-      private const string redirectinicio="/Views/Login/Inicio.aspx";
+      private const string redirectinicio="Views/Login/Inicio.aspx";
       private const string redirectMain = "Main.aspx";
       private const string admin = "admin";
       private int contCBKSTotal;
@@ -3465,7 +3465,7 @@ namespace ProyectosWeb
                   protected void cerrarSesiononclick(Object sender, EventArgs e)
          {
              FormsAuthentication.SignOut();
-             Response.Redirect("/Views/Login/Inicio.aspx");             
+             Response.Redirect("Views/Login/Inicio.aspx");             
         }
         
     }

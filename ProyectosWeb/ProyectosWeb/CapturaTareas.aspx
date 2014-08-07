@@ -7,7 +7,7 @@
     <title></title>
    
   <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-   <link rel="stylesheet" href="/Style/Style.css" />
+   <link rel="stylesheet" href="Style/Style.css" />
   
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
@@ -42,7 +42,7 @@
 </script>
 
     <div id="header" align="center">
-    <img src="/Img/SolIcon.png" alt="Empresa" height="100px" width="20%" style="float:left;">  
+    <img src="Img/SolIcon.png" alt="Empresa" height="100px" width="20%" style="float:left;">  
     <h1 align="center">Sistema de captura de tareas</h1>
     </div>
 <div id="Container" runat="server">

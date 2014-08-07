@@ -10,7 +10,7 @@
     <script src="http://ajax.microsoft.com/ajax/beta/0911/extended/ExtendedControls.debug.js"
         type="text/javascript"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-    <link rel="stylesheet" href="/Style/Style.css" />
+    <link rel="stylesheet" href="Style/Style.css" />
     <link rel="stylesheet" href="css/Seguridad/Seguridad.css" />
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
@@ -628,7 +628,7 @@
      <asp:HiddenField ID="hidLiidButton" runat="server"  Value="" /> 
       <asp:HiddenField ID="hidindexpantalla" runat="server"  Value="0" /> 
     <div id="header" align="center">
-        <img src="/Img/SolIcon.png" alt="Empresa" height="100px" width="20%" style="float: left;">
+        <img src="../../Img/SolIcon.png" alt="Empresa" height="100px" width="20%" style="float: left;">
         <h1>
             Encabezado</h1> 
             <p align="right">
