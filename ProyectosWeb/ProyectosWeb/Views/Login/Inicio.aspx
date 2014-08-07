@@ -31,7 +31,8 @@
  <body data-spy="scroll">
     <form id="form1" runat="server">
      <asp:HiddenField ID="HidValidEmailRestoreSeg" runat="server" Value="" />
-
+     <asp:HiddenField ID="hidClicks" runat="server"  Value="0" />
+      <asp:HiddenField ID="Hidsistemaval" runat="server"  Value="0" />
 
 <!-- TOP MENU NAVIGATION -->
 <div class="navbar navbar-fixed-top">
@@ -39,7 +40,7 @@
 		<div class="container">
 	
 			<a class="brand pull-left" href="#">
-			Solutia Intelligence
+			SICT-App
 			</a>
 	
 			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -129,10 +130,9 @@
                                     Sistema 
                                 </td>
                                 </tr>
-                            <tr>
-                                
+                            <tr>                                
                                 <td>
-                                    <asp:DropDownList ID="DropDownList1" runat="server">
+                                    <asp:DropDownList ID="DropDownList1" OnTextChanged="SeleccionDropDownList" runat="server">
                                     </asp:DropDownList>
                                 </td>
                             </tr>                            
@@ -214,7 +214,77 @@
                         </table>
                          
                     </asp:View>
-
+                     <asp:View ID="View5RestablecerDatosUs" runat="server">
+                        <table id="Table6">
+                            <tr>
+                                <td colspan="2">
+                                    <asp:Label ID="Label4" runat="server" Text="Restablecer Contraseña"></asp:Label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Usuario :
+                                </td>
+                                <td>
+                                    <asp:Label ID="LabUserRestore" runat="server" Font-Bold="True" Text=""></asp:Label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Contraseña  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </td>                               
+                            </tr>
+                             <tr>
+                              <td>
+                                    <input id="PasswordUsRestore" maxlength="12" type="password" runat="server" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Confirmar Contraseña 
+                                </td>                               
+                            </tr>
+                             <tr>
+                             <td>
+                                    <input id="PasswordUsRestoreConfirm" maxlength="12" type="password" runat="server" />
+                                </td> 
+                                 </tr>                                                                                                              
+                            <tr>
+                                <td>
+                                    <asp:Button ID="RestablecerPasswordEmail" OnClick="RestablecerPasswordEmail_Click"
+                                        runat="server" Text="Restablecer" class="btn btn-primary" />
+                                </td>
+                                <td>
+                                   <asp:HyperLink ID="HyperLinkSesion" NavigateUrl="~/Views/Login/Inicio.aspx" runat="server">Iniciar Sesion</asp:HyperLink>
+                                </td>
+                            </tr>                            
+                        </table>
+                        <table>
+                        <tr>
+                                <td>
+                                    <asp:Label ID="LabRestorePass" runat="server" Font-Bold="True"></asp:Label>
+                                </td>
+                            </tr>
+                        </table>
+                    </asp:View>
+                    <asp:View ID="ViewExpirado" runat="server">
+                        <table id="Table7">
+                            <tr>
+                                <td>
+                                    <asp:Label ID="Label8" runat="server" Text="El link ha expirado :D, inicie de nuevo con el proceso de recuperación de datos. " Font-Bold="true"></asp:Label>
+                                </td>
+                            </tr>
+                              <tr>
+                            <td>
+                                   <asp:HyperLink ID="HyperLink1" NavigateUrl="~/Views/Login/Inicio.aspx" runat="server">Iniciar Sesion</asp:HyperLink>
+                                </td>
+                                </tr>
+                        </table>
+                    </asp:View>
                 </asp:MultiView>                                  
     </div>            
 		
@@ -241,13 +311,7 @@
 
 
 <!-- FOOTER -->
-<div class="footer container container-fluid">
-
-	<!-- COPYRIGHT - EDIT HOWEVER YOU WANT! -->
-	<div id="copyright">
-		Copyright &copy; 2014 Carp.io<br>
-		Licensed under <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>. Built on <a href="http://twitter.github.com/bootstrap/">Bootstrap</a>.
-	</div>
+<div class="footer container container-fluid">	
 	
 	<!-- CREDIT - PLEASE LEAVE THIS LINK! -->
 	<div id="credits">
@@ -276,12 +340,13 @@
                 ignore: "",
                 rules: {
                     'TextBoxUsuario': { required: true, minlength: 5 },
-                    'PasswordUsuario': { required: true, maxlength: 12, minlength: 5 }
+                    'PasswordUsuario': { required: true, maxlength: 12, minlength: 5 },
+                    'DropDownList1': { required: true}                    
                 },
                 messages: {
                     'TextBoxUsuario': { required: '', minlength: 'El Nombre de Usuario debe ser minimo 5 caracteres' },
-                    'PasswordUsuario': { required: '', minlength: 'La contraseña debe ser maximo 12 caracteres', minlength: 'La contraseña debe ser minimo 5 caracteres' }
-
+                    'PasswordUsuario': { required: '', minlength: 'La contraseña debe ser maximo 12 caracteres', minlength: 'La contraseña debe ser minimo 5 caracteres' },
+                    'DropDownList1': { required: '' }
                 },
                 errorPlacement: function (error, element) {
                     element.css('border-color', 'red');
@@ -291,8 +356,8 @@
 
                 },
                 debug: true,
-                submitHandler: function (ButtonIniciarSesion) {
-                    ButtonIniciarSesion.submit();
+                submitHandler: function (ButtonIniciarSesion) {                    
+                        ButtonIniciarSesion.submit();                    
                 }
             });
         });
@@ -315,6 +380,22 @@
             }
         }
 
+        $('#<%= PasswordUsRestoreConfirm.ClientID%>').keyup(function () {
+            var pass = $("#<%=PasswordUsRestore.ClientID%>");
+            var confpass = $('#<%= PasswordUsRestoreConfirm.ClientID%>');
+            confirmarPass(confpass, pass);
+        });
+
+        function confirmarPass(confpass, pass) {
+            if (confpass.val().length > 0) {
+                if (confpass.val() == pass.val()) {
+                    confpass.css("border-color", "green");
+                } else {
+                    confpass.css("border-color", "red");
+                }
+            }
+        }
+
         $('#<%= TextBoxEmailRegistrado.ClientID%>').keyup(function () {
             var usuariot = $("#<%=TextBoxEmailRegistrado.ClientID%>");
             var sc = $("#<%=LabEmailReg.ClientID%>");
@@ -327,7 +408,7 @@
 
         function validarAjax(usuariot, hid, sc, metodo, msgexiste, msgNoexiste, color1, color2) {
             if (usuariot.val().length > 0) {
-                
+
                 $.ajax({
                     type: "POST",
                     url: "Inicio.aspx/CheckEmail",
@@ -364,6 +445,43 @@
             }
 
         }
+
+        $('#<%= DropDownList1.ClientID%>').change(function () {
+            var option = $('[id*=DropDownList1] option:selected');
+            var valor = $("#<%=DropDownList1.ClientID%>");
+            if (option.val().toString() !== "") {
+                valor.css("border-color", "blue");
+            } else {
+                valor.css("border-color", "red");
+            }
+
+            $('#<%= Hidsistemaval.ClientID%>').val(option.val().toString());
+        });
+
+
+        $('#<%= RestablecerPasswordEmail.ClientID%>').on('click', function () {
+            $("#form1").validate({
+                ignore: "",
+                rules: {
+                    'PasswordUsRestore': { required: true, maxlength: 12, minlength: 5 },
+                    'PasswordUsRestoreConfirm': { required: true, maxlength: 12, minlength: 5, equalTo: '#PasswordUsRestore' }
+                },
+                messages: {
+                    'PasswordUsRestore': { required: 'Ingrese una contraseña', minlength: 'La contraseña debe ser maximo 12 caracteres', minlength: 'Mínimo 5 caracteres' },
+                    'PasswordUsRestoreConfirm': { required: 'La contraseña no coincide', minlength: 'La contraseña debe ser maximo 12 caracteres', minlength: 'Mínimo 5 caracteres', equalTo: 'La contraseña no coincide' }
+                },
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element)
+                    error.addClass('message');  // add a class to the wrapper
+                    error.css("color", "red");
+                },
+                debug: true,
+                submitHandler: function (RestablecerPasswordEmail) {
+                    RestablecerPasswordEmail.submit();
+
+                }
+            });
+        });
 
         $('#<%= ButtonEnviarEmailSeg.ClientID%>').on('click', function () {
             $("#form1").validate({
@@ -407,6 +525,18 @@
                         $("#TextBoxEmailRegistrado").filteredTextBox({
                             InValidChars: " ",
                             ValidChars: ".@",
+                            FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+                        });
+                        $("#PasswordUsRestore").filteredTextBox({
+                            InValidChars: " ",
+                            ValidChars: ".",
+                            FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+                        });
+                        $("#PasswordUsRestoreConfirm").filteredTextBox({
+                            InValidChars: " ",
+                            ValidChars: ".",
                             FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
                 | Sys.Extended.UI.FilterTypes.Numbers
                         });

@@ -26,7 +26,22 @@ namespace ProyectosWeb.BusinessLogic.Seguridad
         {
             return _perfilDao.eliminarUsuarioPerfil(idusuario, idperfil);
         }
-        
+        public void DropDownBinPerfiles(DropDownList lista)
+        {
+            DataTable table2 = new DataTable();
+            table2.Columns.Add("idperfil", typeof(int));
+            table2.Columns.Add("nombre", typeof(string));
+            List<Perfil> perfil = _perfilDao.getPerfiles(-1, -1);
+            table2.Rows.Add(0, "Seleccione un Perfil");
+            for (int i = 0; i < perfil.Count; i++)
+            {
+                table2.Rows.Add(perfil[i].idPerfil, perfil[i].nombre);
+            }
+            lista.DataSource = table2;
+            lista.DataValueField = "idperfil";
+            lista.DataTextField = "nombre";
+            lista.DataBind();
+        }
         public void llenarListaPerfilesNoAsignados(ListBox ListBoxUsuariosSeg, int idusuario)
         {
             DataTable table2 = new DataTable();

@@ -10,8 +10,7 @@ namespace ProyectosWeb.DAO.SeguridadDAOS
 {
     public class GrupoDAO
     {
-        private SqlConnection _conn;// = new SqlConnection("Data Source=172.16.1.31;Initial Catalog=ProyectosGestion;Persist Security Info=True;User ID=sa;Password=Adminpwd20");
-
+        private SqlConnection _conn;
         public GrupoDAO(SqlConnection conn)
         {
         _conn=conn;

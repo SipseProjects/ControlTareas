@@ -11,6 +11,7 @@
         type="text/javascript"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="/Style/Style.css" />
+    <link rel="stylesheet" href="css/Seguridad/Seguridad.css" />
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     
@@ -23,6 +24,31 @@
         });
         });     
     </script>
+<!-- include jQuery and jQueryUI libraries --><%--
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css"/>--%>
+
+<!-- include plugin -->
+<script type="text/javascript" src="jquery-tree-checkboxes/minified/jquery.tree.min.js"></script>
+<link rel="stylesheet" type="text/css" href="jquery-tree-checkboxes/minified/jquery.tree.min.css" />
+<!-- initialize checkboxTree plugin -->
+<script type="text/javascript">
+    //<!--
+    $(document).ready(function () {
+        $('#tree').tree({
+            /* specify here your options */
+        });
+        $('#DivTreePerfil').tree({
+
+        });
+        $('#DivTreeModSis').tree({
+
+        });
+        
+    });
+    //-->
+</script>
     <script type="text/javascript">
         Sys.debug = true;
         Sys.require(Sys.components.filteredTextBox, function () {
@@ -101,11 +127,9 @@
             });
 
         }); 
-    </script>
+    </script>    
     <script type="text/javascript" src="validacion/jquery.validate.js"></script>
-    <script type="text/javascript">
-
-        
+    <script type="text/javascript">        
 
         $(function () {
             $('#<%=LinkProyecto.ClientID%>').on('click', function () {
@@ -128,9 +152,12 @@
                     $('[id*=ListBoxGruposSeg]').append(opt);
                 }
             });
-        });
 
-        
+            $("#TextBoxFechaoIniSis").datepicker({ dateFormat: "yy/mm/dd" });
+            $("#TextBoxFechaFinEsSis").datepicker({ dateFormat: "yy/mm/dd" });
+            $("#TextBoxFinRealSis").datepicker({ dateFormat: "yy/mm/dd" });
+
+        });
 
         $(document).ready(function () {
 
@@ -138,7 +165,7 @@
                 event.stopPropagation();
                 return false;
             }
-           
+
 
             $('#<%=ButtonGuardarGU.ClientID%>').bind("click", function () {
                 $("[id*=ListBoxGruposAsigSeg] option").attr("selected", "selected");
@@ -184,7 +211,7 @@
                 validarUs(usuariot, hid, sc, sc);
 
             });
-            
+
 
             $('#<%= TextBoxUsuarioUpdate.ClientID%>').keyup(function () {
                 var usuariot = $("#<%=TextBoxUsuarioUpdate.ClientID%>");
@@ -321,6 +348,13 @@
                 quitarValidacion(g);
             });
 
+            $('#<%= ButtonCancelSistema.ClientID%>').on('click', function (data) {
+                quitarValidacionSistema();
+            });
+            $('#<%= ButtonConsultaSistemasSeg.ClientID%>').on('click', function (data) {
+                quitarValidacionSistema();
+            });             
+
             function quitarValidacion(g) {
                 if (g == "Usuarios") {
                     $("#TextBoxUsuario").rules("remove");
@@ -340,6 +374,54 @@
                     $("#TextBoxNomPerfil").rules("remove");
                     $("#TextBoxDescripcionPerfil").rules("remove");
                 }
+                else if (g == "Sistemas") {
+                    quitarValidacionSistema();
+                }
+            }
+
+            function quitarValidacionSistema() {
+                $("#TextBoxClaveSis").rules("remove");
+                $("#TextBoxNombreSis").rules("remove");
+                $("#TextBoxDescSis").rules("remove");
+                $("#TextBoxClienteSis").rules("remove");
+                $("#TextBoxFechaoIniSis").rules("remove");
+                $("#TextBoxFechaFinEsSis").rules("remove");
+            }
+
+
+            $('#<%= ButtonUpdateSistema.ClientID%>').on('click', function () {
+                validaSistema();
+            });
+
+            function validaSistema() {
+                $("#BodyForm").validate({
+                    ignore: "",
+                    rules: {
+                        'TextBoxClaveSis': { required: true },
+                        'TextBoxNombreSis': { required: true },
+                        'TextBoxClienteSis': { required: true },
+                        'TextBoxDescSis': { required: true },
+                        'TextBoxFechaoIniSis': { required: true },
+                        'TextBoxFechaFinEsSis': { required: true }
+                    },
+                    messages: {
+                        'TextBoxClaveSis': { required: 'Ingrese una clave' },
+                        'TextBoxNombreSis': { required: 'Ingrese un nombre' },
+                        'TextBoxClienteSis': { required: 'Ingrese un nombre de cliente' },
+                        'TextBoxDescSis': { required: 'Ingrese una descripción' },
+                        'TextBoxFechaoIniSis': { required: 'Ingrese una fecha de Inicio' },
+                        'TextBoxFechaFinEsSis': { required: 'Ingrese una fecha estimada' }
+                    },
+                    errorPlacement: function (error, element) {
+                        error.insertAfter(element);
+                        error.addClass('message');  // add a class to the wrapper
+                        error.css("color", "red");
+                    },
+                    debug: true,
+                    submitHandler: function (ButtonUpdateSistema) {
+                        ButtonUpdateSistema.submit();
+                    }
+                });
             }
 
             $('#<%= ButtonEnviarEmailSeg.ClientID%>').on('click', function () {
@@ -351,7 +433,7 @@
                     },
                     messages: {
                         'TextBoxEmailRegistrado': { email: 'Ingrese un correo valido. Ejemplo: cristian@hotmail.com' },
-                        'HidValidEmailRestoreSeg':{required:''}
+                        'HidValidEmailRestoreSeg': { required: '' }
                     },
                     errorPlacement: function (error, element) {
                         error.insertAfter(element)
@@ -445,7 +527,7 @@
                             'PasswordConfirm': { required: 'La contraseña no coincide', minlength: 'La contraseña debe ser maximo 12 caracteres', minlength: 'La contraseña debe ser minimo 5 caracteres', equalTo: 'La contraseña no coincide' },
                             'HiddenValidUser': { required: '', maxlength: 'Maximo 30 caracteres' },
                             'TextAreaTecnologias': { maxlength: 'Maximo 30 caracteres' },
-                            'HidValidEmailReg': {required:''}
+                            'HidValidEmailReg': { required: '' }
                         },
                         errorPlacement: function (error, element) {
                             error.insertAfter(element)
@@ -510,6 +592,9 @@
                         }
                     });
                 }
+                else if (g == "Sistemas") {
+                    validaSistema();
+                }
             });
 
         });
@@ -535,96 +620,106 @@
     <asp:HiddenField ID="HidValidEmailReg" runat="server" Value="" />    
     <asp:HiddenField ID="HidValidEmailRestoreSeg" runat="server" Value="" />
     <asp:HiddenField ID="hidClicks" runat="server"  Value="0" />
-
+    <asp:HiddenField ID="HidSistemaUpdate" runat="server"  Value="0" /> 
+    <asp:HiddenField ID="hidopcionpant" runat="server"  Value="0" />  
+    <asp:HiddenField ID="hidcontchecks" runat="server"  Value="0" /> 
+    <asp:HiddenField ID="hidpantallaid" runat="server"  Value="" />
+     <asp:HiddenField ID="hidcontchecksubop" runat="server"  Value="0" />   
+     <asp:HiddenField ID="hidLiidButton" runat="server"  Value="" /> 
+      <asp:HiddenField ID="hidindexpantalla" runat="server"  Value="0" /> 
     <div id="header" align="center">
         <img src="/Img/SolIcon.png" alt="Empresa" height="100px" width="20%" style="float: left;">
         <h1>
-            Encabezado</h1>
+            Encabezado</h1> 
+            <p align="right">
+            <asp:Label ID="usuarioLogin" runat="server" Text=""></asp:Label>
+            <asp:LinkButton ID="LinkButton1" OnClick="cerrarSesiononclick" runat="server" >Salir</asp:LinkButton>
+            </p>
     </div>
     <div id="Container" runat="server">
         <div id="LeftSideMenu">
-            <div id="accordion" runat="server">
+            <div id="accordion" runat="server">                       
                 <h3 id="Proyecto1" runat="server" align="left">
                     Seguridad</h3>
                 <div id="DivProyecto1" runat="server">
                     <p align="left">
                         Catalogos</p>
                     <ul>
-                        <li>Usuarios
-                            <ul>
-                                <li>
-                                    <asp:LinkButton  ID="LinkUsuariosSeg" CommandName="LinkUsuariosSeg" runat="server" OnClick="UsuariosOnClick">Usuarios</asp:LinkButton></li>
-                                <li>
-                                    <asp:LinkButton ID="LinkcuentaUsSeg" runat="server" OnClick="CuentaUsuarioOnClick">Cuenta</asp:LinkButton></li>
-                                <li>
-                                    <asp:LinkButton ID="LinkRestablecerPass" runat="server" OnClick="RestablecerPasswordOnClick">Enviar Email</asp:LinkButton></li>
-                                <li>
-                                    <asp:LinkButton ID="LinkRestablecerPassEmailSeg" runat="server" OnClick="RestablecerPasswordEmailOnClick">Contraseña Nueva</asp:LinkButton></li>
+                        <li id="lblUsuariosSegLi" class="liacordion" ><asp:Label runat="server" ID="lblUsuariosSeg">Usuarios</asp:Label>
+                            <ul>                           
+                                <li id="LinkUsuariosSegLi" class="liacordion" >
+                                    <asp:LinkButton  ID="LinkUsuariosSeg" CommandName="subUsuarios,,1" runat="server" OnClick="UsuariosOnClick">Usuarios</asp:LinkButton></li>
+                                <li id="LinkcuentaUsSegLi" class="liacordion">
+                                    <asp:LinkButton ID="LinkcuentaUsSeg" CommandName="sub,,2" runat="server" OnClick="CuentaUsuarioOnClick">Cuenta</asp:LinkButton></li>                                                                
                             </ul>
                         </li>
-                        <li>
-                            <asp:LinkButton ID="LinkGruposSeg" runat="server" OnClick="GruposOnClick">Grupos</asp:LinkButton></li>
-                        <li>
-                            <asp:LinkButton ID="LinkPerfilesSeg" runat="server" OnClick="PerfilesOnClick">Perfiles</asp:LinkButton></li>
-                        <li>Relaciones
+                        <li class="liacordion" >
+                            <asp:LinkButton ID="LinkGruposSeg" CommandName="Grupos,,3" runat="server" OnClick="GruposOnClick">Grupos</asp:LinkButton></li>
+                        <li class="liacordion">
+                            <asp:LinkButton ID="LinkPerfilesSeg" CommandName="Perfiles,,4" runat="server" OnClick="PerfilesOnClick">Perfiles</asp:LinkButton></li>
+                        <li class="liacordion" ><asp:Label runat="server" ID="lblRelacionesSeg">Relaciones</asp:Label>
                             <ul>
-                                <li>
-                                    <asp:LinkButton ID="LinkRelacionesUsSeg" runat="server" OnClick="RelacionesUsuariosOnClick">Usuarios</asp:LinkButton></li>
-                                <li>
-                                    <asp:LinkButton ID="LinkRelacionesGruSeg" runat="server" OnClick="RelacionesGruposOnClick">Grupos</asp:LinkButton></li>
-                                <li>
-                                    <asp:LinkButton ID="LinkRelacionesPerfSeg" runat="server" OnClick="RelacionesPerfilesOnClick">Perfiles</asp:LinkButton></li>
+                                <li class="liacordion">
+                                    <asp:LinkButton ID="LinkRelacionesUsSeg" CommandName="subRelaciones,,5" runat="server" OnClick="RelacionesUsuariosOnClick">Usuarios</asp:LinkButton></li>
+                                <li class="liacordion">
+                                    <asp:LinkButton ID="LinkRelacionesGruSeg" CommandName="subRelaciones,,6" runat="server" OnClick="RelacionesGruposOnClick">Grupos</asp:LinkButton></li>
+                                <li class="liacordion">
+                                    <asp:LinkButton   ID="LinkRelacionesPerfSeg" CommandName="subRelaciones,,7" runat="server" OnClick="RelacionesPerfilesOnClick">Perfiles</asp:LinkButton></li>
                             </ul>
-                        </li>
-                        <li><a href="#">Fases</a></li>
-                        <li><a href="#">Tipos de persona</a></li>
-                        <li><a href="#">Tecnologia</a></li>
-                        <li><a href="#">Parametros de sistema</a></li>
-                        <li><a href="#">Clientes</a></li>
+                        </li >
+                        <li class="liacordion"><a href="#">Fases</a></li>
                     </ul>
-                    <p align="left">
-                        Control de acceso</p>
+                        <asp:Label runat="server" ID="LblControlAcceso">Control de acceso</asp:Label>
                     <ul>
-                        <li>Proyecto</li>
-                        <li>Modulos</li>
-                        <li>Pantallas</li>
-                        <li>Opciones</li>
+                        <li class="liacordion"><asp:LinkButton ID="LB2CASistem" runat="server" CommandName="subSistemas,,8" OnClick="ControlAccesSistemaOnClick">Sistemas</asp:LinkButton></li>
+                        <li class="liacordion"><asp:LinkButton ID="LB3CAModul" runat="server" CommandName="subCAModulo,,9" OnClick="ControlAccesModuloOnClick">Módulos</asp:LinkButton></li>
+                        <li class="liacordion"><asp:LinkButton ID="LB4CAWindo" runat="server" CommandName="subCAPantalla,,10" OnClick="ControlAccesPantallasOnClick">Pantallas</asp:LinkButton></li>
+                        <li class="liacordion"><asp:LinkButton ID="LB5CAOption" runat="server" CommandName="subCAOpcion,,11" OnClick="ControlAccesOpcionesOnClick">Opciones</asp:LinkButton></li>
+                        <li class="liacordion"><asp:Label runat="server" CommandName="op4RelAcceso" ID="LBLRelAcceso">Relaciones</asp:Label>
+                            <ul><li class="liacordion">
+                                    <asp:LinkButton ID="LBCASistema" CommandName="op5CASisMod,12,12" runat="server" OnClick="RelAccesoModSistemaOnClick">Sistemas</asp:LinkButton></li>                               
+                                <li class="liacordion">
+                                    <asp:LinkButton ID="LBCAPerfil" class="acordionButton" CommandName="op5CAPerfil,11,13" runat="server" OnClick="RelAccesoPerfilesOnClick">Perfiles</asp:LinkButton></li>
+                                <li class="liacordion">
+                                    <asp:LinkButton ID="LBCAUsu" CommandName="op5CAUsu,11,14" runat="server" OnClick="RelAccesoUsuariosOnClick">Usuarios</asp:LinkButton></li>
+                               </ul>
+                        </li>                       
                     </ul>
                 </div>
                 <h3 id="Proyecto2" runat="server">
                     Tarea</h3>
-                <div id="DivProyecto2">
+                <div id="DivProyecto2" runat="server">
                     <ul>
-                        <li>
-                            <asp:LinkButton  ID="LinkProyecto" runat="server" OnClick="ProyectoOnClick">Proyecto</asp:LinkButton></li>
-                        <li>
-                            <asp:LinkButton ID="LinkRequerimiento" runat="server" OnClick="RequerimientoOnClick">Requerimiento</asp:LinkButton></li>
-                        <li>
-                            <asp:LinkButton ID="LinkCasosUso" runat="server" OnClick="CasosUsoOnClick">Casos de uso</asp:LinkButton></li>
-                        <li>
-                            <asp:LinkButton ID="LinkComponente" runat="server" OnClick="ComponenteOnClick">Componente</asp:LinkButton></li>
-                        <li>
-                            <asp:LinkButton ID="LinkTarea" runat="server" OnClick="TareaOnClick">Tarea</asp:LinkButton></li>
+                        <li class="liacordion">
+                            <asp:LinkButton  ID="LinkProyecto" runat="server" CommandName="OpcionTarea,,15" OnClick="ProyectoOnClick">Proyecto</asp:LinkButton></li>
+                        <li class="liacordion">
+                            <asp:LinkButton ID="LinkRequerimiento" runat="server" CommandName="OpcionTarea,,16" OnClick="RequerimientoOnClick">Requerimiento</asp:LinkButton></li>
+                        <li class="liacordion">
+                            <asp:LinkButton ID="LinkCasosUso" runat="server" CommandName="OpcionTarea,,17" OnClick="CasosUsoOnClick">Casos de uso</asp:LinkButton></li>
+                        <li class="liacordion">
+                            <asp:LinkButton ID="LinkComponente" runat="server" CommandName="OpcionTarea,,18" OnClick="ComponenteOnClick">Componente</asp:LinkButton></li>
+                        <li class="liacordion">
+                            <asp:LinkButton ID="LinkTarea" runat="server" CommandName="OpcionTarea,,19" OnClick="TareaOnClick">Tarea</asp:LinkButton></li>
                     </ul>
                 </div>
                 <h3 id="Proyecto3" runat="server">
                     Consultas y reporte</h3>
-                <div id="DivProyecto3" runat="server">
+                <div id="DivProyecto3" runat="server"> 
                     <ul>
-                        <li>Horas: planeadas, reales</li>
-                        <li>Avance</li>
-                        <li>Fase</li>
-                        <li>Usuarios-Persona</li>
-                        <li>Cliente</li>
-                        <li>Semaforo de proyectos</li>
-                        <li>Retrasos</li>
+                        <li class="liacordion">Horas: planeadas, reales</li>
+                        <li class="liacordion">Avance</li>
+                        <li class="liacordion">Fase</li>
+                        <li class="liacordion">Usuarios-Persona</li>
+                        <li class="liacordion">Cliente</li>
+                        <li class="liacordion">Semaforo de proyectos</li>
+                        <li class="liacordion">Retrasos</li>
                     </ul>
                 </div>
                 <h3 id="Proyecto4" runat="server">
                     Seguimiento de tarea</h3>
                 <div id="DivProyecto4" runat="server">
                     <ul>
-                        <li><asp:LinkButton ID="LinkButton1" runat="server" onclick="LinkButton1_Click">Actualizar Tarea</asp:LinkButton></li>
+                        <li class="liacordion"><asp:LinkButton ID="LinkButton1" runat="server" onclick="LinkButton1_Click">Actualizar Tarea</asp:LinkButton></li>
                     </ul>
                 </div>
             </div>
@@ -633,7 +728,7 @@
             <p align="center">
                 <asp:Label ID="Label1" runat="server" Text="Gestor de " Font-Bold="True"></asp:Label>
                 <asp:Label ID="LabelNav" runat="server" Font-Bold="True"></asp:Label>
-            </p>
+            </p>            
             <div id="ContentTop" runat="server">
                 <asp:MultiView ID="MultiView1Seg" runat="server">
                     <asp:View ID="View1Seg" runat="server">
@@ -818,9 +913,9 @@
                                 </td>
                                 <td>
                                     <div>
-                                        <asp:Button ID="ButtonAgregarGU" OnClientClick="return false" runat="server" Text="<<"
+                                        <asp:Button ID="ButtonAgregarGU" OnClientClick="return false" runat="server" Text="Asignar"
                                             BackColor="#0066FF" ForeColor="White" />
-                                        <asp:Button ID="ButtonEliminarGU" runat="server" OnClientClick="return false" Text=">>"
+                                        <asp:Button ID="ButtonEliminarGU" runat="server" OnClientClick="return false" Text="Desasignar"
                                             BackColor="#0066FF" ForeColor="White" />
                                     </div>
                                     <br />
@@ -972,7 +1067,7 @@
                                         runat="server" Text="Restablecer" />
                                 </td>
                                 <td>
-                                   <asp:HyperLink ID="HyperLinkSesion" NavigateUrl="~/Main.aspx" runat="server">Iniciar Sesion</asp:HyperLink>
+                                   <asp:HyperLink ID="HyperLinkSesion" NavigateUrl="~/Views/Login/Inicio.aspx" runat="server">Iniciar Sesion</asp:HyperLink>
                                 </td>
                             </tr>                            
                         </table>
@@ -992,6 +1087,177 @@
                                 </td>
                             </tr>
                         </table>
+                    </asp:View>
+                    <asp:View ID="ViewSistema" runat="server">
+                       <table id="Table8">
+                            <tr>                                
+                                    <td>Clave : </td><td><asp:TextBox MaxLength="30" ID="TextBoxClaveSis"
+                                        runat="server"></asp:TextBox>
+                                </td>
+                                </tr>
+                                <tr>
+                                <td>Nombre : </td><td>
+                                    <asp:TextBox ID="TextBoxNombreSis" MaxLength="30" runat="server"></asp:TextBox>
+                                </td>
+                                </tr> 
+                                <tr>
+                                <td>Cliente : </td><td>
+                                    <asp:TextBox ID="TextBoxClienteSis" MaxLength="45" runat="server"></asp:TextBox>
+                                </td>
+                                </tr>                               
+                            <tr>
+                                <td>
+                                    Descripcion :</td><td>
+                                    <asp:TextBox ID="TextBoxDescSis" MaxLength="45" runat="server"></asp:TextBox>
+                                </td>
+                                </tr>
+                                <tr>
+                                <td>
+                                    Fecha inicio : </td><td>
+                                    <asp:TextBox ID="TextBoxFechaoIniSis" runat="server"></asp:TextBox>
+                                </td>
+                            </tr>
+                                <tr>
+                                <td>
+                                    Fecha fin estimada : </td><td>
+                                    <asp:TextBox ID="TextBoxFechaFinEsSis" runat="server"></asp:TextBox>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Fecha fin real : </td><td>
+                                    <asp:TextBox ID="TextBoxFinRealSis" runat="server"></asp:TextBox>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Tecnologias : </td><td>
+                                    <asp:TextBox MaxLength="40" ID="TextBoxTecSistema" runat="server"></asp:TextBox>
+                                </td>
+                            </tr>
+                             <tr>
+                            <td>                                                
+                   </td>
+                            </tr>
+                        </table> 
+                        <div runat="server" id="opcionesUpdateSistem">
+                        <asp:Button ID="ButtonUpdateSistema" runat="server" Text="Actualizar"
+                        OnClick="ButtonUpdateSistemaseg_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="ButtonCancelSistema"
+                             runat="server" Text="Cancelar" OnClick="ButtonCancelSistemaseg_Click" />
+                             &nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="ButtonConsultaSistemasSeg"
+                             runat="server" Text="Consultas" OnClick="ButtonConsultaSistemasSeg_Click" />
+                        </div>
+                              <table>  
+                            <tr>
+                                <td>
+                                    <asp:Label  ID="lblUpdateSistema"   runat="server"></asp:Label></td>
+                            </tr>
+                        </table>                                      
+                    </asp:View>
+                    <asp:View ID="ViewModulo" runat="server">
+                        <div> 
+                                    <asp:CheckBoxList ID="CheckBoxListModulo" runat="server">
+                                    </asp:CheckBoxList> </div>
+                                    <div><asp:Button ID="ButtonGuardarModuloSeg"
+                             runat="server" Text="Registrar" OnClick="ButtonGuardarModuloSeg_Click"  />
+                             <asp:Button ID="Button4"
+                             runat="server" Text="Actualizar" OnClick="ButtonAtualizaModuloSeg_Click"  />
+                             <asp:Button ID="ButtonEliminaModulo"
+                             runat="server" Text="Eliminar" OnClick="ButtonEliminaModuloSeg_Click"  />
+                             </div>
+                             <div><asp:Label  ID="LabUpdateModulo"   runat="server"></asp:Label></div>                              
+                    </asp:View>
+                    <asp:View ID="ViewPnntalla" runat="server">                                                                  
+<div id="tree" runat="server">
+     <ul id="ulconttree" runat="server">
+        <%--<li id="limodulotree" runat="server"><asp:CheckBox ID="CB1DivProyecto1" runat="server"  Text="Seguridad"/>
+            <ul>
+                <li><asp:CheckBox ID="CB1Usuarios" runat="server"  Text="Usuarios"/>
+                    <ul>
+                        <li><asp:CheckBox ID="CB1Usuarios2" runat="server"  Text="Usuarios"/></li>
+                        <li><asp:CheckBox ID="CB1Cuenta" runat="server"  Text="Cuenta"/></li>
+                    </ul>
+                    </li>
+                    <li><asp:CheckBox ID="CB1Grupos" runat="server"  Text="Grupos"/>
+                    </li>
+                    <li><asp:CheckBox ID="CB1Pefiles" runat="server"  Text="Perfiles"/>
+                    </li>
+                    <li><asp:CheckBox ID="CB1Relaciones" runat="server"  Text="Relaciones"/>
+                    </li>
+            </ul>            
+            </li>
+            <li><asp:CheckBox ID="CheckBox9" runat="server"  Text="Seguridad"/>
+            <ul>
+                <li><asp:CheckBox ID="CheckBox32" runat="server"  Text="Seguridad"/>
+                    <ul>
+                        <li><asp:CheckBox ID="CheckBox33" runat="server"  Text="Seguridad"/></li>
+                    </ul>
+                    </li>
+            </ul>
+            <ul>
+                <li><asp:CheckBox ID="CheckBox34" runat="server"  Text="Seguridad"/>
+                    <ul>
+                        <li><asp:CheckBox ID="CheckBox35" runat="server"  Text="Seguridad"/></li>
+                        <li><asp:CheckBox ID="CheckBox36" runat="server"  Text="Seguridad"/></li>
+                        <li><asp:CheckBox ID="CheckBox37" runat="server"  Text="Seguridad"/>
+                            <ul>
+                                <li><asp:CheckBox ID="CheckBox38" runat="server"  Text="Seguridad"/></li>
+                                <li><asp:CheckBox ID="CheckBox39" runat="server"  Text="Seguridad"/></li>
+                            </ul>
+                            </li>
+                        <li><asp:CheckBox ID="CheckBox40" runat="server"  Text="Seguridad"/></li>
+                        <li><asp:CheckBox ID="CheckBox41" runat="server"  Text="Seguridad"/></li>
+                        <li><asp:CheckBox ID="CheckBox42" runat="server"  Text="Seguridad"/></li>
+                    </ul>
+                    </li>
+            </ul>
+            </li>--%>
+            </ul>
+</div>
+ <div><asp:Button ID="ButtonregistraPantalla"
+                             runat="server" Text="Registrar" OnClick="ButtonRegistrarPantallasSeg_Click"  />
+                             <asp:Button ID="ButtonUpdatepantalla"
+                             runat="server" Text="Actualizar" OnClick="ButtonAtualizaPantallasSeg_Click"  />
+                             <asp:Button ID="ButtonDeletePantallaOpcion"
+                             runat="server" Text="Eliminar" OnClick="ButtonDeletePantallaOpcion_Click"  />
+                             </div>
+                             <div><asp:Label  ID="LblupdatePantalla"   runat="server"></asp:Label></div>
+                    </asp:View>
+                    <asp:View ID="ViewRelAccesoPerfil" runat="server">
+                 <div id="divPerfilAcList" class="PerfilAcList">  
+                  <asp:DropDownList ID="DropDownAccesoRelaciones" AutoPostBack="True" OnSelectedIndexChanged="SeleccionDropDownListAcceso"
+                                        runat="server">
+                                    </asp:DropDownList></div> 
+                                   <div class="contTreePerfil">                                                                 
+<div id="DivTreePerfil" runat="server">
+     <ul id="ulTreeAccePerfil" runat="server">       
+            </ul>
+</div>
+ <div><asp:Button ID="Button5"
+                             runat="server" Text="Asignar" OnClick="ButtonRegistrarRelAccesoSeg_Click"  />
+                             <asp:Button ID="Button6"
+                             runat="server" Text="Actualizar" OnClick="ButtonAtualizaRelAccesoSeg_Click"  />
+                             </div>
+                             <div><asp:Label  ID="LblStatusAccePerfil"   runat="server"></asp:Label></div>
+                             </div>
+                    </asp:View>
+                    <asp:View ID="ViewModuloSistema" runat="server">
+                 <div id="div1" class="PerfilAcList">  
+                  <asp:DropDownList ID="DropDownListModSis" AutoPostBack="True" OnSelectedIndexChanged="SeleccionDropDownModuloSistema"
+                                        runat="server">
+                                    </asp:DropDownList></div> 
+                                   <div class="contTreePerfil">                                                                 
+<div id="DivTreeModSis" runat="server">
+     <ul id="ulModSis" runat="server">       
+            </ul>
+</div>
+ <div><asp:Button ID="ButtonAsignarModSis"
+                             runat="server" Text="Asignar" OnClick="ButtonRegistrarRelAccesoSisModSeg_Click"  />
+                             <asp:Button ID="ButtonDesasignarModSis"
+                             runat="server" Text="Actualizar" OnClick="ButtonDeleteRelAccesoSisModSeg_Click"  />
+                             </div>
+                             <div><asp:Label  ID="Label6"   runat="server"></asp:Label></div>
+                             </div>
                     </asp:View>
                 </asp:MultiView>
                 <asp:MultiView ID="MultiView2" runat="server">
@@ -1059,18 +1325,18 @@
                         </p>
                     </asp:View>
                 </asp:MultiView>
-                <p>
+                <div runat="server" id="opcionesRegSeg">
                     <asp:Button ID="Button4seg" validate="required:true" runat="server" Text="Insertar"
                         OnClick="Button4seg_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="Button5seg"
                             validate="required:false" runat="server" Text="Buscar" OnClick="Button5seg_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button
                                 ID="Button6seg" runat="server" validate="required:false" Text="Mostrar todo"
                                 OnClick="Button6seg_Click" />
-                </p>
-                <p>
+                </div>
+                <div runat="server" id="opcionesRegTarea" >
                     <asp:Button ID="Button1" runat="server" Text="Insertar" OnClick="Button1_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button
                         ID="Button2" runat="server" Text="Buscar" OnClick="Button2_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button
                             ID="Button3" runat="server" Text="Mostrar todo" OnClick="Button3_Click" />
-                </p>
+                </div>
             </div>
             <div id="ContentBot">                
                 <asp:MultiView ID="MultiViewTareaGrid" runat="server">
@@ -1204,6 +1470,42 @@
                             <SortedDescendingHeaderStyle BackColor="#575357" />
                         </asp:GridView>
                     </asp:View>
+                    <asp:View ID="ViewSistemaGrid" runat="server">
+                        <asp:GridView ID="GridViewsistema" runat="server" AutoGenerateColumns="False" OnRowEditing="GridView2Seg_RowEditing"
+                            OnRowDeleting="GridView2Seg_RowDeleting" OnPageIndexChanging="GridView2Seg_PageIndexChanging"
+                            OnRowCancelingEdit="GridView2Seg_RowCancelingEdit" OnRowUpdating="GridView2Seg_RowUpdating"
+                            BackColor="White" BorderColor="#DEDFDE" BorderStyle="None" BorderWidth="1px"
+                            CellPadding="4" ForeColor="Black" GridLines="Vertical">
+                            <AlternatingRowStyle BackColor="White" />
+                            <Columns>
+                                <asp:BoundField HeaderText="ID" ReadOnly="True" DataField="IDSistemas" />
+                                <asp:BoundField HeaderText="Clave" ReadOnly="True" DataField="ClaveSistemas" />
+                                <asp:BoundField HeaderText="Nombre" ReadOnly="True" DataField="Nombre" />
+                                <asp:BoundField HeaderText="Descripcion" ReadOnly="True" DataField="Descripcion" />
+                                <asp:BoundField HeaderText="Cliente" ReadOnly="True" DataField="Cliente" />
+                                <asp:BoundField HeaderText="Fecha registro" ReadOnly="True" DataField="FechaRegistro" DataFormatString="{0:yyyy/MM/dd}"
+                                    ApplyFormatInEditMode="true" />
+                                <asp:BoundField HeaderText="Fecha inicio" ReadOnly="True" DataField="FechaInicio" DataFormatString="{0:yyyy/MM/dd}"
+                                    ApplyFormatInEditMode="true" />
+                                <asp:BoundField HeaderText="Fecha fin estimada" ReadOnly="True" DataField="FechaFinEstimada" DataFormatString="{0:yyyy/MM/dd}"
+                                    ApplyFormatInEditMode="true" />
+                                <asp:BoundField HeaderText="Fecha fin real" ReadOnly="True" DataField="FechaFinReal" DataFormatString="{0:yyyy/MM/dd}"
+                                    ApplyFormatInEditMode="true" />
+                                <asp:BoundField HeaderText="Tecnologias" ReadOnly="True" DataField="Tecnologias" />
+                                <asp:CommandField ShowEditButton="true" />
+                                <asp:CommandField ShowDeleteButton="true" />
+                            </Columns>
+                            <FooterStyle BackColor="#CCCC99" />
+                            <HeaderStyle BackColor="#6B696B" Font-Bold="True" ForeColor="White" />
+                            <PagerStyle BackColor="#F7F7DE" ForeColor="Black" HorizontalAlign="Right" />
+                            <RowStyle BackColor="#F7F7DE" />
+                            <SelectedRowStyle BackColor="#CE5D5A" Font-Bold="True" ForeColor="White" Width="10px" />
+                            <SortedAscendingCellStyle BackColor="#FBFBF2" />
+                            <SortedAscendingHeaderStyle BackColor="#848384" />
+                            <SortedDescendingCellStyle BackColor="#EAEAD3" />
+                            <SortedDescendingHeaderStyle BackColor="#575357" />
+                        </asp:GridView>
+                    </asp:View>
                 </asp:MultiView>
             </div>
         </div>
@@ -1213,5 +1515,6 @@
         </div>
     </div>
     </form>
+    
 </body>
 </html>

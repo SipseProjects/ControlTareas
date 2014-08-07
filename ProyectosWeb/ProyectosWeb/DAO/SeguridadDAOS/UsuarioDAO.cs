@@ -4,13 +4,14 @@ using System.Linq;
 using System.Web;
 using System.Data.SqlClient;
 using ProyectosWeb.Models;
+using ProyectosWeb.Models.Seguridad;
 using System.Data;
 
 namespace ProyectosWeb.DAO.SeguridadDAOS
 {
     public class UsuarioDAO
     {
-        private SqlConnection _conn;// = new SqlConnection("Data Source=172.16.1.31;Initial Catalog=ProyectosGestion;Persist Security Info=True;User ID=sa;Password=Adminpwd20");
+        private SqlConnection _conn;
 
         public UsuarioDAO(SqlConnection conn)
         {
@@ -18,8 +19,7 @@ namespace ProyectosWeb.DAO.SeguridadDAOS
         }
 
         public List<Usuario> getUsuarios(int idgrupo, int sinusuario) {
-            _conn.Close();
-            _conn.Open();
+            abrirConexion();
             List<Usuario> listado = new List<Usuario>();
             SqlCommand cmSql = _conn.CreateCommand();
             if (idgrupo > 0 && sinusuario == 0)
@@ -71,11 +71,11 @@ namespace ProyectosWeb.DAO.SeguridadDAOS
                 }
 
             }
-            _conn.Close();
+            cerrarConexion();
             return listado;
         }
         public int UpdateUsuarioPassword(int idusuario, string oldUsuario, string newUsuario, String pass) {
-            _conn.Open();
+            abrirConexion();
             SqlCommand cmSql = _conn.CreateCommand();
             cmSql.CommandText = "update usuarios set nombre=@parm1,contraseña=@parm3 where  nombre=@parm2";
             cmSql.Parameters.Add("@parm1", SqlDbType.VarChar);
@@ -85,13 +85,27 @@ namespace ProyectosWeb.DAO.SeguridadDAOS
             cmSql.Parameters["@parm1"].Value = newUsuario;
             cmSql.Parameters["@parm3"].Value = pass;
            int exito= cmSql.ExecuteNonQuery();
-            _conn.Close();
+           cerrarConexion();
             return exito;
+        }
+
+        public void abrirConexion() {
+            if (_conn.State != ConnectionState.Open)
+            {
+                _conn.Open();
+            }
+        }
+         
+        public void cerrarConexion(){
+            if (_conn.State != ConnectionState.Closed)
+            {
+                _conn.Close();
+            }
         }
 
         public int UpdatePasswordRestore(int idusuario, String pass)
         {
-            _conn.Open();
+            abrirConexion();
             SqlCommand cmSql = _conn.CreateCommand();
             cmSql.CommandText = "update usuarios set contraseña=@parm2 where  idusuario=@parm1";          
             cmSql.Parameters.Add("@parm1", SqlDbType.VarChar);
@@ -99,13 +113,13 @@ namespace ProyectosWeb.DAO.SeguridadDAOS
             cmSql.Parameters["@parm1"].Value = idusuario;
             cmSql.Parameters["@parm2"].Value = pass;
             int exito = cmSql.ExecuteNonQuery();
-            _conn.Close();
+            cerrarConexion();
             return exito;
         }
 
         public Usuario getUserByEmail(String email) {
             Usuario resultado = new Usuario();
-            _conn.Open();
+            abrirConexion();
           
             SqlCommand cmSql = _conn.CreateCommand();
             cmSql.CommandText = "select u.IDUsuario as 'l',u.Nombre, u.esEmpleado,u.Estado,p.IDPersonas, p.IDUsuario,p.Nombre as nomUsuario,"
@@ -126,17 +140,140 @@ namespace ProyectosWeb.DAO.SeguridadDAOS
                     resultado = new Usuario();
                     resultado.idUsuario = int.Parse(drDatos["idusuario"].ToString());
                     resultado.nombre = drDatos["nombre"].ToString();
-
+                    Persona p = new Persona(); 
                 }
 
             }
-            _conn.Close();
+            cerrarConexion();
             return resultado;
         }
+        public Usuario getUsuarioLogeado(string username)
+        {
+            abrirConexion();
+            Usuario us = new Usuario();
+            Persona p = new Persona();
+            Perfil per = new Perfil();
+            Grupo grupo = new Grupo();
+            PerfilesUsuarios perfilUs = new PerfilesUsuarios();
+            List<Perfil> PerfilesUsu = new List<Perfil>();
+            List<Grupo> GruposUsu = new List<Grupo>();
 
+            SqlCommand cmSql = _conn.CreateCommand();
+            cmSql.CommandText = "select u.idusuario, u.nombre as nomUser,u.esempleado, p.idpersonas, p.nombre," 
+                   + " p.apellido, p.email, per.idperfil as idperfilrel, perfil.nombre as nomPerfil,"
+                   + " perfil.descripcion as perfilDesc, perfil.usuarioalta, perfil.usuariobaja, perfil.usuariomodifica,"
+                   + " gus.idgrupo, grupo.nombre as nomGrupo, grupo.descripcion as grupoDesc"
+                   + " from usuarios u"
+                   + " inner join personas p on u.idusuario=p.idusuario"
+                   + " left  join  perfilesusuarios per"
+                   + " on per.idusuario=u.idusuario"
+                   + " left  join  perfiles perfil"
+                   + " on per.idperfil=perfil.idperfil"
+                   + " left  join  gruposusuarios gus"
+                   + " on gus.idusuario=u.idusuario"
+                   + " left  join  grupos grupo"
+                   + " on grupo.idgrupos=gus.idgrupo"
+                   + " where u.nombre=@parm1 and u.estado=0";
+            cmSql.Parameters.Add("@parm1", SqlDbType.VarChar);
+            cmSql.Parameters["@parm1"].Value = username;
+            SqlDataAdapter da = new SqlDataAdapter(cmSql);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            if (ds.Tables.Count > 0)
+            {
+                DataTable dtDatos = ds.Tables[0];
+                int filas=ds.Tables[0].Rows.Count;
+                if (filas > 0)
+                {
+                    DataRow drDatos = dtDatos.Rows[0];
+                    us = new Usuario();
+                    us.idUsuario = int.Parse(drDatos["idusuario"].ToString());
+                    us.nombre = drDatos["nomUser"].ToString();
+                    p.idPersona = int.Parse(drDatos["idpersonas"].ToString());
+                    p.nombre = drDatos["nombre"].ToString();
+                    p.apellido = drDatos["apellido"].ToString();
+                    p.email = drDatos["email"].ToString();
+                    us.persona = p;
+
+                    cmSql.CommandText = "select distinct per.idperfil as idperfilrel, perfil.nombre as nomPerfil,"
+                   + " perfil.descripcion as perfilDesc, perfil.usuarioalta, perfil.usuariobaja, perfil.usuariomodifica"
+                   + " "
+                   + " from usuarios u"
+                   + " inner join personas p on u.idusuario=p.idusuario"
+                   + " left  join  perfilesusuarios per"
+                   + " on per.idusuario=u.idusuario"
+                   + " left  join  perfiles perfil"
+                   + " on per.idperfil=perfil.idperfil"
+                   + " where u.nombre=@parm2 and u.estado=0";
+                    cmSql.Parameters.Add("@parm2", SqlDbType.VarChar);
+                    cmSql.Parameters["@parm2"].Value = username;
+                    SqlDataAdapter daperfil = new SqlDataAdapter(cmSql);
+                    DataSet dsperfil = new DataSet();
+                    daperfil.Fill(dsperfil);
+                    if (dsperfil.Tables.Count > 0)
+                    {
+                        DataTable dtDatosp = dsperfil.Tables[0];
+                        int filasp = dsperfil.Tables[0].Rows.Count;
+                        for (int perf = 0; perf < filasp; perf++)
+                        {
+                            DataRow drrelaciones = dtDatosp.Rows[perf];
+                            if ((drDatos["idperfilrel"].ToString().Length > 0))
+                            {
+                            per = new Perfil();
+                            per.idPerfil =  int.Parse(drDatos["idperfilrel"].ToString());
+                            per.nombre = drrelaciones["nomPerfil"].ToString();
+                            per.descripcion = drrelaciones["perfilDesc"].ToString();
+                            per.usuarioAlta = drrelaciones["usuarioalta"].ToString();
+                            per.usuarioBaja = drrelaciones["usuariobaja"].ToString();
+                            per.usuarioModifica = drrelaciones["usuariomodifica"].ToString();
+                            us.PerfilesUsu.Add(per);
+                            }
+                        }
+                    }
+                    cmSql.CommandText = "select distinct gus.idgrupo as diferente,"
+                   + " gus.idgrupo, grupo.nombre as nomGrupo, grupo.descripcion as grupoDesc"
+                   + " from usuarios u"
+                   + " inner join personas p on u.idusuario=p.idusuario"
+                   + " left  join  gruposusuarios gus"
+                   + " on gus.idusuario=u.idusuario"
+                   + " left  join  grupos grupo"
+                   + " on grupo.idgrupos=gus.idgrupo"
+                   + " where u.nombre=@parm3 and u.estado=0";
+                    cmSql.Parameters.Add("@parm3", SqlDbType.VarChar);
+                    cmSql.Parameters["@parm3"].Value = username;
+                    SqlDataAdapter dagrupo = new SqlDataAdapter(cmSql);
+                    DataSet dsgrupo = new DataSet();
+                    dagrupo.Fill(dsgrupo);
+
+                    if (dsgrupo.Tables.Count > 0)
+                    {
+                        DataTable dtDatosg = dsgrupo.Tables[0];
+                        int filasg = dsgrupo.Tables[0].Rows.Count;
+
+                            for (int perf = 0; perf < filasg; perf++)
+                            {
+                                DataRow drrelaciones = dtDatos.Rows[perf];
+                                
+                                if(drDatos["idgrupo"].ToString().Length>0){
+                                grupo = new Grupo();
+                                grupo.idGrupo =  int.Parse(drDatos["idgrupo"].ToString());
+                                grupo.nombre = drrelaciones["nomgrupo"].ToString();
+                                grupo.descripcion = drrelaciones["grupodesc"].ToString();
+                                us.GruposUsu.Add(grupo);
+                                }
+                            }
+                      }
+                }
+
+            }
+
+            cerrarConexion();
+            return us;
+        }
         public Usuario getUsuario(int idusuario)
         {
-            _conn.Open();
+            abrirConexion();
             Usuario us = new Usuario();
             SqlCommand cmSql = _conn.CreateCommand();
             cmSql.CommandText = "Select * from usuarios where idusuario=@parm1";
@@ -160,12 +297,12 @@ namespace ProyectosWeb.DAO.SeguridadDAOS
                 }
 
             }
-            _conn.Close();
+            cerrarConexion();
             return us;
         }
 
         public int setLinkCliked(int idusuario, int numClicks) {
-            _conn.Open();
+            abrirConexion();
             SqlCommand cmSql = _conn.CreateCommand();
             cmSql.CommandText = " UPDATE u"
                        + " SET   u.linkclicked=@parm2"
@@ -179,16 +316,16 @@ namespace ProyectosWeb.DAO.SeguridadDAOS
             cmSql.Parameters["@parm2"].Value = numClicks;
 
             int exito = cmSql.ExecuteNonQuery();
-            _conn.Close();
+            cerrarConexion();
             return exito;
         }
 
         public int setTiempoExpiracion(int idusuario)
         {
-            _conn.Open();
+            abrirConexion();
             SqlCommand cmSql = _conn.CreateCommand();
             cmSql.CommandText = " UPDATE u"
-                       + " SET   u.tiempoexpiracion=getdate()"
+                       + " SET   u.tiempoexpiracion=getdate(), u.linkclicked=0"
                        + " FROM Usuarios AS u"
                        + " INNER JOIN Personas AS P "
                        + "        ON u.IDUsuario = P.IDUsuario "
@@ -196,7 +333,7 @@ namespace ProyectosWeb.DAO.SeguridadDAOS
             cmSql.Parameters.Add("@parm1", SqlDbType.Int);
             cmSql.Parameters["@parm1"].Value = idusuario;
             int exito = cmSql.ExecuteNonQuery();
-            _conn.Close();
+            cerrarConexion();
             return exito;
         }
     }

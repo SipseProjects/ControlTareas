@@ -21,6 +21,12 @@ namespace ProyectosWeb.BusinessLogic.Seguridad
         {
            return _usuarioDao.getUsuario(idusuario);
         }
+
+        public Usuario getUsuarioLogeado(string username)
+        {
+            return _usuarioDao.getUsuarioLogeado(username);
+        }
+
         public void llenarListaUsuario(ListBox ListBoxUsuariosSeg)
         {
             DataTable table2 = new DataTable();

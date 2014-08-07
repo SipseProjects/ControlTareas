@@ -1,0 +1,4 @@
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\Modelos\bin\Debug\Modelos.dll
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\Modelos\bin\Debug\Modelos.pdb
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\Modelos\obj\Debug\Modelos.dll
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\Modelos\obj\Debug\Modelos.pdb

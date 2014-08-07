@@ -1,0 +1,18 @@
+﻿.PerfilAcList
+	{ float: left; 
+	
+	}
+.contTreePerfil
+	{  float: left; 
+   width:70%;
+	
+	}
+	
+	.liacordion
+	{ list-style-type:none;	
+	}
+	
+	
+	a:hover { color: blue;
+	           }
+
