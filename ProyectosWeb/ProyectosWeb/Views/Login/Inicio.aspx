@@ -14,16 +14,16 @@
 <!--[if lt IE 9]>
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
-<link href="/LoginSources/font/stylesheet.css" rel="stylesheet" type="text/css" />	
-<link href="/LoginSources/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-<link href="/LoginSources/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
-<link href="/LoginSources/css/styles.css" rel="stylesheet" type="text/css" />
-<link href="/LoginSources/css/media-queries.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="/LoginSources/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+<link href="../../LoginSources/font/stylesheet.css" rel="stylesheet" type="text/css" />	
+<link href="../../LoginSources/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="../../LoginSources/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
+<link href="../../LoginSources/css/styles.css" rel="stylesheet" type="text/css" />
+<link href="../../LoginSources/css/media-queries.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="../../LoginSources/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 
 <meta name="viewport" content="width=device-width" />
  
-<link rel="shortcut icon" href="/LoginSources/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="../../LoginSources/favicon.ico" type="image/x-icon">
 
 <link href='http://fonts.googleapis.com/css?family=Exo:400,800' rel='stylesheet' type='text/css'>
 
@@ -71,7 +71,7 @@
   
 		<!-- PHONES IMAGE FOR DESKTOP MEDIA QUERY -->
 		<div class="span5 visible-desktop">
-			<img src="/Img/SolIcon.png">
+			<img src="../../Img/SolIcon.png">
 		</div>
 	
 		<!-- APP DETAILS -->
@@ -295,7 +295,7 @@
 			<h2 class="page-title" id="scroll_up">
 				Acerca de
 				<a href="#home" class="arrow-top">
-				<img src="/LoginSources/img/arrow-top.png">
+				<img src="../../LoginSources/img/arrow-top.png">
 				</a>
 			</h2>			
 			
@@ -321,16 +321,16 @@
 </div>
 
 <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
-<script src="/LoginSources/js/bootstrap.min.js"></script>
-<script src="/LoginSources/js/bootstrap-collapse.js"></script>
-<script src="/LoginSources/js/bootstrap-scrollspy.js"></script>
-<script src="/LoginSources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
-<script src="/LoginSources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-<script src="/LoginSources/js/init.js"></script>
+<script src="../../LoginSources/js/bootstrap.min.js"></script>
+<script src="../../LoginSources/js/bootstrap-collapse.js"></script>
+<script src="../../LoginSources/js/bootstrap-scrollspy.js"></script>
+<script src="../../LoginSources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script src="../../LoginSources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script src="../../LoginSources/js/init.js"></script>
  <script type="text/javascript" src="http://ajax.microsoft.com/ajax/beta/0911/Start.debug.js"></script>
     <script src="http://ajax.microsoft.com/ajax/beta/0911/extended/ExtendedControls.debug.js"
         type="text/javascript"></script>
- <script type="text/javascript" src="/validacion/jquery.validate.js"></script>
+ <script type="text/javascript" src="../../validacion/jquery.validate.js"></script>
  
 <script type="text/javascript" >
     $(document).ready(function () {

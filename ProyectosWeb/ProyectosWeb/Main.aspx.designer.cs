@@ -175,13 +175,13 @@ namespace ProyectosWeb {
         protected global::System.Web.UI.WebControls.Label usuarioLogin;
         
         /// <summary>
-        /// Control LinkButton1.
+        /// Control LinkButtonSalir.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LinkButton1;
+        protected global::System.Web.UI.WebControls.LinkButton LinkButtonSalir;
         
         /// <summary>
         /// Control Container.
