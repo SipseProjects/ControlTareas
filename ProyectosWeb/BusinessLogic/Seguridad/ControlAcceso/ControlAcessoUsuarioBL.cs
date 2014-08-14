@@ -12,7 +12,7 @@ using System.Data.SqlClient;
 
 namespace ProyectosWeb.BusinessLogic.Seguridad
 {
-    public class ControlAcessoUsuarioBL
+    public sealed class ControlAcessoUsuarioBL
     {
         private CAUsuarioDAO _usuarioDao;
         private  PerfilesModulosBL _PerfilesModulosBL;
@@ -93,7 +93,6 @@ namespace ProyectosWeb.BusinessLogic.Seguridad
             sistemasModulos.sistemasModulos = _SistemasModulosBL.getSistemasModulos(idSistema, 0);
             for (int s = 0; s < sistemasModulos.sistemasModulos.Count;s++)
             {
-                 //perfilesModulos.AddRange(getPerfilesModulosUsuario(cd,sistemasModulos.sistemasModulos[s].idModulo));
                 perfilesPantallas.AddRange(getPerfilesPantallasUsuario(perfiles, 0, sistemasModulos.sistemasModulos[s].idModulo));                 
                 usuariosPantallas.AddRange(getUsuariosPantallas(idUsuario, 0, sistemasModulos.sistemasModulos[s].idModulo));
                 perfilesOpciones.AddRange(getPerfilesOpcionesUsuario(perfiles, 0, 0, sistemasModulos.sistemasModulos[s].idModulo));
@@ -104,8 +103,6 @@ namespace ProyectosWeb.BusinessLogic.Seguridad
             sistemasModulos.usuariosPantallas = usuariosPantallas;
             sistemasModulos.perfilesOpciones = perfilesOpciones;
             sistemasModulos.usuariosOpciones = usuariosOpciones;
-
-            //sistemasModulos.perfilesModulos = perfilesModulos;
 
             return sistemasModulos;
         }

@@ -62,32 +62,37 @@ namespace ProyectosWeb.DAO.SeguridadDAOS
 
         public List<Sistema> getSistemas()
         {
-           
-            _conn.Open();
             List<Sistema> listado = new List<Sistema>();
-            SqlCommand cmSql = _conn.CreateCommand();
+            _conn.Open();
+            try
+            {                
+                SqlCommand cmSql = _conn.CreateCommand();
 
-            cmSql.CommandText = "select * from sistemas p where p.Estado=0";
-            
-            SqlDataAdapter da = new SqlDataAdapter(cmSql);
-            DataSet ds = new DataSet();
-            da.Fill(ds);
+                cmSql.CommandText = "select * from sistemas p where p.Estado=0";
 
-            if (ds.Tables.Count > 0)
-            {
-                DataTable dtDatos = ds.Tables[0];
-                if (ds.Tables[0].Rows.Count > 0)
+                SqlDataAdapter da = new SqlDataAdapter(cmSql);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+
+                if (ds.Tables.Count > 0)
                 {
-                    for (int g1 = 0; g1 < ds.Tables[0].Rows.Count; g1++)
+                    DataTable dtDatos = ds.Tables[0];
+                    if (ds.Tables[0].Rows.Count > 0)
                     {
-                        DataRow drDatos = dtDatos.Rows[g1];
-                        Sistema p = new Sistema();
-                        p.idSistema = int.Parse(drDatos["idsistemas"].ToString());
-                        p.nombre = drDatos["nombre"].ToString();
-                        listado.Add(p);
+                        for (int g1 = 0; g1 < ds.Tables[0].Rows.Count; g1++)
+                        {
+                            DataRow drDatos = dtDatos.Rows[g1];
+                            Sistema p = new Sistema();
+                            p.idSistema = int.Parse(drDatos["idsistemas"].ToString());
+                            p.clave = drDatos["clavesistemas"].ToString();
+                            p.nombre = drDatos["nombre"].ToString();
+                            listado.Add(p);
+                        }
                     }
-                }
 
+                }
+            }catch(Exception e){
+            
             }
             _conn.Close();
             return listado;
@@ -95,9 +100,10 @@ namespace ProyectosWeb.DAO.SeguridadDAOS
         public DbQueryResult DeleteSistema(int idSistema)
         {
             DbQueryResult resultado = new DbQueryResult();
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
                 cmSql.CommandText =

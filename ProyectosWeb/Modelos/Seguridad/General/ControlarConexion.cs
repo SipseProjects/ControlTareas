@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data.SqlClient;
 using System.Data;
-namespace ProyectosWeb.BusinessLogic.general
+namespace Models.General
 {
     public class ControlarConexion
     {

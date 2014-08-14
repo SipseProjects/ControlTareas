@@ -21,9 +21,10 @@ namespace DAOS.Seguridad
         public DbQueryResult registrarPerfilesModulos(PerfilesModulos pmodulo)
         {
             DbQueryResult resultado = new DbQueryResult();          
-            _conn.Open();
+            
             try
-            {                              
+            {
+                _conn.Open();
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
 
@@ -62,9 +63,10 @@ namespace DAOS.Seguridad
         public DbQueryResult UpdatePerfilesModulos(PerfilesModulos pmodulo)
         {
             DbQueryResult resultado = new DbQueryResult();
-            _conn.Open();
+           
             try
             {
+                _conn.Open();
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
 
@@ -97,9 +99,10 @@ namespace DAOS.Seguridad
         public PerfilesModulos getPerfilModulo(int idperfil, int idmodulo)
         {
             PerfilesModulos p = new PerfilesModulos();            
-            _conn.Open();
+           
             try
             {
+                _conn.Open();
                 SqlCommand cmSql = _conn.CreateCommand();
                 cmSql.CommandText = "select * from perfilesmodulos o where o.idperfil=@parm1 and o.idmodulo=@parm2";
                 cmSql.Parameters.Add("@parm1", SqlDbType.Int);
@@ -134,9 +137,10 @@ namespace DAOS.Seguridad
         public List<PerfilesModulos> getPerfilesModulos(int IdPerfil, int idmodulo)
         {
             List<PerfilesModulos> listado = new List<PerfilesModulos>();
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 SqlCommand cmSql = _conn.CreateCommand();
                 if (IdPerfil > 0 && idmodulo<1)
                 {

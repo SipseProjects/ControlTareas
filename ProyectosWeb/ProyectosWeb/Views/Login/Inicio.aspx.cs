@@ -31,7 +31,8 @@ namespace ProyectosWeb.Views.Login
         protected void Page_Load(object sender, EventArgs e)
         {
             _sistemasBl.DropDownBindSistemas(DropDownList1);
-
+            lblcontrolarAcceso.ForeColor = System.Drawing.Color.Red;
+            lblcontrolarAcceso.Text = GlobalDataSingleton.Instance.controlAcceso;
             string path = HttpContext.Current.Request.Url.AbsoluteUri;
             if (path.Contains("?"))
             {
@@ -109,12 +110,12 @@ namespace ProyectosWeb.Views.Login
         }
         protected void ButtonEnviarEmailSeg_Click(object sender, EventArgs e)
         {                        
-            String email = TextBoxEmailRegistrado.Text.Trim();
+            String email = TextBoxEmailRegistrado.Text.Trim().ToLower();
             Usuario us = _usuarioFacade.getUserByEmail(email);
 
             if (us.idUsuario != 0)
             {
-                _enviarEmail.SendMail("llr.allleo@gmail.com", email, us.idUsuario.ToString(), us.nombre);
+                _enviarEmail.SendMail("llopez@solutiaintelligence.com", email, us.idUsuario.ToString(), us.nombre);
                 _usuarioFacade.setTiempoExpiracion(us.idUsuario);
                 LabEmailReg.Text = "Correo Enviado. \n Sigue las instrucciones que te hemos enviado. ";
             }
@@ -180,7 +181,7 @@ namespace ProyectosWeb.Views.Login
                                 Response.Cookies.Add(faCookie);
 
                                 conn.Close();
-                                //  FormsAuthentication.GetRedirectUrl(d, false);
+                                GlobalDataSingleton.Instance.controlAcceso = "";
                                 Response.Redirect("../../Main.aspx");
                             }
                         }
@@ -248,7 +249,7 @@ namespace ProyectosWeb.Views.Login
             SqlCommand cmSql = conn.CreateCommand();
             cmSql.CommandText = "Select * from usuarios where nombre=@parm2 and estado=0";
             cmSql.Parameters.Add("@parm2", SqlDbType.VarChar);
-            cmSql.Parameters["@parm2"].Value =u;
+            cmSql.Parameters["@parm2"].Value =u.ToLower();
             SqlDataAdapter da = new SqlDataAdapter(cmSql);
             DataSet ds = new DataSet();
             da.Fill(ds);
@@ -294,13 +295,14 @@ namespace ProyectosWeb.Views.Login
         public static string accesAjax(string referencia, string param, String email)
         {
             string returnValue = string.Empty;
-            conn.Open();
+            
             try
-            {                
+            {
+                conn.Open();
                 SqlCommand cmSql = conn.CreateCommand();
                 cmSql.CommandText = "Select * from " + referencia + " where  " + param + "=@parm2";
                 cmSql.Parameters.Add("@parm2", SqlDbType.VarChar);
-                cmSql.Parameters["@parm2"].Value = email;
+                cmSql.Parameters["@parm2"].Value = email.Trim().ToLower();
                 SqlDataAdapter da = new SqlDataAdapter(cmSql);
                 DataSet ds = new DataSet();
                 da.Fill(ds);

@@ -22,9 +22,10 @@ namespace DAOS.Seguridad
         public DbQueryResult registrarUsuariosModulos(UsuariosModulos usuariomodulo)
         {
             DbQueryResult resultado = new DbQueryResult();          
-            _conn.Open();
+            
             try
-            {                              
+            {
+                _conn.Open();           
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
 
@@ -63,9 +64,10 @@ namespace DAOS.Seguridad
         public DbQueryResult UpdateUsuariosModulos(UsuariosModulos usuariomodulo)
         {
             DbQueryResult resultado = new DbQueryResult();
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
 
@@ -98,9 +100,10 @@ namespace DAOS.Seguridad
         public UsuariosModulos getUsuarioModulo(int idusuario, int idmodulo)
         {
             UsuariosModulos p = new UsuariosModulos();            
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 SqlCommand cmSql = _conn.CreateCommand();
                 cmSql.CommandText = "select * from usuariosmodulos o where o.idusuario=@parm1 and o.idmodulo=@parm2";
                 cmSql.Parameters.Add("@parm1", SqlDbType.Int);
@@ -137,9 +140,10 @@ namespace DAOS.Seguridad
             List<UsuariosModulos> listado = new List<UsuariosModulos>();
             _status=new DbQueryResult();
             _status.Success=false;
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 SqlCommand cmSql = _conn.CreateCommand();
                 if (IdUsuario > 0 && idmodulo < 1)
                 {

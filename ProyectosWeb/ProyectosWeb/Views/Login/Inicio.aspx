@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Inicio.aspx.cs" Inherits="ProyectosWeb.Views.Login.Inicio" %>
+﻿<%@ Page Language="C#" EnableEventValidation="false" AutoEventWireup="true" CodeBehind="Inicio.aspx.cs" Inherits="ProyectosWeb.Views.Login.Inicio" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -132,7 +132,7 @@
                                 </tr>
                             <tr>                                
                                 <td>
-                                    <asp:DropDownList ID="DropDownList1" OnTextChanged="SeleccionDropDownList" runat="server">
+                                    <asp:DropDownList ID="DropDownList1" AutoPostBack="false" runat="server">
                                     </asp:DropDownList>
                                 </td>
                             </tr>                            
@@ -156,6 +156,11 @@
                                 <td>
                                     <asp:Label ID="msgpass" runat="server" Font-Bold="True"></asp:Label>
 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <asp:Label ID="lblcontrolarAcceso" runat="server" Font-Bold="True"></asp:Label>
                                 </td>
                             </tr>
                         </table>
@@ -335,13 +340,20 @@
 <script type="text/javascript" >
     $(document).ready(function () {
 
+        
         $('#<%= ButtonIniciarSesion.ClientID%>').on('click', function () {
+            var valor1 = $('#<%=TextBoxUsuario.ClientID%>');
+
+            if (valor1.val() == "admin") {
+                $('#<%= Hidsistemaval.ClientID%>').val('0');
+                $('#DropDownList1 option:first-child').attr("value", "0");
+            }
             $("#form1").validate({
                 ignore: "",
                 rules: {
                     'TextBoxUsuario': { required: true, minlength: 5 },
                     'PasswordUsuario': { required: true, maxlength: 12, minlength: 5 },
-                    'DropDownList1': { required: true}                    
+                    'DropDownList1': { required: true }
                 },
                 messages: {
                     'TextBoxUsuario': { required: '', minlength: 'El Nombre de Usuario debe ser minimo 5 caracteres' },
@@ -350,25 +362,26 @@
                 },
                 errorPlacement: function (error, element) {
                     element.css('border-color', 'red');
-                    error.insertAfter(element)
+                    error.insertAfter(element);
                     error.addClass('message');  // add a class to the wrapper
                     error.css("color", "red");
+                    error.css("display", "block");
 
                 },
                 debug: true,
-                submitHandler: function (ButtonIniciarSesion) {                    
-                        ButtonIniciarSesion.submit();                    
+                submitHandler: function (ButtonIniciarSesion) {
+                    ButtonIniciarSesion.submit();
                 }
             });
         });
 
         $('#<%= TextBoxUsuario.ClientID%>').keyup(function () {
-            var u = $("#<%=TextBoxUsuario.ClientID%>");
+            var u = $('#<%=TextBoxUsuario.ClientID%>');
             CambiarBorder(u);
         });
 
         $('#<%= PasswordUsuario.ClientID%>').keyup(function () {
-            var p = $("#<%=PasswordUsuario.ClientID%>");
+            var p = $('#<%=PasswordUsuario.ClientID%>');
             CambiarBorder(p);
         });
 
@@ -448,18 +461,27 @@
 
         $('#<%= DropDownList1.ClientID%>').change(function () {
             var option = $('[id*=DropDownList1] option:selected');
-            var valor = $("#<%=DropDownList1.ClientID%>");
+            var valor = $('#<%=DropDownList1.ClientID%>');
+            var valorus = $('#<%=TextBoxUsuario.ClientID%>');
+            var sis;
             if (option.val().toString() !== "") {
                 valor.css("border-color", "blue");
+                sis = option.val().toString();
             } else {
-                valor.css("border-color", "red");
+                if (valorus.val() !== "admin") {
+                    valor.css("border-color", "red");
+                } else {
+                    sis = "0";
+                }
             }
 
-            $('#<%= Hidsistemaval.ClientID%>').val(option.val().toString());
+            $('#<%= Hidsistemaval.ClientID%>').val(sis);
+
         });
 
 
         $('#<%= RestablecerPasswordEmail.ClientID%>').on('click', function () {
+
             $("#form1").validate({
                 ignore: "",
                 rules: {
@@ -484,6 +506,7 @@
         });
 
         $('#<%= ButtonEnviarEmailSeg.ClientID%>').on('click', function () {
+
             $("#form1").validate({
                 ignore: "",
                 rules: {
@@ -505,6 +528,23 @@
                 }
             });
         });
+
+        $(function () {
+            var valor = $('#<%=DropDownList1.ClientID%>');
+            var opciones = $('#DropDownList1 > option').length;
+            
+            var valorus = $('#<%=TextBoxUsuario.ClientID%>');                       
+
+            if (valorus.val() == "admin") {
+                $('#<%= Hidsistemaval.ClientID%>').val('0');
+                $('#DropDownList1 option:first-child').attr("value", "0");
+            } else if (opciones > 1) {
+                $('#DropDownList1').prop('selectedIndex', 1);
+                var option = $('[id*=DropDownList1] option:selected');
+                $('#<%= Hidsistemaval.ClientID%>').val(option.val());
+            }
+        });
+
     });
             </script>
                 <script type="text/javascript">

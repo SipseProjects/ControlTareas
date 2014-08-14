@@ -19,9 +19,12 @@ using System.Configuration;
 using ProyectosWeb.Models.Seguridad;
 using System.Globalization;
 using BusinessLogic.Seguridad;
+using ProyectosWeb.BusinessLogic.general;
 using Models.Seguridad;
 using Models.Seguridad.ControlAcceso;
 using Models;
+using System.Diagnostics;
+
 
 namespace ProyectosWeb
 {
@@ -32,7 +35,7 @@ namespace ProyectosWeb
         private UsuarioFacade _usuarioFacade = new UsuarioFacade(conn);
         private static PerfilBL _perfilBL = new PerfilBL(conn);
         public static GruposBL _grupoBL = new GruposBL(conn);
-        public static SistemasBL _sistemaBL = new SistemasBL(conn);
+        public static SistemasBL _sistemaBL = new SistemasBL(conn);        
         private int usRestore;        
         private SeguridadDAO accesDao = new SeguridadDAO(); 
         String PageIndex,PrevIndex;
@@ -64,11 +67,14 @@ namespace ProyectosWeb
       private UsuarioLogin uslogin;
       private String userName;
       private eliminarCheckboxs eliminarOp = new eliminarCheckboxs();
+      private static ControlarConexion controlConn = new ControlarConexion(conn);
 
         private int checkboxParent=0;
         private String analizador = "";
         private int subTotalCHK=0;
        private  int indexParentEliminar;
+
+       public static Stopwatch stopWatch = new Stopwatch();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -80,7 +86,7 @@ namespace ProyectosWeb
                  userName = Context.User.Identity.Name;
                 usuarioLogin.Text = userName + ", ";                               
                 uslogin = _CAUsuarioBL.getUsuarioLogeado(userName, GlobalDataSingleton.Instance.sistemaID);
-                if (uslogin.Perfiles.Count > 0)
+                if (uslogin.Perfiles.Count > 0 || userName.ToLower().Equals(admin))
                 {
                 _sistemamodulo = uslogin.sistemasModulos;
                 List<SistemasModulos> acceso = _sistemamodulo.sistemasModulos;
@@ -97,6 +103,7 @@ namespace ProyectosWeb
                     List<PerfilesPantallas> accesopantalla = _sistemamodulo.perfilesPantallas;
                     if (accesoUsuariopantalla.Count < 1 && accesopantalla.Count < 1 && !userName.ToLower().Equals(admin))
                     {
+                        GlobalDataSingleton.Instance.controlAcceso = "El Usuario no tiene asociado ninguna pantalla.";
                         Response.Redirect(redirectinicio);
                     }
                     else
@@ -114,10 +121,12 @@ namespace ProyectosWeb
                         }
                     }
                 }else {
+                    GlobalDataSingleton.Instance.controlAcceso = "El Sistema no tiene asociado ningun Módulo.";
                     Response.Redirect(redirectinicio);
                 }
                 }
                 else {
+                    GlobalDataSingleton.Instance.controlAcceso = "El Usuario no tiene asociado ningun Perfil.";
                     Response.Redirect(redirectinicio);
                 }                                
                 //Desactivar Modulo Seguridad
@@ -128,9 +137,17 @@ namespace ProyectosWeb
                 MultiView2.ActiveViewIndex = -1;
                 MultiViewTareaGrid.ActiveViewIndex = -1;
                 activarbotonTarea(false);                
-                //!Context.User.Identity.AuthenticationType.ToLower().Equals("ntlm")                
+                //!Context.User.Identity.AuthenticationType.ToLower().Equals("ntlm")   
+                //desactivar Modulo  consulta/reportes
+                MultiViewConsultaReporte.ActiveViewIndex = -1;
+                
+                //desactivar Modulo seguimiento tarea
+                MultiViewSeguimientoTarea.ActiveViewIndex = -1;
 
                 int linkButtonTareas = 0;
+                int linkButtonConsultaReporte = 0;
+                int linkButtonSeguimientoTareas = 0;
+                 int linkButtonSeguridad = 0;
                 if (Request.Form["__EVENTTARGET"] != null)
                 {
                     if (Request.Form["__EVENTTARGET"] == LinkProyecto.UniqueID || Request.Form["__EVENTTARGET"] == LinkRequerimiento.UniqueID
@@ -139,15 +156,24 @@ namespace ProyectosWeb
                     {
                         linkButtonTareas = 1;
                     }
-                }
+                    if (Request.Form["__EVENTTARGET"] == LinkButton1.UniqueID)
+                    {
+                     linkButtonSeguimientoTareas = 1;
+                     }
 
-                DropDownListDep.Visible = false;
+                    if ( origenLinkButton(Request.Form["__EVENTTARGET"],DivProyecto1.ClientID))
+                    {
+                     linkButtonSeguridad = 1;
+                     }
+                    
+                }                
+
                 if (IsPostBack && ViewState["Index"] != null)
                 {
                     PageIndex = ViewState["Index"].ToString();
                     /**/
 
-                    if (linkButtonTareas != 1)
+                    if (linkButtonTareas != 1 && linkButtonSeguimientoTareas!=1)
                     {
                         if (PageIndex.Equals("Usuarios"))
                         {
@@ -220,6 +246,22 @@ namespace ProyectosWeb
                         }
                         
                     }
+                    //modulo tarea
+                   if ((PageIndex.Equals("Proyectos") || PageIndex.Equals("Requerimientos") || PageIndex.Equals("CasosUso")
+                            || PageIndex.Equals("Componentes") || PageIndex.Equals("Tareas") ||  linkButtonTareas == 1 )&&
+                       (linkButtonSeguimientoTareas == 0 && linkButtonSeguridad == 0 && linkButtonConsultaReporte == 0))
+                    {
+                        activarbotonTarea(true);
+                        MultiView2.ActiveViewIndex = 0;
+                        MultiViewTareaGrid.ActiveViewIndex = 0;
+                    }
+
+                    //modulo seguimiento de tareas
+                    if ((PageIndex.Equals("Captura de Tareas") || linkButtonSeguimientoTareas == 1) && linkButtonTareas == 0 && linkButtonSeguridad == 0 && linkButtonConsultaReporte == 0)
+                    {
+                        MultiViewSeguimientoTarea.ActiveViewIndex = 0;
+                    }
+                    
                 }
 
                 string path = HttpContext.Current.Request.Url.AbsoluteUri;
@@ -272,7 +314,7 @@ namespace ProyectosWeb
 
                 }
                 HyperLinkSesion.Visible = false;
-                DropDownListDep.Visible = false;
+               
                 if (IsPostBack && ViewState["PrevIndex"] != null)
                 {
                     PrevIndex = ViewState["PrevIndex"].ToString();
@@ -281,6 +323,7 @@ namespace ProyectosWeb
                 }
             }
             else {
+                GlobalDataSingleton.Instance.controlAcceso = "";
                 Response.Redirect(redirectinicio);
             }   
         }
@@ -480,6 +523,7 @@ namespace ProyectosWeb
                 ((BoundField)GridView2Seg.Columns[7]).DataField = "Tecnologias";
                 GridView2Seg.Columns[8].HeaderText = "Email";
                 ((BoundField)GridView2Seg.Columns[8]).DataField = "Email";
+                ((BoundField)GridView2Seg.Columns[8]).ReadOnly = true;
                 GridView2Seg.Columns[9].HeaderText = "Telefono";
                 ((BoundField)GridView2Seg.Columns[9]).DataField = "Telefono";
                 gvbindSeg();
@@ -496,7 +540,7 @@ namespace ProyectosWeb
             MultiView1Seg.ActiveViewIndex = 4;
             msgactualizado.Text = "";
             getPantallaIndex();
-            ControlAccesoOpciones();                        
+            //ControlAccesoOpciones();                        
         }
         protected void RestablecerPasswordOnClick(object sender, EventArgs e)
         {
@@ -788,11 +832,11 @@ namespace ProyectosWeb
                             if (modulo.estado == 0)
                             {
                                 listado.Items[i].Selected = true;
-                                listado.Items[i].Attributes.Add("style", "color: green;");
+                                listado.Items[i].Attributes.Add("style", "color: green !important;");
                             }
                             else if (modulo.estado > 0)
                             {
-                                listado.Items[i].Attributes.Add("style", "color: red;");
+                                listado.Items[i].Attributes.Add("style", "color: red !important; ");
                             }
                         }
 
@@ -871,6 +915,38 @@ namespace ProyectosWeb
             ControlAccesoOpciones();
         }
 
+        protected internal bool origenLinkButton(String eventtargetorigen, String idcontrol){
+            bool equivalente = false;
+            Control f = FindControl(idcontrol); 
+        foreach (Control c in f.Controls)
+            {
+                string idlink = "";
+                try
+                {
+                    if (c.GetType() == typeof(LinkButton))
+                    {
+                        idlink =  ((LinkButton)c).ClientID;
+                    }                    
+
+                }
+                catch
+                {
+                    if (c.GetType() == typeof(LinkButton))
+                    {
+                        idlink = ((LinkButton)c).ClientID;
+                    }
+                }
+            if(idlink.Trim().Length>0){
+                if (eventtargetorigen.Equals(idlink))
+                {
+                    equivalente = true;
+                    break;
+                }
+            }
+        }
+        return equivalente;
+        }
+
         public void cambiarNomEtiquetaRelaciones(string nombre, string nombre2)
         { 
         LabelUsuariosSeg.Text=nombre;
@@ -923,13 +999,13 @@ namespace ProyectosWeb
         protected void SeleccionDropDownModuloSistema(Object sender, EventArgs e)
         {
             string valor = DropDownListModSis.SelectedValue;
-           
-            if (valor.Trim().Length > 0)
-            {
+               if(valor.Trim().Length==0){
+                   valor = "0";
+               }
                 int idseleccionado = int.Parse(valor);
                 HidUsuSeleccionadoSeg.Value = "" + idseleccionado;
                llenarTree(false, false);                                                
-            }
+            
         }
 
         protected void SeleccionUsuarioOnClick(object sender, EventArgs e)
@@ -1130,6 +1206,7 @@ namespace ProyectosWeb
                            + " if(parseInt(td.children[0].value.length)>29){ td.children[0].value=CellValue.substring(0, 30);}"
                            + " "
                           );
+                        grid.Rows[b].Cells[4].Attributes.Add("onclick", " " + JQueryConfirmDialogGridview("   javascript:__doPostBack('GridView2SegGrupo','Delete$" + b + "'); "));
                     }
                       if (PageIndex.Equals("Usuarios"))
                      {                        
@@ -1200,9 +1277,11 @@ namespace ProyectosWeb
                          + " Row = table.rows[i];"
                          + " td = Row.cells[9]; "
                          + "  CellValue = td.children[0].value;"
+                         + " if(isNaN(CellValue)){ td.children[0].value='';}"
                          + " if(parseInt(td.children[0].value.length)>11){ td.children[0].value=CellValue.substring(0, 12);}"
                          + " "
                         );
+                         grid.Rows[b].Cells[11].Attributes.Add("onclick", " " + JQueryConfirmDialogGridview("   javascript:__doPostBack('GridView2Seg','Delete$"+b+"'); "));
                      }
                     if (PageIndex.Equals("Perfiles"))
                     {
@@ -1219,6 +1298,9 @@ namespace ProyectosWeb
                            + " if(parseInt(td.children[0].value.length)==1){ if(td.children[0].value==='N'||td.children[0].value==='Y'||td.children[0].value==='n'||td.children[0].value==='y') {td.children[0].value=td.children[0].value;}else{td.children[0].value=''; }}"
                           );
                         }
+                        grid.Rows[b].Cells[7].Attributes.Add("onclick", " " + JQueryConfirmDialogGridview("   javascript:__doPostBack('GridView2SegPerfil','Delete$" + b + "'); "));                    
+                    }else if(PageIndex.Equals("Sistemas")){
+                        grid.Rows[b].Cells[grid.Rows[b].Cells.Count-1].Attributes.Add("onclick", " " + JQueryConfirmDialogGridview("   javascript:__doPostBack('GridViewsistema','Delete$" + b + "'); "));                                      
                     }
                 }
                 
@@ -1237,6 +1319,27 @@ namespace ProyectosWeb
             if(PageIndex.Contains("Sistema")){
                 ControlAccesoOpciones();
             }
+                            
+        }
+
+        private String JQueryConfirmDialogGridview(String direccion) {
+            return "  $(function () {"
+                    + "event.preventDefault(); "
+                    + " $('#dialog-confirm').dialog({"
+                    + "   height: 200,"
+                    + "  width: 300,"
+                    + " modal: true,"
+                    + " buttons: {"
+                    + "   'Si': function () {"
+                    + "     $(this).dialog('close');"
+                    + direccion
+                    + " },"
+                    + "  'No': function () {"
+                    + "     $(this).dialog('close'); return false;"
+                    + " }"
+                    + " }"
+                    + " });  return false;"
+                    + " });";
         }
 
         protected void gvbind()
@@ -1249,8 +1352,13 @@ namespace ProyectosWeb
             conn.Close();
             if (ds.Tables[0].Rows.Count > 0)
             {
+                  
                 GridView1.DataSource = ds;
                 GridView1.DataBind();
+                for (int b = 0; b < GridView1.Rows.Count; b++)
+                {
+                    GridView1.Rows[b].Cells[GridView1.Rows[b].Cells.Count - 1].Attributes.Add("onclick", " " + JQueryConfirmDialogGridview("   javascript:__doPostBack('GridView1','Delete$" + b + "'); "));
+                }
             }
             else
             {
@@ -1336,34 +1444,65 @@ namespace ProyectosWeb
             return exito;
         }
         protected void Button1_Click(object sender, EventArgs e)
-        {           
+        {
+            int idcomponente = (DropDownListDep.SelectedValue.Length > 0 ? int.Parse(DropDownListDep.SelectedValue) : 0);
             if (PageIndex != null && PageIndex.Equals("Tareas")) {
                 SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "insert into " + PageIndex + " values('" + TextBoxClave.Text + "' , '" + TextBoxNombre.Text + "' , '" + TextBoxDescripcion.Text + "' , '" + TextBoxCliente.Text + "' , GETDATE() , CONVERT(datetime,'" + TextBoxFechaInicio.Text + "',111) , CONVERT(datetime,'" + TextBoxFechaFinEst.Text + "',111) , CONVERT(datetime,'" + TextBoxFechaFinReal.Text + "',111) , '04' , 0  )  ";
-                cmd.CommandType = CommandType.Text;
-                cmd.Connection = conn;
-                conn.Open();
-                cmd.ExecuteNonQuery();
+               
+                bool existe = accesDao.existeEnDB("select * from " + PageIndex + " s where s.idcomponentes=" + idcomponente + " and s.clavetareas='" + TextBoxClave.Text + "' and s.nombre='" + TextBoxNombre.Text.Trim() + "' and s.descripcion='" + TextBoxDescripcion.Text.Trim() + "' and s.cliente='" + TextBoxCliente.Text.Trim() + "' and s.horasestimadas=CONVERT(time,'" + DropDownListHoras.SelectedValue + ":00:00',0)");
 
+                if (!existe)
+                {
+                    cmd.CommandText = "insert into " + PageIndex + " values(nullif(" + idcomponente + ",0), '" + TextBoxClave.Text.Trim() + "' , '" + TextBoxNombre.Text.Trim() + "' , '" + TextBoxDescripcion.Text.Trim() + "' , '" + TextBoxCliente.Text.Trim() + "' , GETDATE() , CONVERT(datetime,'" + TextBoxFechaInicio.Text + "',111) , CONVERT(datetime,'" + TextBoxFechaFinEst.Text + "',111) , CONVERT(datetime,'" + TextBoxFechaFinReal.Text + "',111) ,CONVERT(time,'" + DropDownListHoras.SelectedValue + ":00:00',0),CONVERT(time,'00:00:00',0),'', 0  )  ";
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Connection = conn;
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
 
+                
             
             }else 
             if (PageIndex!=null&&PageIndex.Equals("Proyectos"))
             {
                 SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "insert into " + PageIndex + " values('" + TextBoxClave.Text + "' , '" + TextBoxNombre.Text + "' , '" + TextBoxDescripcion.Text + "' , '" + TextBoxCliente.Text + "' , GETDATE() , CONVERT(datetime,'" + TextBoxFechaInicio.Text + "',111) , CONVERT(datetime,'" + TextBoxFechaFinEst.Text + "',111) , CONVERT(datetime,'" + TextBoxFechaFinReal.Text + "',111) , '04' , 0  )  ";
-                cmd.CommandType = CommandType.Text;
-                cmd.Connection = conn;
-                conn.Open();
-                cmd.ExecuteNonQuery();
+                bool existe = accesDao.existeEnDB("select * from " + PageIndex + " s where s.clave" + PageIndex + "='" + TextBoxClave.Text + "' and s.nombre='" + TextBoxNombre.Text.Trim() + "' and s.descripcion='" + TextBoxDescripcion.Text.Trim() + "' and s.cliente='" + TextBoxCliente.Text.Trim() + "'");
+
+                if (!existe)
+                {
+                    cmd.CommandText = "insert into " + PageIndex + " values('" + TextBoxClave.Text + "' , '" + TextBoxNombre.Text + "' , '" + TextBoxDescripcion.Text + "' , '" + TextBoxCliente.Text + "' , GETDATE() , CONVERT(datetime,'" + TextBoxFechaInicio.Text + "',111) , CONVERT(datetime,'" + TextBoxFechaFinEst.Text + "',111) , CONVERT(datetime,'" + TextBoxFechaFinReal.Text + "',111) , '04' , 0  )  ";
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Connection = conn;
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
             else {
                 SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "insert into " + PageIndex + " values(  "+DropDownListDep.SelectedValue.ToString()+", '" + TextBoxClave.Text + "' , '" + TextBoxNombre.Text + "' , '" + TextBoxDescripcion.Text + "' , '" + TextBoxCliente.Text + "' , GETDATE() , CONVERT(datetime,'" + TextBoxFechaInicio.Text + "',111) , CONVERT(datetime,'" + TextBoxFechaFinEst.Text + "',111) , CONVERT(datetime,'" + TextBoxFechaFinReal.Text + "',111) , '04' , 0  )  ";
-                cmd.CommandType = CommandType.Text;
-                cmd.Connection = conn;
-                conn.Open();
-                cmd.ExecuteNonQuery();
+               String idcomponente2="";
+                switch(PageIndex){
+                    case "Requerimientos":
+                        idcomponente2="proyecto";
+                        break;
+                    case "CasosUso":
+                        idcomponente2 = "requerimientos";
+                        break;
+                    case "Componentes":
+                        idcomponente2 = "casosuso";
+                        break;
+                
+                }
+
+                bool existe = accesDao.existeEnDB("select * from " + PageIndex + " s where s.id" + idcomponente2 + "=" + idcomponente + " and s.clave" + PageIndex + "='" + TextBoxClave.Text + "' and s.nombre='" + TextBoxNombre.Text.Trim() + "' and s.descripcion='" + TextBoxDescripcion.Text.Trim() + "' and s.cliente='" + TextBoxCliente.Text.Trim() + "'");
+
+                if (!existe)
+                {
+                    cmd.CommandText = "insert into " + PageIndex + " values(  " + DropDownListDep.SelectedValue.ToString() + ", '" + TextBoxClave.Text + "' , '" + TextBoxNombre.Text + "' , '" + TextBoxDescripcion.Text + "' , '" + TextBoxCliente.Text + "' , GETDATE() , CONVERT(datetime,'" + TextBoxFechaInicio.Text + "',111) , CONVERT(datetime,'" + TextBoxFechaFinEst.Text + "',111) , CONVERT(datetime,'" + TextBoxFechaFinReal.Text + "',111) , '' , 0  )  ";
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Connection = conn;
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
                  
             }            
             
@@ -1413,8 +1552,8 @@ namespace ProyectosWeb
                 {
                     string tecs = TextAreaTecnologias.Value.ToString();
                     DataSet existe = accesDao.getDataset("select * from " + PageIndex + " u inner join  Personas  p "
-                     + " on u.IDUsuario=p.IDUsuario where u.nombre='" + TextBoxUsuario.Text.Trim() + "'"
-                     + " and p.Nombre='" + TextBoxNomUsuario.Text.Trim() + "' and p.apellido='" + TextBoxApellidos.Text.Trim() + "' and p.Tecnologias='" + tecs.Trim() + "'");
+                     + " on u.IDUsuario=p.IDUsuario where u.nombre='" + TextBoxUsuario.Text.Trim().ToLower() + "'"
+                     + " and p.Nombre='" + TextBoxNomUsuario.Text.Trim() + "' and p.apellido='" + TextBoxApellidos.Text.Trim() + "' and p.Tecnologias='" + tecs.Trim() + "' and p.email='" + TextBoxEmail.Text.Trim().ToLower() + "'");
 
                     if (existe.Tables.Count>0)
                     {
@@ -1427,9 +1566,9 @@ namespace ProyectosWeb
                                 //Hash user password
                                 String passwordHash = BCrypt.Net.BCrypt.HashPassword(PasswordUs.Value.ToString(), BCrypt.Net.BCrypt.GenerateSalt(12));
 
-                         bool exito = registrar("insert into " + PageIndex + "(Nombre,esEmpleado,Contraseña) values('" + TextBoxUsuario.Text.Trim() + "','" + ((RadioButtonEmpleado.SelectedItem.ToString().Equals("Si")) ? 'Y' : 'N') + "','" + passwordHash + "')"
+                         bool exito = registrar("insert into " + PageIndex + "(Nombre,esEmpleado,Contraseña) values('" + TextBoxUsuario.Text.Trim().ToLower() + "','" + ((RadioButtonEmpleado.SelectedItem.ToString().Equals("Si")) ? 'Y' : 'N') + "','" + passwordHash + "')"
                             + " insert into Personas(IDUsuario,Nombre,apellido,FechaRegistro,Tecnologias,Email,Telefono) values((select idusuario from Usuarios where IDUsuario=@@IDENTITY),"
-                            + " '" + TextBoxNomUsuario.Text.Trim() + "','" + TextBoxApellidos.Text + "',GETDATE(),'" + tecs.Trim() + "','" + TextBoxEmail.Text.Trim() + "', nullif(" + tel + ",0))"
+                            + " '" + TextBoxNomUsuario.Text.Trim() + "','" + TextBoxApellidos.Text + "',GETDATE(),'" + tecs.Trim() + "','" + TextBoxEmail.Text.Trim().ToLower() + "', nullif(" + tel + ",0))"
                                 );
 
                             if(exito){
@@ -1828,12 +1967,15 @@ namespace ProyectosWeb
             if (PageIndex != null)
             {
                 Pantalla pid = _pantallaBL.getPantalla(null, idasp);
+                if (PageIndex.Equals("Pantallas"))
+                {
+                    pregis.ForeColor = System.Drawing.Color.Blue;                    
+                }
                 if (pid.idPantalla > 0)
                 {
                     pregis.ID = pregis.ID + "," + pid.idPantalla;
                     if (PageIndex.Equals("Pantallas"))
-                    {
-                        pregis.ForeColor = System.Drawing.Color.Blue;
+                    {                        
                         if(pid.estado>0){
                             pregis.ForeColor = System.Drawing.Color.Red;
                         }else{
@@ -2036,6 +2178,13 @@ namespace ProyectosWeb
                     opcion = MultiView1Seg.Views[int.Parse(splitidview[1])].ClientID;
                 }                
             }
+            else if (comando.ToLower().Contains("seguimientotarea"))
+            {
+                opcion = MultiViewSeguimientoTarea.Views[0].ClientID;
+            }
+            
+
+
             string[] indicepantallas = idpantalla.Split(new Char[] { ',' });
             string idpantallaop = "";
             if (indicepantallas.Length > 4)
@@ -2072,6 +2221,12 @@ namespace ProyectosWeb
                                     subOpcion = ((Button)c).Text.Trim() + ",";
                                     subOpcionId = ((Button)c).ClientID + ",";
                                     opcionp = "" + ((Button)c).CommandName;
+                                }
+                                if (c.GetType() == typeof(FileUpload))
+                                {
+                                    subOpcion ="Seleccionar Archivo,";
+                                    subOpcionId = (c as FileUpload).ClientID + ",";
+                                    //opcionp = "" + ((Button)c).CommandName;
                                 }
                                 if (c.GetType() == typeof(GridView))
                                 {
@@ -2185,15 +2340,25 @@ namespace ProyectosWeb
             int cont = 0;
             
             if(PageIndex.Trim().Equals("Acceso por Perfiles") || PageIndex.Trim().Equals("Acceso por Usuarios")){
-                for (int sm = 0; sm < _sistemamodulo.sistemasModulos.Count; sm++)
+                List<SistemasModulos> sistema=new List<SistemasModulos>();
+                if (userName.Equals("admin"))
                 {
-                    cont++;
-                    Modulo d = _sistemamodulo.sistemasModulos[sm].modulo;
-                    if (bool.Parse(_sistemamodulo.sistemasModulos[sm].divvisible) && bool.Parse(_sistemamodulo.sistemasModulos[sm].h3visible))
+                 List<Sistema>  sis= _sistemaBL.getSistemas();
+                  Sistema  sisSICT=sis.Find(x => x.clave.Trim().ToLower() == "sict");
+                    sistema=   _SistemasModulosBL.getSistemasModulos(sisSICT.idSistema,0);
+                }else{
+                sistema= _sistemamodulo.sistemasModulos;
+                }                 
+                //_sistemamodulo.sistemasModulos.Count;
+                    for (int sm = 0; sm < sistema.Count; sm++)
                     {
-                    agregarCheckboxmodulos(d, cont, subopciones, divTree, relAccesoPerfilb);
-                    }
-                }
+                        cont++;
+                        Modulo d = sistema[sm].modulo;
+                        if (bool.Parse(sistema[sm].divvisible) && bool.Parse(sistema[sm].h3visible))
+                        {
+                            agregarCheckboxmodulos(d, cont, subopciones, divTree, relAccesoPerfilb);
+                        }
+                    }                                   
             }else{
             foreach (Modulo d in _modulosBl.getModulos())
             {
@@ -2635,16 +2800,23 @@ namespace ProyectosWeb
                                     if(PageIndex.Equals("Acceso por Perfiles"))
                                     {
                                     PerfilesPantallas ppantalla = new PerfilesPantallas();
-                                    ppantalla.idPantalla = int.Parse(split[3]);
+                                    
                                     ppantalla.visible = pantalla.Checked.ToString();
                                     int idSeleecionado = int.Parse(HidUsuSeleccionadoSeg.Value);
                                     ppantalla.idPerfil = idSeleecionado;
 
                                     if (registra)
                                     {
-                                        if (ppantalla.idPerfil > 0)
+                                        if ( split.Length > 4)
                                         {
-                                            _PerfilesPantallasBL.registrarPerfilesPantallas(ppantalla);
+                                            if (split[4].Trim().Length > 0)
+                                            {
+                                                ppantalla.idPantalla = int.Parse(split[4]);
+                                                if (ppantalla.idPerfil > 0)
+                                                {
+                                                    _PerfilesPantallasBL.registrarPerfilesPantallas(ppantalla);
+                                                }
+                                            }
                                         }
                                     }
                                     else if (actualiza && split.Length >5 )
@@ -2660,16 +2832,23 @@ namespace ProyectosWeb
                                     else if (PageIndex.Equals("Acceso por Usuarios"))
                                     {
                                         UsuariosPantallas usuariopantalla = new UsuariosPantallas();
-                                        usuariopantalla.idPantalla = int.Parse(split[3]);
+                                        
                                         usuariopantalla.visible = pantalla.Checked.ToString();
                                         int idSeleecionado = int.Parse(HidUsuSeleccionadoSeg.Value);
                                         usuariopantalla.idUsuario = idSeleecionado;
 
                                         if (registra)
                                         {
-                                            if (usuariopantalla.idUsuario > 0)
+                                            if (split.Length > 4)
                                             {
-                                                _UsuariosPantallasBL.registrarUsuariosPantallas(usuariopantalla);
+                                                if (split[4].Trim().Length > 0)
+                                                {
+                                                    usuariopantalla.idPantalla = int.Parse(split[4]);
+                                                    if (usuariopantalla.idUsuario > 0)
+                                                    {
+                                                        _UsuariosPantallasBL.registrarUsuariosPantallas(usuariopantalla);
+                                                    }
+                                                }
                                             }
                                         }
                                         else if (actualiza && split.Length > 5)
@@ -2912,7 +3091,7 @@ namespace ProyectosWeb
         protected void ButtonActualizaUsuSeg_Click(object sender, EventArgs e)
         {
             String passwordHash = BCrypt.Net.BCrypt.HashPassword(PasswordUsUpdate.Value.ToString(), BCrypt.Net.BCrypt.GenerateSalt(12));
-            int exito = _usuarioFacade.UpdateUsuarioPassword(0, TextBoxUsuarioUpdate.Text, TextBoxUsuarioUpdate.Text.Trim(), passwordHash);
+            int exito = _usuarioFacade.UpdateUsuarioPassword(0, HidValidUserUpdate.Value, TextBoxUsuarioUpdate.Text.Trim().ToLower(), passwordHash);
             if(exito>0){
                 msgactualizado.ForeColor = System.Drawing.Color.Green;
                 msgactualizado.Text = "Los datos han sido actualizados correctamente";                
@@ -3128,31 +3307,72 @@ namespace ProyectosWeb
             string idtabla = "";
             if (PageIndex.Equals("Usuarios"))
             {
-            idtabla=PageIndex.Substring(0, PageIndex.Length - 1);
-            cell = GridView2Seg.Rows[e.RowIndex].Cells[0];
-            }else
-                if (PageIndex.Equals("Perfiles"))
-                {
-                    idtabla = PageIndex.Substring(0, PageIndex.Length - 2);
-                    cell = GridView2SegPerfil.Rows[e.RowIndex].Cells[0];
-            } 
-            else  if (PageIndex.Equals("Grupos")) {
+                idtabla = PageIndex.Substring(0, PageIndex.Length - 1);
+                cell = GridView2Seg.Rows[e.RowIndex].Cells[0];
+            }
+            else if (PageIndex.Equals("Perfiles"))
+            {
+                idtabla = PageIndex.Substring(0, PageIndex.Length - 2);
+                cell = GridView2SegPerfil.Rows[e.RowIndex].Cells[0];
+            }
+            else if (PageIndex.Equals("Grupos"))
+            {
                 idtabla = PageIndex;
                 cell = GridView2SegGrupo.Rows[e.RowIndex].Cells[0];
             }
             else if (PageIndex.Equals("Sistemas"))
+            {
+                idtabla = PageIndex;
+                cell = GridViewsistema.Rows[e.RowIndex].Cells[0];
+                List<PerfilLogin> listado = new List<PerfilLogin>();
+                PerfilLogin defaultp = new PerfilLogin();
+                listado.Add(defaultp);
+
+                SistemasModulos validarRelaciones = _CAUsuarioBL.getSistemasModulosRelaciones(Convert.ToInt32(cell.Text), 0, listado);
+
+
+                if (validarRelaciones.sistemasModulos.Count < 1 &&
+                    validarRelaciones.perfilesPantallas.Count < 1 && validarRelaciones.usuariosPantallas.Count < 1)
                 {
-                    idtabla = PageIndex;
-                    cell = GridViewsistema.Rows[e.RowIndex].Cells[0];
                     _sistemaBL.DeleteSistema(Convert.ToInt32(cell.Text));
                 }
+                else
+                {
+                    HidnoEliminarSistema.Value = "1";
+                }
+
+            }
 
             if (!PageIndex.Equals("Sistemas"))
             {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("update " + PageIndex + " set Estado='1' where ID" + idtabla + "=" + Convert.ToInt32(cell.Text), conn);
-                cmd.ExecuteNonQuery();
-                conn.Close();
+                
+                if (PageIndex.Equals("Usuarios"))
+                {
+                    cell = GridView2Seg.Rows[e.RowIndex].Cells[1];
+                    UsuarioLogin validarRelaciones = _CAUsuarioBL.getUsuarioLogeado(cell.Text.Trim(), GlobalDataSingleton.Instance.sistemaID);
+                    if (validarRelaciones.idUsuario > 0)
+                    {
+                        if (validarRelaciones.sistemasModulos.perfilesPantallas.Count < 1 && validarRelaciones.sistemasModulos.usuariosPantallas.Count < 1)
+                        {
+                            cell = GridView2Seg.Rows[e.RowIndex].Cells[0];
+                            conn.Open();
+                            SqlCommand cmd = new SqlCommand("update " + PageIndex + " set Estado='1' where ID" + idtabla + "=" + Convert.ToInt32(cell.Text), conn);
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+                        else
+                        {
+                            HidnoEliminar.Value = "1";
+                        }
+                    }                                            
+                }
+                else {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand("update " + PageIndex + " set Estado='1' where ID" + idtabla + "=" + Convert.ToInt32(cell.Text), conn);
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+                
             }
 
             ViewState["Index"] = PageIndex;
@@ -3174,26 +3394,26 @@ namespace ProyectosWeb
                 opcion = GridView2SegPerfil;
             }
            
-            TextBox usuario, esempleado, nombre, apellidos, tecnologias, email, telefono;
+            TextBox  esempleado, nombre, apellidos, tecnologias, email, telefono;
             GridViewRow row = (GridViewRow)opcion.Rows[e.RowIndex]; 
             TableCell ID = opcion.Rows[e.RowIndex].Cells[0];
             SqlCommand cmd =new SqlCommand();
             opcion.EditIndex = -1;
             if(PageIndex.Equals("Usuarios")){
-            //usuario = (TextBox)row.Cells[1].Controls[0];
+       
             esempleado = (TextBox)row.Cells[2].Controls[0];
             nombre = (TextBox)row.Cells[4].Controls[0];
             apellidos = (TextBox)row.Cells[5].Controls[0];
             tecnologias = (TextBox)row.Cells[7].Controls[0];
-            email = (row.Cells[8].Controls[0] as TextBox);
-            telefono = (row.Cells[9].Controls[0] as TextBox);
-            //u.Nombre = '" + usuario.Text.Trim() + "',
+            
+            telefono = (row.Cells[9].Controls[0] as TextBox);          
 
             string stringtel = "";
-                                if(TextBoxTelefono.Text.Trim().Length>0){
-                                    long tel = long.Parse(TextBoxTelefono.Text.Trim());
+            if (telefono.Text.Trim().Length > 0)
+            {
+                long tel = long.Parse(telefono.Text.Trim());
                                     stringtel = ", p.telefono=" + tel + "";
-                                }
+            }
                 
 
             String actualizar = " UPDATE u"
@@ -3203,7 +3423,7 @@ namespace ProyectosWeb
                        + "        ON u.IDUsuario = P.IDUsuario "
                        + " WHERE u.IDUsuario = "+ID.Text+""
                        + " UPDATE p"
-                       + " SET  p.Nombre = '" + nombre.Text.Trim() + "', p.Apellido='" + apellidos.Text.Trim() + "',p.Tecnologias='" + tecnologias.Text.Trim() + "', p.email='" + email.Text.Trim() + "' " +stringtel
+                       + " SET  p.Nombre = '" + nombre.Text.Trim() + "', p.Apellido='" + apellidos.Text.Trim() + "',p.Tecnologias='" + tecnologias.Text.Trim() + "' " +stringtel
                        + " FROM Usuarios AS u"
                        + " INNER JOIN Personas AS P"
                        + "        ON u.IDUsuario = P.IDUsuario "
@@ -3270,12 +3490,40 @@ namespace ProyectosWeb
         [System.Web.Services.WebMethod]        
         public static string CheckEmail(string email)
         {
-           return accesAjax("personas", "email", email);      
+           string returnValue = string.Empty;
+           controlConn.abrirConexion();
+           try
+           {
+               SqlCommand cmSql = conn.CreateCommand();
+               cmSql.CommandText = "Select * from personas where  email=@parm2";
+               cmSql.Parameters.Add("@parm2", SqlDbType.VarChar);
+               cmSql.Parameters["@parm2"].Value = email.Trim().ToLower();
+               SqlDataAdapter da = new SqlDataAdapter(cmSql);
+               DataSet ds = new DataSet();
+               da.Fill(ds);
+               returnValue = "false";
+               if (ds.Tables.Count > 0)
+               {
+                   DataTable dtDatos = ds.Tables[0];
+                   if (ds.Tables[0].Rows.Count > 0)
+                   {
+                       DataRow drDatos = dtDatos.Rows[0];
+                       returnValue = "true";
+                   }
+               }
+
+           }
+           catch
+           {
+               returnValue = "error";
+           }
+           controlConn.cerrarConexion();
+           return returnValue;
         }
 
         public static string accesAjax(string referencia, string param, String email) { 
             string returnValue = string.Empty;
-            conn.Open();
+            controlConn.abrirConexion();
             try{                
                 SqlCommand cmSql = conn.CreateCommand();
                 cmSql.CommandText = "Select * from "+referencia+" where  "+param+"=@parm2";
@@ -3300,7 +3548,7 @@ namespace ProyectosWeb
             {
                 returnValue = "error";
             }
-            conn.Close();
+            controlConn.cerrarConexion();
             return returnValue;  
         
         }
@@ -3309,13 +3557,13 @@ namespace ProyectosWeb
         public static string CheckUserName(string userName)
         {
             string returnValue = string.Empty;
-            conn.Open();
+            controlConn.abrirConexion();
             try
             {                
                 SqlCommand cmSql = conn.CreateCommand();
                 cmSql.CommandText = "Select * from usuarios where  nombre=@parm2";
                 cmSql.Parameters.Add("@parm2", SqlDbType.VarChar);
-                cmSql.Parameters["@parm2"].Value = userName;
+                cmSql.Parameters["@parm2"].Value = userName.ToLower();
                 SqlDataAdapter da = new SqlDataAdapter(cmSql);
                 DataSet ds = new DataSet();
                 da.Fill(ds);
@@ -3334,7 +3582,7 @@ namespace ProyectosWeb
             {
                 returnValue = "error";
             }
-            conn.Close();
+            controlConn.cerrarConexion();
             return returnValue;
         }
 
@@ -3459,14 +3707,110 @@ namespace ProyectosWeb
 
          protected void LinkButton1_Click(object sender, EventArgs e)
          {
-             Response.Redirect("CapturaTareas.aspx");
+             //Response.Redirect("CapturaTareas.aspx");
+             actualizaPagina("Captura de Tareas");
+             getPantallaIndex();
+             ControlAccesoOpciones();
+             MultiViewSeguimientoTarea.ActiveViewIndex = 0;
          }
          
-                  protected void cerrarSesiononclick(Object sender, EventArgs e)
+         protected void cerrarSesiononclick(Object sender, EventArgs e)
          {
              FormsAuthentication.SignOut();
-             Response.Redirect("Views/Login/Inicio.aspx");             
+             Response.Redirect("Views/Login/Inicio.aspx");
+             GlobalDataSingleton.Instance.controlAcceso = "";
         }
+        //Modulo seguimiento de Tarea
+         protected void ButtonUpload_Click(object sender, EventArgs e)
+         {
+             Boolean fileOK = false;
+             String path = Server.MapPath("~/UploadedExcels/");
+             if (FileUploadTareas.HasFile)
+             {
+                 String fileExtension =
+                     System.IO.Path.GetExtension(FileUploadTareas.FileName).ToLower();
+                 String[] allowedExtensions = { ".xls", ".xlsx" };
+                 for (int i = 0; i < allowedExtensions.Length; i++)
+                 {
+                     if (fileExtension == allowedExtensions[i])
+                     {
+                         fileOK = true;
+                     }
+                 }
+             }
+
+             if (fileOK)
+             {
+                 try
+                 {
+                     FileUploadTareas.PostedFile.SaveAs(path
+                         + FileUploadTareas.FileName);
+                     LabelSubir.Text = "Tareas cargadas con exito";
+                 }
+                 catch (Exception ex)
+                 {
+                     LabelSubir.Text = "Error en carga de tareas";
+                 }
+             }
+             else
+             {
+                 LabelSubir.Text = "No se aceptan archivos de este tipo";
+             }
+         }
+
+         protected void dtm1_Tick(object sender, EventArgs e)
+         {
+             if (stopWatch.IsRunning)
+             {
+
+                 TimeSpan ts = stopWatch.Elapsed;
+                 this.LabelSeguimientoTarea.Text = String.Format("{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds);
+             
+             }
+         }
+
+         protected void ButtonIniciar_Click(object sender, EventArgs e)
+         {
+             if (stopWatch.IsRunning)
+             {
+                 stopWatch.Stop();
+                 ButtonIniciar.Text = "Iniciar";
+
+             }
+             else
+             {
+                 stopWatch.Start();
+                 ButtonIniciar.Text = "Detener";
+             }
+             
+
+                 TimeSpan ts = stopWatch.Elapsed;
+                 this.LabelSeguimientoTarea.Text = String.Format("{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds);
+
+             
+         }
+
+         protected void ButtonReset_Click(object sender, EventArgs e)
+         {
+
+             LabelSeguimientoTarea.Text = "00:00:00";
+             stopWatch.Reset();
+
+
+         }
+         protected void ButtonEnviar_Click(object sender, EventArgs e)
+         {
+
+         }
+
+         [System.Web.Services.WebMethod]
+         public static String tiempo()
+         {
+             TimeSpan ts = stopWatch.Elapsed;
+            String tiempo= String.Format("{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds);
+            return tiempo;
+         }
+
         
     }
 }

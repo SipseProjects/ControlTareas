@@ -25,7 +25,7 @@ namespace ProyectosWeb.BusinessLogic.general
             msg.Subject = "Tus Datos de Control de Tareas";
             SmtpClient smt = new SmtpClient("smtp.gmail.com");
             smt.Port = 587;
-            smt.Credentials = new NetworkCredential("llr.allleo@gmail.com", "superl89");
+            smt.Credentials = new NetworkCredential("llopez@solutiaintelligence.com", "gtleo144");
             smt.EnableSsl = true;
             smt.Send(msg);
         }

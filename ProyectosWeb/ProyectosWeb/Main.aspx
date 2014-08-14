@@ -12,9 +12,15 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="Style/Style.css" />
     <link rel="stylesheet" href="css/Seguridad/Seguridad.css" />
+
+ 
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-    
+    <script src="scripts/ConfirmDialog/jquery.easy-confirm-dialog.js"></script>
+    <script runat="server" type="text/c#">
+             
+        
+</script>
     <script>
         $(function () {
             $("#accordion").accordion({ collapsible: true,
@@ -28,6 +34,8 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css"/>--%>
+<script type="text/javascript" src="validacion/jquery.validate.js"></script>
+<script src="scripts/seguridad/Seguridad.js" ></script>
 
 <!-- include plugin -->
 <script type="text/javascript" src="jquery-tree-checkboxes/minified/jquery.tree.min.js"></script>
@@ -35,6 +43,52 @@
 <!-- initialize checkboxTree plugin -->
 <script type="text/javascript">
     //<!--
+    $(function () {
+
+        setInterval(tiempoTarea, 1000);
+        function tiempoTarea() {            
+            $.ajax({
+                type: "POST",
+                url: "Main.aspx/tiempo",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $("[id*=LabelSeguimientoTarea]").text(data.d.toString());
+                },
+                failure: function () {
+
+                }
+            });
+        }
+
+        $("#ButtonEliminaModulo").on('click', function () {
+            var b = $("[id*=ButtonEliminaModulo]");
+            dialogo(b);
+        });
+        $("#ButtonDeletePantallaOpcion").on('click', function () {
+            var b = $("[id*=ButtonDeletePantallaOpcion]");
+            dialogo(b);
+        });
+        function dialogo(boton) {
+            event.preventDefault();
+            $("#dialog-confirm").dialog({
+                height: 200,
+                width: 300,
+                modal: true,
+                buttons: {
+                    "Si": function () {
+                        $(this).dialog("close");
+                        boton.click();
+                    },
+
+                    "No": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        }
+    });
+
     $(document).ready(function () {
         $('#tree').tree({
             /* specify here your options */
@@ -44,90 +98,18 @@
         });
         $('#DivTreeModSis').tree({
 
-        });
-        
+        });        
     });
+   
+
     //-->
 </script>
-    <script type="text/javascript">
-        Sys.debug = true;
-        Sys.require(Sys.components.filteredTextBox, function () {
-            $("#TextBoxTelefono").filteredTextBox({
-                FilterType: Sys.Extended.UI.FilterTypes.Numbers
-            });
-            $("#TextBoxNomUsuario").filteredTextBox({
-                ValidChars: " ",
-                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
-            });
-            $("#TextBoxApellidos").filteredTextBox({                                   
-                ValidChars: " ",
-                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
-            });
-            $("#TextBoxNomGrupo").filteredTextBox({
-                ValidChars: " ",
-                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
-            });
-            $("#TextBoxNomPerfil").filteredTextBox({
-                ValidChars: " ",
-                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
-            });
-            $("#TextBoxUsuarioUpdate").filteredTextBox({
-                InValidChars: " ",
-                ValidChars: ".",
-                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
-                | Sys.Extended.UI.FilterTypes.Numbers
-            });
-            $("#PasswordUsUpdate").filteredTextBox({
-                InValidChars: " ",
-                ValidChars: ".",
-                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
-                | Sys.Extended.UI.FilterTypes.Numbers
-            });
-            $("#PasswordConfirmUpdate").filteredTextBox({
-                InValidChars: " ",
-                ValidChars: ".",
-                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
-                | Sys.Extended.UI.FilterTypes.Numbers
-            });
-            $("#TextBoxUsuario").filteredTextBox({
-                InValidChars: " ",
-                ValidChars: ".",
-                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
-                | Sys.Extended.UI.FilterTypes.Numbers
-            });
-            $("#PasswordUs").filteredTextBox({
-                InValidChars: " ",
-                ValidChars: ".",
-                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
-                | Sys.Extended.UI.FilterTypes.Numbers
-            });
-            $("#PasswordConfirm").filteredTextBox({
-                InValidChars: " ",
-                ValidChars: ".",
-                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
-                | Sys.Extended.UI.FilterTypes.Numbers
-            });
-            $("#PasswordUsRestore").filteredTextBox({
-                InValidChars: " ",
-                ValidChars: ".",
-                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
-                | Sys.Extended.UI.FilterTypes.Numbers
-            });
-            $("#PasswordUsRestoreConfirm").filteredTextBox({
-                InValidChars: " ",
-                ValidChars: ".",
-                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
-                | Sys.Extended.UI.FilterTypes.Numbers
-            });
-            $("#TextBoxEmailRegistrado").filteredTextBox({
-                InValidChars: " ",
-                ValidChars: ".@",
-                FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
-                | Sys.Extended.UI.FilterTypes.Numbers
-            });
-
-        }); 
-    </script>    
+   <%-- <link href="../../LoginSources/font/stylesheet.css" rel="stylesheet" type="text/css" />--%>	
+<link href="LoginSources/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="LoginSources/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
+<link href="LoginSources/css/styles.css" rel="stylesheet" type="text/css" />
+<%--<link href="../../LoginSources/css/media-queries.css" rel="stylesheet" type="text/css" />--%> 
+       
     <script type="text/javascript" src="validacion/jquery.validate.js"></script>
     <script type="text/javascript">        
 
@@ -353,7 +335,7 @@
             });
             $('#<%= ButtonConsultaSistemasSeg.ClientID%>').on('click', function (data) {
                 quitarValidacionSistema();
-            });             
+            });
 
             function quitarValidacion(g) {
                 if (g == "Usuarios") {
@@ -416,6 +398,7 @@
                         error.insertAfter(element);
                         error.addClass('message');  // add a class to the wrapper
                         error.css("color", "red");
+                        error.css("display", "-webkit-inline-box");
                     },
                     debug: true,
                     submitHandler: function (ButtonUpdateSistema) {
@@ -439,6 +422,7 @@
                         error.insertAfter(element)
                         error.addClass('message');  // add a class to the wrapper
                         error.css("color", "red");
+                        error.css("display", "-webkit-inline-box");
                     },
                     debug: true,
                     submitHandler: function (ButtonEnviarEmailSeg) {
@@ -466,6 +450,7 @@
                         error.insertAfter(element)
                         error.addClass('message');  // add a class to the wrapper
                         error.css("color", "red");
+                        error.css("display", "-webkit-inline-box");
                     },
                     debug: true,
                     submitHandler: function (ButtonActualizaUsSeg) {
@@ -490,6 +475,7 @@
                         error.insertAfter(element)
                         error.addClass('message');  // add a class to the wrapper
                         error.css("color", "red");
+                        error.css("display", "-webkit-inline-box");
                     },
                     debug: true,
                     submitHandler: function (RestablecerPasswordEmail) {
@@ -530,9 +516,10 @@
                             'HidValidEmailReg': { required: '' }
                         },
                         errorPlacement: function (error, element) {
-                            error.insertAfter(element)
+                            error.insertAfter(element);
                             error.addClass('message');  // add a class to the wrapper
                             error.css("color", "red");
+                            error.css("display", "-webkit-inline-box");
                         },
 
                         debug: true,
@@ -560,6 +547,7 @@
                             error.insertAfter(element)
                             error.addClass('message');  // add a class to the wrapper
                             error.css("color", "red");
+                            error.css("display", "-webkit-inline-box");
                         },
 
                         debug: true,
@@ -584,6 +572,7 @@
                             error.insertAfter(element)
                             error.addClass('message');  // add a class to the wrapper
                             error.css("color", "red");
+                            error.css("display", "-webkit-inline-box");
                         },
 
                         debug: true,
@@ -595,10 +584,63 @@
                 else if (g == "Sistemas") {
                     validaSistema();
                 }
+
+            });
+
+            $(function () {
+                var elimina = $('#<%=HidnoEliminar.ClientID%>').val();
+                if (elimina !== "0") {
+                    $('#<%=HidnoEliminar.ClientID%>').val('0');
+                    alert('El usuario tiene asociado un sistema y módulos, no puede ser eliminado, Contacte con el Administrador.');
+                }
+                var elimina2 = $('#<%=HidnoEliminarSistema.ClientID%>').val();
+                if (elimina2 !== "0") {
+                    $('#<%=HidnoEliminarSistema.ClientID%>').val('0');
+                    alert('El sistema tiene asociado perfiles y usuarios, no puede ser eliminado, Contacte con el Administrador.');
+                }
+            });
+
+            //            Modulo Tarea
+            $('#<%= Button1.ClientID%>').on('click', function () {
+                if ((g == "Componentes") || (g == "CasosUso") || g == ("Requerimientos")
+                || (g == "Tareas") || (g == "Proyectos")) {
+                    $("#BodyForm").validate({
+                        rules: {
+                            'TextBoxClave': { required: true, maxlength: 30
+                            },
+                            'TextBoxNombre': { required: true, maxlength: 30
+                            },
+                            'TextBoxCliente': { required: true, maxlength: 30
+                            },
+                            'TextBoxFechaInicio': { required: true
+                            }
+                        },
+                        messages: {
+                            'TextBoxClave': { required: 'Ingrese una Clave' },
+                            'TextBoxNombre': { required: 'Ingrese un Nombre' },
+                            'TextBoxCliente': { required: 'Ingrese nombre del Cliente' },
+                            'TextBoxFechaInicio': { required: 'Ingrese fecha de inicio'
+                            }
+                        },
+                        errorPlacement: function (error, element) {
+                            error.insertAfter(element);
+                            error.addClass('message');  // add a class to the wrapper
+                            error.css("color", "red");
+                            error.css("display", "block");
+                        },
+
+                        debug: true,
+                        submitHandler: function (Button1) {
+                            Button1.submit();
+                        }
+                    });
+                }
             });
 
         });
-   
+
+       
+
     </script>    
     <script>
         $(function () {
@@ -610,8 +652,7 @@
 </head>
 <body runat="server">
     <form id="BodyForm" runat="server">
-    <asp:ScriptManager ID="ScriptManager1" runat="server">
-    </asp:ScriptManager>
+    
     <asp:HiddenField ID="hidAccordionIndex" runat="server" Value="0" />
     <asp:HiddenField ID="HiddenValidUser" runat="server" Value="" />
     <asp:HiddenField ID="HidValidUserUpdate" runat="server" Value="" />
@@ -627,10 +668,12 @@
      <asp:HiddenField ID="hidcontchecksubop" runat="server"  Value="0" />   
      <asp:HiddenField ID="hidLiidButton" runat="server"  Value="" /> 
       <asp:HiddenField ID="hidindexpantalla" runat="server"  Value="0" /> 
+      <asp:HiddenField ID="HidnoEliminar" runat="server"  Value="0" />
+      <asp:HiddenField ID="HidnoEliminarSistema" runat="server"  Value="0" />
+
     <div id="header" align="center">
-        <img src="../../Img/SolIcon.png" alt="Empresa" height="100px" width="20%" style="float: left;">
-        <h1>
-            Encabezado</h1> 
+        <img src="../../Img/SolIcon.png" alt="Empresa" height="100px" width="20%" style="float: left;"/>
+        <h1>Sistema de Control de Tareas </h1> 
             <p align="right">
             <asp:Label ID="usuarioLogin" runat="server" Text=""></asp:Label>
             <asp:LinkButton ID="LinkButtonSalir" OnClick="cerrarSesiononclick" runat="server" >Salir</asp:LinkButton>
@@ -719,19 +762,20 @@
                     Seguimiento de tarea</h3>
                 <div id="DivProyecto4" runat="server">
                     <ul>
-                        <li class="liacordion"><asp:LinkButton ID="LinkButton1" runat="server" onclick="LinkButton1_Click">Actualizar Tarea</asp:LinkButton></li>
+                        <li class="liacordion"><asp:LinkButton ID="LinkButton1" CommandName="OpcionSeguimientoTarea,,20" runat="server" onclick="LinkButton1_Click">Actualizar Tarea</asp:LinkButton></li>
                     </ul>
                 </div>
             </div>
         </div>
         <div id="Content" runat="server">
             <p align="center">
-                <asp:Label ID="Label1" runat="server" Text="Gestor de " Font-Bold="True"></asp:Label>
-                <asp:Label ID="LabelNav" runat="server" Font-Bold="True"></asp:Label>
+              <%--  <asp:Label ID="Label1" runat="server" Text="Gestor de " Font-Bold="True"></asp:Label>--%>
+                <asp:Label ID="LabelNav" runat="server" Font-Bold="True" Font-Size="Large"></asp:Label>
             </p>            
             <div id="ContentTop" runat="server">
                 <asp:MultiView ID="MultiView1Seg" runat="server">
                     <asp:View ID="View1Seg" runat="server">
+                  
                         <table id="Table2">
                             <tr>
                                 <td>
@@ -741,6 +785,10 @@
                                     <asp:TextBox MaxLength="30" ID="TextBoxNomUsuario" runat="server">    
                                     </asp:TextBox>
                                 </td>
+                                
+                            </tr>
+                            <tr><td colspan="2">
+                            </td>                                
                             </tr>
                             <tr>
                                 <td>
@@ -821,6 +869,7 @@
                                 </td>
                             </tr>
                         </table>
+                        
                     </asp:View>
                     <asp:View ID="View2Seg" runat="server">
                         <table id="Table1Seg">
@@ -913,13 +962,13 @@
                                 </td>
                                 <td>
                                     <div>
-                                        <asp:Button ID="ButtonAgregarGU" OnClientClick="return false" runat="server" Text="Asignar"
+                                        <asp:Button ID="ButtonAgregarGU" class="btn btn-primary" OnClientClick="return false" runat="server" Text="Asignar"
                                             BackColor="#0066FF" ForeColor="White" />
-                                        <asp:Button ID="ButtonEliminarGU" runat="server" OnClientClick="return false" Text="Desasignar"
+                                        <asp:Button ID="ButtonEliminarGU" class="btn btn-primary" runat="server" OnClientClick="return false" Text="Desasignar"
                                             BackColor="#0066FF" ForeColor="White" />
                                     </div>
                                     <br />
-                                    <asp:Button ID="ButtonGuardarGU" runat="server" OnClick="guardarusurioGrupo" Text="Guardar"
+                                    <asp:Button ID="ButtonGuardarGU" class="btn btn-primary" runat="server" OnClick="guardarusurioGrupo" Text="Guardar"
                                         BackColor="#0066FF" ForeColor="White" />
                                 </td>
                                 <td>
@@ -965,7 +1014,7 @@
                             </tr>                            
                             <tr>
                                 <td>
-                                    <asp:Button ID="ButtonActualizaUsSeg" runat="server" Text="Actualizar" OnClick="ButtonActualizaUsuSeg_Click" />
+                                    <asp:Button ID="ButtonActualizaUsSeg" class="btn btn-primary" runat="server" Text="Actualizar" OnClick="ButtonActualizaUsuSeg_Click" />
                                 </td>
                             </tr>
                         </table>
@@ -1014,7 +1063,7 @@
                             </tr>                            
                             <tr>
                                 <td>
-                                    <asp:Button ID="ButtonEnviarEmailSeg" runat="server" Text="Enviar E-mail" OnClick="ButtonEnviarEmailSeg_Click" />
+                                    <asp:Button ID="ButtonEnviarEmailSeg" class="btn btn-primary" runat="server" Text="Enviar E-mail" OnClick="ButtonEnviarEmailSeg_Click" />
                                 </td>
                             </tr>
                         </table>
@@ -1063,7 +1112,7 @@
                             </tr>                                                                                                               
                             <tr>
                                 <td>
-                                    <asp:Button ID="RestablecerPasswordEmail" OnClick="RestablecerPasswordEmail_Click"
+                                    <asp:Button ID="RestablecerPasswordEmail" class="btn btn-primary" OnClick="RestablecerPasswordEmail_Click"
                                         runat="server" Text="Restablecer" />
                                 </td>
                                 <td>
@@ -1141,11 +1190,11 @@
                             </tr>
                         </table> 
                         <div runat="server" id="opcionesUpdateSistem">
-                        <asp:Button ID="ButtonUpdateSistema" runat="server" Text="Actualizar"
+                        <asp:Button ID="ButtonUpdateSistema" class="btn btn-primary" runat="server" Text="Actualizar"
                         OnClick="ButtonUpdateSistemaseg_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="ButtonCancelSistema"
-                             runat="server" Text="Cancelar" OnClick="ButtonCancelSistemaseg_Click" />
+                             runat="server" class="btn btn-primary" Text="Cancelar" OnClick="ButtonCancelSistemaseg_Click" />
                              &nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="ButtonConsultaSistemasSeg"
-                             runat="server" Text="Consultas" OnClick="ButtonConsultaSistemasSeg_Click" />
+                             runat="server" class="btn btn-primary" Text="Consultas" OnClick="ButtonConsultaSistemasSeg_Click" />
                         </div>
                               <table>  
                             <tr>
@@ -1159,67 +1208,25 @@
                                     <asp:CheckBoxList ID="CheckBoxListModulo" runat="server">
                                     </asp:CheckBoxList> </div>
                                     <div><asp:Button ID="ButtonGuardarModuloSeg"
-                             runat="server" Text="Registrar" OnClick="ButtonGuardarModuloSeg_Click"  />
+                             runat="server" Text="Registrar" class="btn btn-primary" OnClick="ButtonGuardarModuloSeg_Click"  />
                              <asp:Button ID="Button4"
-                             runat="server" Text="Actualizar" OnClick="ButtonAtualizaModuloSeg_Click"  />
-                             <asp:Button ID="ButtonEliminaModulo"
-                             runat="server" Text="Eliminar" OnClick="ButtonEliminaModuloSeg_Click"  />
-                             </div>
-                             <div><asp:Label  ID="LabUpdateModulo"   runat="server"></asp:Label></div>                              
+                             runat="server" Text="Actualizar" class="btn btn-primary" OnClick="ButtonAtualizaModuloSeg_Click"  />
+                             <asp:Button ID="ButtonEliminaModulo" 
+                             runat="server" Text="Eliminar" class="btn btn-primary" OnClick="ButtonEliminaModuloSeg_Click"  />                             
+                             </div>                                                        
+                             <div><asp:Label  ID="LabUpdateModulo"   runat="server"></asp:Label></div>                                                          
                     </asp:View>
                     <asp:View ID="ViewPnntalla" runat="server">                                                                  
 <div id="tree" runat="server">
-     <ul id="ulconttree" runat="server">
-        <%--<li id="limodulotree" runat="server"><asp:CheckBox ID="CB1DivProyecto1" runat="server"  Text="Seguridad"/>
-            <ul>
-                <li><asp:CheckBox ID="CB1Usuarios" runat="server"  Text="Usuarios"/>
-                    <ul>
-                        <li><asp:CheckBox ID="CB1Usuarios2" runat="server"  Text="Usuarios"/></li>
-                        <li><asp:CheckBox ID="CB1Cuenta" runat="server"  Text="Cuenta"/></li>
-                    </ul>
-                    </li>
-                    <li><asp:CheckBox ID="CB1Grupos" runat="server"  Text="Grupos"/>
-                    </li>
-                    <li><asp:CheckBox ID="CB1Pefiles" runat="server"  Text="Perfiles"/>
-                    </li>
-                    <li><asp:CheckBox ID="CB1Relaciones" runat="server"  Text="Relaciones"/>
-                    </li>
-            </ul>            
-            </li>
-            <li><asp:CheckBox ID="CheckBox9" runat="server"  Text="Seguridad"/>
-            <ul>
-                <li><asp:CheckBox ID="CheckBox32" runat="server"  Text="Seguridad"/>
-                    <ul>
-                        <li><asp:CheckBox ID="CheckBox33" runat="server"  Text="Seguridad"/></li>
-                    </ul>
-                    </li>
-            </ul>
-            <ul>
-                <li><asp:CheckBox ID="CheckBox34" runat="server"  Text="Seguridad"/>
-                    <ul>
-                        <li><asp:CheckBox ID="CheckBox35" runat="server"  Text="Seguridad"/></li>
-                        <li><asp:CheckBox ID="CheckBox36" runat="server"  Text="Seguridad"/></li>
-                        <li><asp:CheckBox ID="CheckBox37" runat="server"  Text="Seguridad"/>
-                            <ul>
-                                <li><asp:CheckBox ID="CheckBox38" runat="server"  Text="Seguridad"/></li>
-                                <li><asp:CheckBox ID="CheckBox39" runat="server"  Text="Seguridad"/></li>
-                            </ul>
-                            </li>
-                        <li><asp:CheckBox ID="CheckBox40" runat="server"  Text="Seguridad"/></li>
-                        <li><asp:CheckBox ID="CheckBox41" runat="server"  Text="Seguridad"/></li>
-                        <li><asp:CheckBox ID="CheckBox42" runat="server"  Text="Seguridad"/></li>
-                    </ul>
-                    </li>
-            </ul>
-            </li>--%>
+     <ul id="ulconttree" runat="server">        
             </ul>
 </div>
  <div><asp:Button ID="ButtonregistraPantalla"
-                             runat="server" Text="Registrar" OnClick="ButtonRegistrarPantallasSeg_Click"  />
-                             <asp:Button ID="ButtonUpdatepantalla"
+                             runat="server" Text="Registrar" class="btn btn-primary" OnClick="ButtonRegistrarPantallasSeg_Click"  />
+                             <asp:Button ID="ButtonUpdatepantalla" class="btn btn-primary"
                              runat="server" Text="Actualizar" OnClick="ButtonAtualizaPantallasSeg_Click"  />
                              <asp:Button ID="ButtonDeletePantallaOpcion"
-                             runat="server" Text="Eliminar" OnClick="ButtonDeletePantallaOpcion_Click"  />
+                             runat="server" Text="Eliminar" class="btn btn-primary" OnClick="ButtonDeletePantallaOpcion_Click"  />
                              </div>
                              <div><asp:Label  ID="LblupdatePantalla"   runat="server"></asp:Label></div>
                     </asp:View>
@@ -1233,9 +1240,9 @@
      <ul id="ulTreeAccePerfil" runat="server">       
             </ul>
 </div>
- <div><asp:Button ID="Button5"
+ <div><asp:Button ID="Button5" class="btn btn-primary"
                              runat="server" Text="Asignar" OnClick="ButtonRegistrarRelAccesoSeg_Click"  />
-                             <asp:Button ID="Button6"
+                             <asp:Button ID="Button6" class="btn btn-primary"
                              runat="server" Text="Actualizar" OnClick="ButtonAtualizaRelAccesoSeg_Click"  />
                              </div>
                              <div><asp:Label  ID="LblStatusAccePerfil"   runat="server"></asp:Label></div>
@@ -1251,9 +1258,9 @@
      <ul id="ulModSis" runat="server">       
             </ul>
 </div>
- <div><asp:Button ID="ButtonAsignarModSis"
+ <div><asp:Button ID="ButtonAsignarModSis" class="btn btn-primary"
                              runat="server" Text="Asignar" OnClick="ButtonRegistrarRelAccesoSisModSeg_Click"  />
-                             <asp:Button ID="ButtonDesasignarModSis"
+                             <asp:Button ID="ButtonDesasignarModSis" class="btn btn-primary"
                              runat="server" Text="Actualizar" OnClick="ButtonDeleteRelAccesoSisModSeg_Click"  />
                              </div>
                              <div><asp:Label  ID="Label6"   runat="server"></asp:Label></div>
@@ -1269,8 +1276,7 @@
                                         runat="server"></asp:TextBox>
                                 </td>
                                 <td>
-                                    Cliente :
-                                    <asp:TextBox ID="TextBoxCliente" runat="server"></asp:TextBox>
+                                    Cliente : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:TextBox ID="TextBoxCliente" runat="server"></asp:TextBox>
                                 </td>
                                 <td>
                                     Fecha de Inicio : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:TextBox ID="TextBoxFechaInicio"
@@ -1305,15 +1311,15 @@
                         </table>
                         <p><asp:Label ID="LabelHrs" runat="server" Text="Registrar horas : "></asp:Label>
                             <asp:DropDownList ID="DropDownListHoras" runat="server">
-                                <asp:ListItem>1</asp:ListItem>
-                                <asp:ListItem>2</asp:ListItem>
-                                <asp:ListItem>3</asp:ListItem>
-                                <asp:ListItem>4</asp:ListItem>
-                                <asp:ListItem>5</asp:ListItem>
-                                <asp:ListItem>6</asp:ListItem>
-                                <asp:ListItem>7</asp:ListItem>
-                                <asp:ListItem>8</asp:ListItem>
-                                <asp:ListItem>9</asp:ListItem>
+                                <asp:ListItem Value="01">1</asp:ListItem>
+                                <asp:ListItem Value="02">2</asp:ListItem>
+                                <asp:ListItem Value="03">3</asp:ListItem>
+                                <asp:ListItem Value="04">4</asp:ListItem>
+                                <asp:ListItem Value="05">5</asp:ListItem>
+                                <asp:ListItem Value="06">6</asp:ListItem>
+                                <asp:ListItem Value="07">7</asp:ListItem>
+                                <asp:ListItem Value="08">8</asp:ListItem>
+                                <asp:ListItem Value="09">9</asp:ListItem>
                                 <asp:ListItem>10</asp:ListItem>
                                 <asp:ListItem>11</asp:ListItem>
                                 <asp:ListItem>12</asp:ListItem>
@@ -1325,18 +1331,46 @@
                         </p>
                     </asp:View>
                 </asp:MultiView>
+                <asp:MultiView ID="MultiViewConsultaReporte" runat="server">
+                    
+                </asp:MultiView>
+                <asp:MultiView ID="MultiViewSeguimientoTarea" runat="server">
+                <asp:View ID="ViewActualizaTarea" runat="server">                
+   <br />
+   <h3>Cronometro de Tareas</h3>      
+    <asp:Label ID="LabelSeguimientoTarea" runat="server" Font-Size="XX-Large" Text="00:00:00"></asp:Label><br />
+  <span> </span>
+      <asp:Button ID="ButtonIniciar" class="btn btn-primary"  runat="server" Text="Iniciar" 
+          onclick="ButtonIniciar_Click" Height="40px" />
+      <asp:Button ID="ButtonReset" class="btn btn-primary" runat="server" 
+          Text="Resetear" onclick="ButtonReset_Click" Height="40px" />
+      <asp:Button ID="ButtonEnviar" class="btn btn-primary" runat="server" Text="Registrar tiempo" Height="40px" 
+          Width="110px" onclick="ButtonEnviar_Click" />       
+   <h4>Actualizar Tareas por archivo :</h4><br />
+        <asp:FileUpload ID="FileUploadTareas"  runat="server" /><br />
+        <asp:Button ID="ButtonUpload" class="btn btn-primary" runat="server" Text="Subir archivo" 
+            onclick="ButtonUpload_Click" /><asp:Label ID="LabelSubir" runat="server" 
+            BackColor="Red"></asp:Label>
+        <asp:GridView ID="GridView2" runat="server">
+        </asp:GridView>
+                    </asp:View>
+                </asp:MultiView>
+                 <div id="dialog-confirm" style="display:none" title="Proceder Eliminación?">
+            <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Esta seguro de proceder con la eliminación?</p>
+        </div>
                 <div runat="server" id="opcionesRegSeg">
-                    <asp:Button ID="Button4seg" validate="required:true" runat="server" Text="Insertar"
-                        OnClick="Button4seg_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="Button5seg"
+                    <asp:Button ID="Button4seg" class="btn btn-primary" validate="required:true" runat="server" Text="Insertar"
+                        OnClick="Button4seg_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="Button5seg" class="btn btn-primary"
                             validate="required:false" runat="server" Text="Buscar" OnClick="Button5seg_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button
-                                ID="Button6seg" runat="server" validate="required:false" Text="Mostrar todo"
+                                ID="Button6seg" runat="server" class="btn btn-primary" validate="required:false" Text="Mostrar todo"
                                 OnClick="Button6seg_Click" />
                 </div>
                 <div runat="server" id="opcionesRegTarea" >
-                    <asp:Button ID="Button1" runat="server" Text="Insertar" OnClick="Button1_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button
-                        ID="Button2" runat="server" Text="Buscar" OnClick="Button2_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button
-                            ID="Button3" runat="server" Text="Mostrar todo" OnClick="Button3_Click" />
+                    <asp:Button ID="Button1" class="btn btn-primary" runat="server" Text="Insertar" OnClick="Button1_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button
+                        ID="Button2" class="btn btn-primary" runat="server" Text="Buscar" OnClick="Button2_Click" />&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button
+                            ID="Button3" class="btn btn-primary" runat="server" Text="Mostrar todo" OnClick="Button3_Click" />
                 </div>
+                
             </div>
             <div id="ContentBot">                
                 <asp:MultiView ID="MultiViewTareaGrid" runat="server">
@@ -1493,7 +1527,7 @@
                                     ApplyFormatInEditMode="true" />
                                 <asp:BoundField HeaderText="Tecnologias" ReadOnly="True" DataField="Tecnologias" />
                                 <asp:CommandField ShowEditButton="true" />
-                                <asp:CommandField ShowDeleteButton="true" />
+                                <asp:CommandField ShowDeleteButton="true"/>
                             </Columns>
                             <FooterStyle BackColor="#CCCC99" />
                             <HeaderStyle BackColor="#6B696B" Font-Bold="True" ForeColor="White" />
@@ -1514,6 +1548,85 @@
             </p>
         </div>
     </div>
+     <script type="text/javascript">
+         Sys.debug = true;
+         Sys.require(Sys.components.filteredTextBox, function () {
+             $('#TextBoxTelefono').filteredTextBox({
+                 FilterType: Sys.Extended.UI.FilterTypes.Numbers
+             });
+             $('#TextBoxNomUsuario').filteredTextBox({
+                 ValidChars: " ",
+                 FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+             });
+             $('#TextBoxApellidos').filteredTextBox({
+                 ValidChars: " ",
+                 FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+             });
+             $('#TextBoxNomGrupo').filteredTextBox({
+                 ValidChars: " ",
+                 FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+             });
+             $('#TextBoxNomPerfil').filteredTextBox({
+                 ValidChars: " ",
+                 FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+             });
+             $('#TextBoxUsuarioUpdate').filteredTextBox({
+                 InValidChars: " ",
+                 ValidChars: ".",
+                 FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+             });
+             $('#PasswordUsUpdate').filteredTextBox({
+                 InValidChars: " ",
+                 ValidChars: ".",
+                 FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+             });
+             $('#PasswordConfirmUpdate').filteredTextBox({
+                 InValidChars: " ",
+                 ValidChars: ".",
+                 FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+             });
+             $('#TextBoxUsuario').filteredTextBox({
+                 InValidChars: " ",
+                 ValidChars: ".",
+                 FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+             });
+             $('#PasswordUs').filteredTextBox({
+                 InValidChars: " ",
+                 ValidChars: ".",
+                 FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+             });
+             $('#PasswordConfirm').filteredTextBox({
+                 InValidChars: " ",
+                 ValidChars: ".",
+                 FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+             });
+             $('#PasswordUsRestore').filteredTextBox({
+                 InValidChars: " ",
+                 ValidChars: ".",
+                 FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+             });
+             $('#PasswordUsRestoreConfirm').filteredTextBox({
+                 InValidChars: " ",
+                 ValidChars: ".",
+                 FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+             });
+             $('#TextBoxEmailRegistrado').filteredTextBox({
+                 InValidChars: " ",
+                 ValidChars: ".@",
+                 FilterType: Sys.Extended.UI.FilterTypes.Custom | Sys.Extended.UI.FilterTypes.UppercaseLetters | Sys.Extended.UI.FilterTypes.LowercaseLetters
+                | Sys.Extended.UI.FilterTypes.Numbers
+             });
+
+         }); 
+    </script>
     </form>
     
 </body>

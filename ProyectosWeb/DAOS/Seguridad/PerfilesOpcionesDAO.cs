@@ -22,9 +22,10 @@ namespace DAOS.Seguridad
         public DbQueryResult registrarPerfilesOpciones(PerfilesOpciones perfilesOpciones)
         {
             DbQueryResult resultado = new DbQueryResult();          
-            _conn.Open();
+            
             try
-            {                              
+            {
+                _conn.Open();                            
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
 
@@ -61,9 +62,10 @@ namespace DAOS.Seguridad
         public DbQueryResult UpdatePerfilesOpciones(PerfilesOpciones perfilesOpciones)
         {
             DbQueryResult resultado = new DbQueryResult();
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
 
@@ -96,9 +98,10 @@ namespace DAOS.Seguridad
             PerfilesOpciones p = new PerfilesOpciones();  
             _status=new DbQueryResult();
             _status.Success=false;
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 SqlCommand cmSql = _conn.CreateCommand();
                 cmSql.CommandText = "select * from perfilesopciones o where o.idperfil=@parm1 and o.idopcion=@parm2";
                 cmSql.Parameters.Add("@parm1", SqlDbType.Int);
@@ -135,7 +138,7 @@ namespace DAOS.Seguridad
             List<PerfilesOpciones> listado = new List<PerfilesOpciones>();
             _status = new DbQueryResult();
             _status.Success = false;
-            _conn.Open();
+            
             String consulta = "select po.idperfilopcion,po.idopcion,po.idperfil,po.visible," +
                     " o.idpantalla, o.nombre,o.descripcion,o.idasp,o.componenteindex," +
                     " o.chkboxtreeindex, o.estado,o.idcheckbox," +
@@ -149,6 +152,7 @@ namespace DAOS.Seguridad
                         " where o.estado=0 ";
             try
             {
+                _conn.Open();
                 SqlCommand cmSql = _conn.CreateCommand();
 
                 if (idPerfil > 0 && idOpcion < 1 && pantallaIndex < 1 && idModulo<1)

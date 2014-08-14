@@ -22,9 +22,10 @@ namespace DAOS.Seguridad
         public DbQueryResult registrarSistemasModulos(SistemasModulos sistemamodulo)
         {
             DbQueryResult resultado = new DbQueryResult();          
-            _conn.Open();
+            
             try
-            {                              
+            {
+                _conn.Open();          
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
 
@@ -63,9 +64,10 @@ namespace DAOS.Seguridad
         public DbQueryResult UpdateSistemasModulos(SistemasModulos sistemamodulo)
         {
             DbQueryResult resultado = new DbQueryResult();
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
 
@@ -99,9 +101,10 @@ namespace DAOS.Seguridad
             SistemasModulos p = new SistemasModulos();
             _status = new DbQueryResult();
             _status.Success = false;
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 SqlCommand cmSql = _conn.CreateCommand();
                 cmSql.CommandText = "select * from sistemasmodulos o where o.idsistema=@parm1 and o.idmodulo=@parm2";
                 cmSql.Parameters.Add("@parm1", SqlDbType.Int);
@@ -138,9 +141,10 @@ namespace DAOS.Seguridad
             List<SistemasModulos> listado = new List<SistemasModulos>();
             _status = new DbQueryResult();
             _status.Success = false;
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 SqlCommand cmSql = _conn.CreateCommand();
                 if (IdSistema > 0 && idmodulo < 1)
                 {

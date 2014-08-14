@@ -22,9 +22,10 @@ namespace DAOS.Seguridad
         public DbQueryResult registrarUsuariosPantallas(UsuariosPantallas usuariospantallas)
         {
             DbQueryResult resultado = new DbQueryResult();          
-            _conn.Open();
+            
             try
-            {                              
+            {
+                _conn.Open();           
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
 
@@ -61,9 +62,10 @@ namespace DAOS.Seguridad
         public DbQueryResult UpdateUsuariosPantallas(UsuariosPantallas usuariospantallas)
         {
             DbQueryResult resultado = new DbQueryResult();
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
 
@@ -94,9 +96,10 @@ namespace DAOS.Seguridad
         public UsuariosPantallas getUsuarioPantalla(int idUsuario, int idPantalla)
         {
             UsuariosPantallas p = new UsuariosPantallas();            
-            _conn.Open();
+           
             try
             {
+                _conn.Open();
                 SqlCommand cmSql = _conn.CreateCommand();
                 cmSql.CommandText = "select * from usuariospantallas o where o.idusuario=@parm1 and o.idpantalla=@parm2";
                 cmSql.Parameters.Add("@parm1", SqlDbType.Int);
@@ -133,9 +136,10 @@ namespace DAOS.Seguridad
             List<UsuariosPantallas> listado = new List<UsuariosPantallas>();
              _status=new DbQueryResult();
              _status.Success = false;
-            _conn.Open();
+           
             try
             {
+                _conn.Open();
                 SqlCommand cmSql = _conn.CreateCommand();
                 if (idUsuario > 0 && idPantalla < 1 && idModulo < 1)
                 {
@@ -172,6 +176,17 @@ namespace DAOS.Seguridad
                     cmSql.Parameters.Add("@parm1", SqlDbType.Int);
                     cmSql.Parameters.Add("@parm2", SqlDbType.Int);
                     cmSql.Parameters["@parm1"].Value = idUsuario;
+                    cmSql.Parameters["@parm2"].Value = idModulo;
+                }
+                else if (idPantalla < 1 && idUsuario < 1 && idModulo > 0)
+                {
+                    cmSql.CommandText =
+                      "select pp.idusuariopantalla,pp.idpantalla,pp.idusuario,pp.visible,pp.componenteindex,p.idmodulo," +
+                      " p.nombre,p.descripcion,p.idasp, p.estado" +
+                       " from usuariospantallas pp" +
+                      " inner join pantallas p" +
+                      " on pp.idpantalla=p.idpantalla where p.estado=0 and p.idmodulo=@parm2";
+                    cmSql.Parameters.Add("@parm2", SqlDbType.Int);
                     cmSql.Parameters["@parm2"].Value = idModulo;
                 }
 
