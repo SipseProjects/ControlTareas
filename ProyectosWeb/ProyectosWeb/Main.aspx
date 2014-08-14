@@ -1288,7 +1288,9 @@
                                     Descripcion :<asp:TextBox ID="TextBoxDescripcion" runat="server"></asp:TextBox>
                                 </td>
                                 <td>
-                                    Estado
+                                    Estado : 
+                                    <asp:DropDownList ID="DropDownList1" runat="server">
+                                    </asp:DropDownList>
                                 </td>
                                 <td>
                                     Fecha fin estimada :
