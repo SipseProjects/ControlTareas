@@ -115,7 +115,7 @@ namespace ProyectosWeb.Views.Login
 
             if (us.idUsuario != 0)
             {
-                _enviarEmail.SendMail("llopez@solutiaintelligence.com", email, us.idUsuario.ToString(), us.nombre);
+                _enviarEmail.SendMail("llopez@solutiaintelligence.com", email, us.idUsuario.ToString(), us.nombre, HttpContext.Current.Request.Url.Authority.ToString());
                 _usuarioFacade.setTiempoExpiracion(us.idUsuario);
                 LabEmailReg.Text = "Correo Enviado. \n Sigue las instrucciones que te hemos enviado. ";
             }
@@ -176,8 +176,10 @@ namespace ProyectosWeb.Views.Login
                                                                 false,
                                                                 d);
                                 string encTicket = FormsAuthentication.Encrypt(authTicket);
+                               
                                 HttpCookie faCookie =
                                   new HttpCookie(FormsAuthentication.FormsCookieName, encTicket);
+                                GlobalDataSingleton.Instance.expirarTimepo = authTicket.Expiration;
                                 Response.Cookies.Add(faCookie);
 
                                 conn.Close();

@@ -27,5 +27,7 @@ namespace Models
         public int sistemaID { get; set; }
         public int noEliminar { get; set; }
         public String controlAcceso { get; set; }
+        public DateTime expirarTimepo { get; set; }
+        public String controlAccesoOpc { get; set; }
     }
 }

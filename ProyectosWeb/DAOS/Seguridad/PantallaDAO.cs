@@ -21,9 +21,10 @@ namespace DAOS.Seguridad
         public DbQueryResult  registrarPantalla(Pantalla pantalla)
         {
             DbQueryResult resultado = new DbQueryResult();          
-            _conn.Open();
+            
             try
-            {                              
+            {
+                _conn.Open();              
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
 
@@ -63,9 +64,10 @@ namespace DAOS.Seguridad
         public DbQueryResult UpdatePantalla(Pantalla pantalla)
         {
             DbQueryResult resultado = new DbQueryResult();
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
 
@@ -95,23 +97,26 @@ namespace DAOS.Seguridad
             return resultado;
         }
 
-        public DbQueryResult DeletePantalla(int IdPantalla)
+        public DbQueryResult DeletePantalla(int IdPantalla, int activar)
         {
             DbQueryResult resultado = new DbQueryResult();
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
-                cmSql.CommandText = 
-                                       " update pantallas   set estado=1 where idpantalla=@parm4" +
-                                    " update op  set op.estado=1" +
+                cmSql.CommandText =
+                                       " update pantallas   set estado=@parm7 where idpantalla=@parm4" +
+                                    " update op  set op.estado=@parm7" +
                                     " from  pantallas as p" +
                                     " inner join opciones op" +
                                     " on op.idpantalla=p.idpantalla" +
                                     " where p.idpantalla=@parm4";
                 cmSql.Parameters.Add("@parm4", SqlDbType.Int);
                 cmSql.Parameters["@parm4"].Value = IdPantalla;
+                cmSql.Parameters.Add("@parm7", SqlDbType.Int);
+                cmSql.Parameters["@parm7"].Value = activar;
                 int exito = cmSql.ExecuteNonQuery();
                 if (exito > 0)
                 {
@@ -128,9 +133,10 @@ namespace DAOS.Seguridad
 
         public Pantalla getPantalla(String nombre, String idAsp) {
             Pantalla p = new Pantalla();            
-            _conn.Open();
+           
             try
             {
+                _conn.Open();
                 SqlCommand cmSql = _conn.CreateCommand();
                 if (nombre!=null)
                 {
@@ -169,9 +175,10 @@ namespace DAOS.Seguridad
         public List<Pantalla> getPantallas()
         {
             List<Pantalla> listado = new List<Pantalla>();
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 SqlCommand cmSql = _conn.CreateCommand();
                 cmSql.CommandText = "select * from pantallas p where p.Estado=0";
                 SqlDataAdapter da = new SqlDataAdapter(cmSql);

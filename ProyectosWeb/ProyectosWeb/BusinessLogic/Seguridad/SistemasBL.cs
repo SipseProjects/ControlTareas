@@ -52,5 +52,10 @@ namespace ProyectosWeb.BusinessLogic.Seguridad
             lista.DataBind();
         }
 
+        public Sistema getSistema(int idSistema)
+        {
+            return _sistemasDao.getSistema(idSistema);
+        }
+
     }
 }

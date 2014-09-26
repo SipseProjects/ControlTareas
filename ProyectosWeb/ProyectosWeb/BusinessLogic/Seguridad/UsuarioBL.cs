@@ -52,6 +52,7 @@ namespace ProyectosWeb.BusinessLogic.Seguridad
             DataTable table2 = new DataTable();
             table2.Columns.Add("idusuario", typeof(int));
             table2.Columns.Add("nombre", typeof(string));
+            table2.Rows.Add("0", "Seleccione un Usuario");
             List<Usuario> usuario = _usuarioDao.getUsuarios(-1,-1);
             for (int i = 0; i < usuario.Count; i++)
             {
@@ -123,6 +124,22 @@ namespace ProyectosWeb.BusinessLogic.Seguridad
         public int setLinkCliked(int idusuario, int numClicks)
         {
             return _usuarioDao.setLinkCliked(idusuario, numClicks);
+        }
+        public void DropDownBinUsuariosCR(DropDownList lista)
+        {
+            DataTable table2 = new DataTable();
+            table2.Columns.Add("idusuario", typeof(int));
+            table2.Columns.Add("nombre", typeof(string));
+            table2.Rows.Add("0", "Seleccione un Usuario");
+            List<Usuario> usuario = _usuarioDao.getUsuarios(-1, -1);
+            for (int i = 0; i < usuario.Count; i++)
+            {
+                table2.Rows.Add(usuario[i].idUsuario, usuario[i].persona.nombre + " " + usuario[i].persona.apellido);
+            }
+            lista.DataSource = table2;
+            lista.DataValueField = "idusuario";
+            lista.DataTextField = "nombre";
+            lista.DataBind();
         }
     }
 

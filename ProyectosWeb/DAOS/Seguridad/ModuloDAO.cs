@@ -20,9 +20,10 @@ namespace DAOS.Seguridad
         public DbQueryResult  registrarModulo(Modulo modulo)
         {
             DbQueryResult resultado = new DbQueryResult();          
-            _conn.Open();
+           
             try
-            {                              
+            {
+                _conn.Open();              
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();              
                  
@@ -60,9 +61,10 @@ namespace DAOS.Seguridad
         public DbQueryResult UpdateModulo(Modulo modulo)
         {
             DbQueryResult resultado = new DbQueryResult();
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
 
@@ -90,20 +92,21 @@ namespace DAOS.Seguridad
             return resultado;
         }
 
-        public DbQueryResult DeleteModulo(Modulo modulo)
+        public DbQueryResult DeleteModulo(Modulo modulo, int activar)
         {
             DbQueryResult resultado = new DbQueryResult();
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
-                cmSql.CommandText = " update modulos  set estado=1 where idmodulo=@parm4" +
-                                    " update p  set p.estado=1"+
+                cmSql.CommandText = " update modulos  set estado=@parm7 where idmodulo=@parm4" +
+                                    " update p  set p.estado=@parm7" +
                                      " from modulos as m"+
                                     " inner join pantallas as p"+
                                     " on p.idmodulo=m.idmodulo where p.idmodulo=@parm5" +
-                                    " update op  set op.estado=1"+
+                                    " update op  set op.estado=@parm7" +
                                     " from modulos as m"+
                                     " inner join pantallas as p"+
                                     " on p.idmodulo=m.idmodulo "+
@@ -116,6 +119,8 @@ namespace DAOS.Seguridad
                 cmSql.Parameters["@parm5"].Value = modulo.idModulo;
                 cmSql.Parameters.Add("@parm6", SqlDbType.Int);
                 cmSql.Parameters["@parm6"].Value = modulo.idModulo;
+                cmSql.Parameters.Add("@parm7", SqlDbType.Int);
+                cmSql.Parameters["@parm7"].Value = activar;
                 int exito = cmSql.ExecuteNonQuery();
                 if (exito > 0)
                 {
@@ -132,9 +137,10 @@ namespace DAOS.Seguridad
 
         public Modulo getModulo(String nombre, String h3Id, String divId, int idModulo) {
             Modulo p = new Modulo();            
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 SqlCommand cmSql = _conn.CreateCommand();
                 if (nombre != null && idModulo <1)
                 {
@@ -177,32 +183,38 @@ namespace DAOS.Seguridad
 
         public List<Modulo> getModulos()
         {
-            _conn.Open();
             List<Modulo> listado = new List<Modulo>();
-            SqlCommand cmSql = _conn.CreateCommand();
-
-            cmSql.CommandText = "select * from modulos p where p.Estado=0";
-
-            SqlDataAdapter da = new SqlDataAdapter(cmSql);
-            DataSet ds = new DataSet();
-            da.Fill(ds);
-
-            if (ds.Tables.Count > 0)
+            try
             {
-                DataTable dtDatos = ds.Tables[0];
-                if (ds.Tables[0].Rows.Count > 0)
+                _conn.Open();
+                
+                SqlCommand cmSql = _conn.CreateCommand();
+
+                cmSql.CommandText = "select * from modulos p where p.Estado=0";
+
+                SqlDataAdapter da = new SqlDataAdapter(cmSql);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+
+                if (ds.Tables.Count > 0)
                 {
-                    for (int g1 = 0; g1 < ds.Tables[0].Rows.Count; g1++)
+                    DataTable dtDatos = ds.Tables[0];
+                    if (ds.Tables[0].Rows.Count > 0)
                     {
-                        DataRow drDatos = dtDatos.Rows[g1];
-                        Modulo p = new Modulo();
-                        p.idModulo = int.Parse(drDatos["idmodulo"].ToString());
-                        p.Nombre = drDatos["nombre"].ToString();
-                        p.h3Id = drDatos["h3Id"].ToString();
-                        p.divId = drDatos["divId"].ToString();
-                        listado.Add(p);
+                        for (int g1 = 0; g1 < ds.Tables[0].Rows.Count; g1++)
+                        {
+                            DataRow drDatos = dtDatos.Rows[g1];
+                            Modulo p = new Modulo();
+                            p.idModulo = int.Parse(drDatos["idmodulo"].ToString());
+                            p.Nombre = drDatos["nombre"].ToString();
+                            p.h3Id = drDatos["h3Id"].ToString();
+                            p.divId = drDatos["divId"].ToString();
+                            listado.Add(p);
+                        }
                     }
                 }
+            }catch(Exception e){
+            
             }
             _conn.Close();
             return listado;

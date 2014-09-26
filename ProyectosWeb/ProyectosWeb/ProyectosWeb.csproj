@@ -42,6 +42,10 @@
     <Reference Include="BCrypt.Net">
       <HintPath>libs\BCrypt.Net.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=3.1.3.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>epplus\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net40\HtmlAgilityPack.dll</HintPath>
     </Reference>
@@ -51,6 +55,12 @@
     </Reference>
     <Reference Include="Microsoft.Data.OData, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Data.OData.5.2.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -83,12 +93,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\Seguridad\Seguridad.css" />
+    <Content Include="epplus\EPPlus.dll" />
+    <Content Include="epplus\EPPlus.XML" />
     <Content Include="jquery-tree-checkboxes\minified\images\anchor.gif" />
     <Content Include="jquery-tree-checkboxes\minified\jquery.tree.min.css" />
     <Content Include="jquery-tree-checkboxes\minified\jquery.tree.min.js" />
     <Content Include="scripts\ConfirmDialog\jquery.easy-confirm-dialog.js" />
     <Content Include="scripts\ConfirmDialog\jquery.easy-confirm-dialog.min.js" />
-    <Content Include="Views\Login\Login.aspx" />
     <Content Include="CapturaTareas.aspx" />
     <Content Include="LoginSources\css\bootstrap-responsive.min.css" />
     <Content Include="LoginSources\css\bootstrap.min.css" />
@@ -141,6 +152,18 @@
     <Content Include="validacion\jquery.validate.js" />
     <Content Include="validacion\ValidationEngine.css" />
     <Content Include="Views\Login\Inicio.aspx" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\SICTWS\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\SICTWS\SistemasModulos.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\SICTWS\test.disco" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -150,6 +173,10 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <None Include="Web References\SICTWS\test.wsdl" />
+    <None Include="Web References\SICTWS\UsuarioLogin.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\general\ControlarConexion.cs" />
@@ -167,13 +194,6 @@
     <Compile Include="DAO\SeguridadDAOS\UsuarioDAO.cs" />
     <Compile Include="Models\Seguridad\PerfilesUsuarios.cs" />
     <Compile Include="Models\Seguridad\Sistema.cs" />
-    <Compile Include="Views\Login\Login.aspx.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Login\Login.aspx.designer.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-    </Compile>
     <Compile Include="CapturaTareas.aspx.cs">
       <DependentUpon>CapturaTareas.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -188,19 +208,22 @@
     <Compile Include="Main.aspx.designer.cs">
       <DependentUpon>Main.aspx</DependentUpon>
     </Compile>
-    <Compile Include="MasterLogin.Master.cs">
-      <DependentUpon>MasterLogin.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="MasterLogin.Master.designer.cs">
-      <DependentUpon>MasterLogin.Master</DependentUpon>
-    </Compile>
     <Compile Include="Models\DBQueryResult.cs" />
     <Compile Include="Models\Seguridad\Grupo.cs" />
     <Compile Include="Models\Seguridad\Perfil.cs" />
     <Compile Include="Models\Seguridad\Persona.cs" />
     <Compile Include="Models\Seguridad\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="ProyectosGestionDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProyectosGestionDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Views\Login\Inicio.aspx.cs">
       <DependentUpon>Inicio.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -208,12 +231,14 @@
     <Compile Include="Views\Login\Inicio.aspx.designer.cs">
       <DependentUpon>Inicio.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Web References\SICTWS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="MasterLogin.Master" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LoginSources\app_icon.psd" />
@@ -222,6 +247,17 @@
     <None Include="LoginSources\font\qlassikbold_tb-webfont.woff" />
     <None Include="LoginSources\phones.psd" />
     <None Include="LoginSources\README.md" />
+    <None Include="ProyectosGestionDataSet.xsc">
+      <DependentUpon>ProyectosGestionDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="ProyectosGestionDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ProyectosGestionDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ProyectosGestionDataSet.xss">
+      <DependentUpon>ProyectosGestionDataSet.xsd</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -237,7 +273,24 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Reportes\" />
     <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://172.16.1.31/SICTWS/test.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\SICTWS\</RelPath>
+      <UpdateFromURL>http://172.16.1.31/SICTWS/test.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ProyectosWeb_SICTWS_test</CachedSettingsPropName>
+    </WebReferenceUrl>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
@@ -247,7 +300,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>53676</DevelopmentServerPort>
+          <DevelopmentServerPort>58073</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

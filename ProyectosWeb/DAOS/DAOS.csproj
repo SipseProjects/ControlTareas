@@ -53,6 +53,7 @@
     <Compile Include="Seguridad\OpcionDAO.cs" />
     <Compile Include="Seguridad\PantallaDAO.cs" />
     <Compile Include="Seguridad\ModuloDAO.cs" />
+    <Compile Include="Tareas\TareasDAO.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Modelos\Models.csproj">

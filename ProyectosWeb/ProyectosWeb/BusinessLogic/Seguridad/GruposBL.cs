@@ -47,6 +47,7 @@ namespace ProyectosWeb.BusinessLogic.Seguridad
             DataTable table2 = new DataTable();
             table2.Columns.Add("idgrupo", typeof(int));
             table2.Columns.Add("nombre", typeof(string));
+            table2.Rows.Add("0", "Seleccione un Grupo");
             List<Grupo> grupo = _grupoDao.getGrupos(0, 1);
             for (int i = 0; i < grupo.Count; i++)
             {
@@ -58,9 +59,9 @@ namespace ProyectosWeb.BusinessLogic.Seguridad
             lista.DataBind();
         }
 
-        public void agregarUsuarioGrupo(int idusuario, int idgrupo)
+        public int agregarUsuarioGrupo(int idusuario, int idgrupo)
         {
-            _grupoDao.agregarUsuarioGrupo(idusuario,idgrupo);
+           return _grupoDao.agregarUsuarioGrupo(idusuario,idgrupo);
         }
         public int eliminarUsuarioGrupo(int idusuario, int idgrupo)
         {

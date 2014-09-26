@@ -31,8 +31,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus">
+      <HintPath>..\ProyectosWeb\epplus\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="General\ExportaExcel.cs" />
     <Compile Include="Seguridad\ControlAcceso\ControlAcessoUsuarioBL.cs" />
     <Compile Include="Seguridad\SistemasModulosBL.cs" />
     <Compile Include="Seguridad\UsuariosModulosBL.cs" />
@@ -52,6 +60,7 @@
     <Compile Include="Seguridad\PantallaBL.cs" />
     <Compile Include="Seguridad\ModuloBL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tareas\ConsultaReporteBL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAOS\DAOS.csproj">

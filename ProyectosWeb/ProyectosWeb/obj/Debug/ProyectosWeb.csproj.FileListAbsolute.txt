@@ -133,6 +133,7 @@ C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\P
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\AjaxMin.dll
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\BCrypt.Net.dll
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\BusinessLogic.dll
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\EPPlus.dll
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\HtmlAgilityPack.dll
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\Microsoft.Data.Edm.dll
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\Microsoft.Data.OData.dll
@@ -143,6 +144,7 @@ C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\P
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\DAOS.dll
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\BusinessLogic.pdb
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\Models.pdb
+C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\EPPlus.xml
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\HtmlAgilityPack.pdb
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\HtmlAgilityPack.xml
 C:\Users\leo\Documents\leo\solutia\gitcONTROLtAREAS\controltareas\ProyectosWeb\ProyectosWeb\bin\Microsoft.Data.Edm.xml

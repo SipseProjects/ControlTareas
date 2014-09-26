@@ -175,6 +175,15 @@ namespace ProyectosWeb {
         protected global::System.Web.UI.WebControls.HiddenField HidnoEliminarSistema;
         
         /// <summary>
+        /// Control accordionInd.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField accordionInd;
+        
+        /// <summary>
         /// Control usuarioLogin.
         /// </summary>
         /// <remarks>
@@ -227,6 +236,15 @@ namespace ProyectosWeb {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivProyecto1;
+        
+        /// <summary>
+        /// Control LlbCatalogoSeg.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LlbCatalogoSeg;
         
         /// <summary>
         /// Control lblUsuariosSeg.
@@ -472,6 +490,15 @@ namespace ProyectosWeb {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivProyecto3;
         
         /// <summary>
+        /// Control LinkButtonCRConsulta.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton LinkButtonCRConsulta;
+        
+        /// <summary>
         /// Control Proyecto4.
         /// </summary>
         /// <remarks>
@@ -515,6 +542,15 @@ namespace ProyectosWeb {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label LabelNav;
+        
+        /// <summary>
+        /// Control LblSinAcessoOpciones.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LblSinAcessoOpciones;
         
         /// <summary>
         /// Control ContentTop.
@@ -812,6 +848,15 @@ namespace ProyectosWeb {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ListBox ListBoxGruposSeg;
+        
+        /// <summary>
+        /// Control lblStatusRelacionUs.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblStatusRelacionUs;
         
         /// <summary>
         /// Control View5Seg.
@@ -1183,13 +1228,13 @@ namespace ProyectosWeb {
         protected global::System.Web.UI.WebControls.Button ButtonGuardarModuloSeg;
         
         /// <summary>
-        /// Control Button4.
+        /// Control ButtonDesactivaModulo.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button4;
+        protected global::System.Web.UI.WebControls.Button ButtonDesactivaModulo;
         
         /// <summary>
         /// Control ButtonEliminaModulo.
@@ -1199,6 +1244,15 @@ namespace ProyectosWeb {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button ButtonEliminaModulo;
+        
+        /// <summary>
+        /// Control Button4.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Button4;
         
         /// <summary>
         /// Control LabUpdateModulo.
@@ -1246,13 +1300,13 @@ namespace ProyectosWeb {
         protected global::System.Web.UI.WebControls.Button ButtonregistraPantalla;
         
         /// <summary>
-        /// Control ButtonUpdatepantalla.
+        /// Control Button7.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonUpdatepantalla;
+        protected global::System.Web.UI.WebControls.Button Button7;
         
         /// <summary>
         /// Control ButtonDeletePantallaOpcion.
@@ -1264,6 +1318,15 @@ namespace ProyectosWeb {
         protected global::System.Web.UI.WebControls.Button ButtonDeletePantallaOpcion;
         
         /// <summary>
+        /// Control ButtonUpdatepantalla.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonUpdatepantalla;
+        
+        /// <summary>
         /// Control LblupdatePantalla.
         /// </summary>
         /// <remarks>
@@ -1271,6 +1334,15 @@ namespace ProyectosWeb {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label LblupdatePantalla;
+        
+        /// <summary>
+        /// Control LblSinRelacion.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LblSinRelacion;
         
         /// <summary>
         /// Control ViewRelAccesoPerfil.
@@ -1336,6 +1408,15 @@ namespace ProyectosWeb {
         protected global::System.Web.UI.WebControls.Label LblStatusAccePerfil;
         
         /// <summary>
+        /// Control LblSinRelacionRel.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LblSinRelacionRel;
+        
+        /// <summary>
         /// Control ViewModuloSistema.
         /// </summary>
         /// <remarks>
@@ -1390,13 +1471,13 @@ namespace ProyectosWeb {
         protected global::System.Web.UI.WebControls.Button ButtonDesasignarModSis;
         
         /// <summary>
-        /// Control Label6.
+        /// Control LblStatusModSis.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label6;
+        protected global::System.Web.UI.WebControls.Label LblStatusModSis;
         
         /// <summary>
         /// Control MultiView2.
@@ -1453,6 +1534,15 @@ namespace ProyectosWeb {
         protected global::System.Web.UI.WebControls.TextBox TextBoxDescripcion;
         
         /// <summary>
+        /// Control DropDownList1.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownList1;
+        
+        /// <summary>
         /// Control TextBoxFechaFinEst.
         /// </summary>
         /// <remarks>
@@ -1462,6 +1552,15 @@ namespace ProyectosWeb {
         protected global::System.Web.UI.WebControls.TextBox TextBoxFechaFinEst;
         
         /// <summary>
+        /// Control Label1.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label1;
+        
+        /// <summary>
         /// Control TextBoxNombre.
         /// </summary>
         /// <remarks>
@@ -1469,15 +1568,6 @@ namespace ProyectosWeb {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TextBoxNombre;
-        
-        /// <summary>
-        /// Control LabelDependencia.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelDependencia;
         
         /// <summary>
         /// Control DropDownListDep.
@@ -1523,6 +1613,132 @@ namespace ProyectosWeb {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.MultiView MultiViewConsultaReporte;
+        
+        /// <summary>
+        /// Control ViewConsultaBusqueda.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.View ViewConsultaBusqueda;
+        
+        /// <summary>
+        /// Control TextBoxFechaInicioCR.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBoxFechaInicioCR;
+        
+        /// <summary>
+        /// Control TextBoxFechaFinEstimCR.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBoxFechaFinEstimCR;
+        
+        /// <summary>
+        /// Control TextBoxFinRCR.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBoxFinRCR;
+        
+        /// <summary>
+        /// Control DropDownListUsuarioCR.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListUsuarioCR;
+        
+        /// <summary>
+        /// Control TextBoxTarea.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBoxTarea;
+        
+        /// <summary>
+        /// Control DropDownListEstado.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListEstado;
+        
+        /// <summary>
+        /// Control DropDownListOpcTareasCR.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListOpcTareasCR;
+        
+        /// <summary>
+        /// Control DropDownListSistemaCR.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListSistemaCR;
+        
+        /// <summary>
+        /// Control ButtonBusquedaCR.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonBusquedaCR;
+        
+        /// <summary>
+        /// Control GridViewCRConsulta.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView GridViewCRConsulta;
+        
+        /// <summary>
+        /// Control DataGridtareas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DataGrid DataGridtareas;
+        
+        /// <summary>
+        /// Control ButtonExportarExcelCR.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonExportarExcelCR;
+        
+        /// <summary>
+        /// Control LblStatusDescargaCR.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LblStatusDescargaCR;
         
         /// <summary>
         /// Control MultiViewSeguimientoTarea.

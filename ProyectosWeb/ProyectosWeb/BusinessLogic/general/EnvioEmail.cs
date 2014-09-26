@@ -9,8 +9,8 @@ namespace ProyectosWeb.BusinessLogic.general
 {
     public class EnvioEmail
     {
-        public void SendMail(String emailde, String emailpara, string id, string nombre)
-        {
+        public void SendMail(String emailde, String emailpara, string id, string nombre, String host)
+        {            
             MailMessage msg = new MailMessage();
             msg.From = new MailAddress(emailde);
             msg.To.Add(emailpara);
@@ -18,7 +18,7 @@ namespace ProyectosWeb.BusinessLogic.general
             " Este es un email automatico, Favor de no responder. <br/> <br/> "
             + " Hola " + nombre + " <br/> <br/> "
             + " Tus Datos de Control de Tareas. <br/><br/> "
-            + " Para recuperar tus datos de Inicio de Sesion para el Control de Tareas, simplemente  <a href='http://localhost:55316/Views/Login/Inicio.aspx?id=email&u=" + id + "'>Sigue este link</a> <br/><br/>"
+            + " Para recuperar tus datos de Inicio de Sesion para el Control de Tareas, simplemente  <a href='http://" + host + "/Views/Login/Inicio.aspx?id=email&u=" + id + "'>Sigue este link</a> <br/><br/>"
             + " Nota: Este proceso expira en 3 Horas. <br/> <br/> "
             + " Nota: El link es valido solo una vez que se inicia el proceso de recuperacion de datos de Inicio de Sesion. <br/> <br/> ";
             msg.IsBodyHtml = true;

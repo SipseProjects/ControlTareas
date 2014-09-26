@@ -148,13 +148,13 @@ namespace DAOS.Seguridad
                 SqlCommand cmSql = _conn.CreateCommand();
                 if (IdSistema > 0 && idmodulo < 1)
                 {
-                    cmSql.CommandText = "select pm.idmodulo, pm.idsistemamodulo, pm.idsistema, pm.divvisible, m.idmodulo,m.nombre, m.h3id, m.divid from sistemasmodulos pm"
-                    + " inner join modulos m"
+                    cmSql.CommandText = "select pm.idmodulo, pm.idsistemamodulo, pm.idsistema, pm.divvisible, m.idmodulo,m.nombre, m.h3id, m.divid, m.estado from modulos m"
+                    + " left join sistemasmodulos pm"
                     + " on m.idmodulo=pm.idmodulo and pm.idsistema in(" + IdSistema + ") ";
                 }
                 else if (idmodulo > 0 && IdSistema > 0)
                 {
-                    cmSql.CommandText = "select pm.idmodulo, pm.idsistemamodulo, pm.idsistema, pm.divvisible, m.idmodulo,m.nombre, m.h3id, m.divid from sistemasmodulos pm"
+                    cmSql.CommandText = "select pm.idmodulo, pm.idsistemamodulo, pm.idsistema, pm.divvisible, m.idmodulo,m.nombre, m.h3id, m.divid, m.estado from sistemasmodulos pm"
                     + " inner join modulos m"
                     + " on m.idmodulo=pm.idmodulo and pm.idsistema in(" + IdSistema + ") and pm.idmodulo=" + idmodulo + "";
                 }
@@ -171,12 +171,14 @@ namespace DAOS.Seguridad
                         {
                             DataRow drDatos = dtDatos.Rows[g1];
                             SistemasModulos pmodulo = new SistemasModulos();
-                            pmodulo.idModulo = int.Parse(drDatos["idmodulo"].ToString());
-                            pmodulo.idSistema = int.Parse(drDatos["idsistema"].ToString());
+                            pmodulo.idModulo = drDatos["idmodulo"].ToString().Length>0 ? int.Parse(drDatos["idmodulo"].ToString()):0;
+                            pmodulo.idSistema =  drDatos["idsistema"].ToString().Length>0 ? int.Parse(drDatos["idsistema"].ToString()):0;
+                            pmodulo.idSistemaModulo = drDatos["idSistemaModulo"].ToString().Length > 0 ? int.Parse(drDatos["idSistemaModulo"].ToString()) : 0;
                             pmodulo.divvisible = drDatos["divvisible"].ToString();
                             pmodulo.h3visible = drDatos["divvisible"].ToString();
                             Modulo mod = new Modulo();
                             mod.idModulo = pmodulo.idModulo;
+                            mod.estado = drDatos["estado"].ToString().Length > 0 ? int.Parse(drDatos["estado"].ToString()) : 0;
                             mod.Nombre = drDatos["nombre"].ToString();
                             mod.h3Id = drDatos["h3Id"].ToString();
                             mod.divId = drDatos["divId"].ToString();

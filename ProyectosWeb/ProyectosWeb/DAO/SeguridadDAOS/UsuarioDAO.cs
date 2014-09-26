@@ -21,70 +21,81 @@ namespace ProyectosWeb.DAO.SeguridadDAOS
         public List<Usuario> getUsuarios(int idgrupo, int sinusuario) {
             abrirConexion();
             List<Usuario> listado = new List<Usuario>();
-            SqlCommand cmSql = _conn.CreateCommand();
-            if (idgrupo > 0 && sinusuario == 0)
+            try
             {
-                cmSql.CommandText = ""
-                    + " select g.idusuario as 'l',p.nombre as nomUsuario, p.apellido from usuarios g "
-                    + " inner join gruposusuarios gu"
-                    + " on g.idusuario=gu.idusuario inner join personas p on p.idusuario=g.idusuario"
-                    + " where g.Estado=0 and gu.idgrupo=@parm1";
-                cmSql.Parameters.Add("@parm1", SqlDbType.Int);
-                cmSql.Parameters["@parm1"].Value = idgrupo;
-            }
-            else if (sinusuario > 0 && idgrupo > 0)
-            {
-                cmSql.CommandText = ""
-                    + " select g.idusuario as 'l',p.nombre as nomUsuario, p.apellido from usuarios g "
-                    + " left join gruposusuarios gu"
-                    + " on g.idusuario=gu.idusuario and gu.idgrupo=@parm1 inner join personas p on p.idusuario=g.idusuario "
-                    + " where  (gu.idgrupo is null and gu.idusuario is null) and g.Estado=0";
-                cmSql.Parameters.Add("@parm1", SqlDbType.Int);
-                cmSql.Parameters["@parm1"].Value = idgrupo;
-            }
-            else
-            {
-                cmSql.CommandText = "select u.IDUsuario as 'l',u.IDCatalogoProveedores,u.Nombre, u.esEmpleado,u.Contraseña,u.Estado,p.IDPersonas, p.IDUsuario,p.Nombre as nomUsuario,"
-                    + " p.Apellido,p.FechaRegistro,p.Tecnologias,p.Estado, p.Email, p.Telefono from Usuarios u inner join  Personas  p"
-                    + " on u.IDUsuario=p.IDUsuario where u.Estado=0";
-            }
-            SqlDataAdapter da = new SqlDataAdapter(cmSql);
-            DataSet ds = new DataSet();
-            da.Fill(ds);
-
-            if (ds.Tables.Count > 0)
-            {
-                DataTable dtDatos = ds.Tables[0];
-                if (ds.Tables[0].Rows.Count > 0)
+                SqlCommand cmSql = _conn.CreateCommand();
+                if (idgrupo > 0 && sinusuario == 0)
                 {
-                    for (int g = 0; g < ds.Tables[0].Rows.Count; g++)
-                    {
-                        DataRow drDatos = dtDatos.Rows[g];
-                        Usuario us = new Usuario();
-                        Persona persona = new Persona();
-                        us.idUsuario = int.Parse(drDatos["l"].ToString());
-                        persona.nombre = drDatos["nomUsuario"].ToString();
-                        persona.apellido = drDatos["apellido"].ToString();
-                        us.persona = persona;
-                        listado.Add(us);
-                    }
+                    cmSql.CommandText = ""
+                        + " select g.idusuario as 'l',p.nombre as nomUsuario, p.apellido from usuarios g "
+                        + " inner join gruposusuarios gu"
+                        + " on g.idusuario=gu.idusuario inner join personas p on p.idusuario=g.idusuario"
+                        + " where g.Estado=0 and gu.idgrupo=@parm1";
+                    cmSql.Parameters.Add("@parm1", SqlDbType.Int);
+                    cmSql.Parameters["@parm1"].Value = idgrupo;
                 }
+                else if (sinusuario > 0 && idgrupo > 0)
+                {
+                    cmSql.CommandText = ""
+                        + " select g.idusuario as 'l',p.nombre as nomUsuario, p.apellido from usuarios g "
+                        + " left join gruposusuarios gu"
+                        + " on g.idusuario=gu.idusuario and gu.idgrupo=@parm1 inner join personas p on p.idusuario=g.idusuario "
+                        + " where  (gu.idgrupo is null and gu.idusuario is null) and g.Estado=0";
+                    cmSql.Parameters.Add("@parm1", SqlDbType.Int);
+                    cmSql.Parameters["@parm1"].Value = idgrupo;
+                }
+                else
+                {
+                    cmSql.CommandText = "select u.IDUsuario as 'l',u.IDCatalogoProveedores,u.Nombre, u.esEmpleado,u.Contraseña,u.Estado,p.IDPersonas, p.IDUsuario,p.Nombre as nomUsuario,"
+                        + " p.Apellido,p.FechaRegistro,p.Tecnologias,p.Estado, p.Email, p.Telefono from Usuarios u inner join  Personas  p"
+                        + " on u.IDUsuario=p.IDUsuario where u.Estado=0";
+                }
+                SqlDataAdapter da = new SqlDataAdapter(cmSql);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
 
+                if (ds.Tables.Count > 0)
+                {
+                    DataTable dtDatos = ds.Tables[0];
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        for (int g = 0; g < ds.Tables[0].Rows.Count; g++)
+                        {
+                            DataRow drDatos = dtDatos.Rows[g];
+                            Usuario us = new Usuario();
+                            Persona persona = new Persona();
+                            us.idUsuario = int.Parse(drDatos["l"].ToString());
+                            persona.nombre = drDatos["nomUsuario"].ToString();
+                            persona.apellido = drDatos["apellido"].ToString();
+                            us.persona = persona;
+                            listado.Add(us);
+                        }
+                    }
+
+                }
+            }catch(Exception e){
+            
             }
             cerrarConexion();
             return listado;
         }
         public int UpdateUsuarioPassword(int idusuario, string oldUsuario, string newUsuario, String pass) {
             abrirConexion();
-            SqlCommand cmSql = _conn.CreateCommand();
-            cmSql.CommandText = "update usuarios set nombre=@parm1,contraseña=@parm3 where  nombre=@parm2";
-            cmSql.Parameters.Add("@parm1", SqlDbType.VarChar);
-            cmSql.Parameters.Add("@parm2", SqlDbType.VarChar);
-            cmSql.Parameters.Add("@parm3", SqlDbType.VarChar);
-            cmSql.Parameters["@parm2"].Value = oldUsuario;
-            cmSql.Parameters["@parm1"].Value = newUsuario;
-            cmSql.Parameters["@parm3"].Value = pass;
-           int exito= cmSql.ExecuteNonQuery();
+            int exito = 0;
+            try
+            {
+                SqlCommand cmSql = _conn.CreateCommand();
+                cmSql.CommandText = "update usuarios set nombre=@parm1,contraseña=@parm3 where  nombre=@parm2";
+                cmSql.Parameters.Add("@parm1", SqlDbType.VarChar);
+                cmSql.Parameters.Add("@parm2", SqlDbType.VarChar);
+                cmSql.Parameters.Add("@parm3", SqlDbType.VarChar);
+                cmSql.Parameters["@parm2"].Value = oldUsuario;
+                cmSql.Parameters["@parm1"].Value = newUsuario;
+                cmSql.Parameters["@parm3"].Value = pass;
+                exito = cmSql.ExecuteNonQuery();
+            }catch(Exception s){
+            
+            }
            cerrarConexion();
             return exito;
         }
@@ -106,13 +117,19 @@ namespace ProyectosWeb.DAO.SeguridadDAOS
         public int UpdatePasswordRestore(int idusuario, String pass)
         {
             abrirConexion();
-            SqlCommand cmSql = _conn.CreateCommand();
-            cmSql.CommandText = "update usuarios set contraseña=@parm2 where  idusuario=@parm1";          
-            cmSql.Parameters.Add("@parm1", SqlDbType.VarChar);
-            cmSql.Parameters.Add("@parm2", SqlDbType.VarChar);
-            cmSql.Parameters["@parm1"].Value = idusuario;
-            cmSql.Parameters["@parm2"].Value = pass;
-            int exito = cmSql.ExecuteNonQuery();
+            int exito = 0;
+            try
+            {
+                SqlCommand cmSql = _conn.CreateCommand();
+                cmSql.CommandText = "update usuarios set contraseña=@parm2 where  idusuario=@parm1";
+                cmSql.Parameters.Add("@parm1", SqlDbType.VarChar);
+                cmSql.Parameters.Add("@parm2", SqlDbType.VarChar);
+                cmSql.Parameters["@parm1"].Value = idusuario;
+                cmSql.Parameters["@parm2"].Value = pass;
+                 exito = cmSql.ExecuteNonQuery();
+            }catch(Exception c){
+            
+            }
             cerrarConexion();
             return exito;
         }
@@ -120,29 +137,33 @@ namespace ProyectosWeb.DAO.SeguridadDAOS
         public Usuario getUserByEmail(String email) {
             Usuario resultado = new Usuario();
             abrirConexion();
-          
-            SqlCommand cmSql = _conn.CreateCommand();
-            cmSql.CommandText = "select u.IDUsuario as 'l',u.Nombre, u.esEmpleado,u.Estado,p.IDPersonas, p.IDUsuario,p.Nombre as nomUsuario,"
-                    + " p.Apellido,p.FechaRegistro,p.Tecnologias,p.Estado, p.Email, p.Telefono from Usuarios u inner join  Personas  p"
-                    + " on u.IDUsuario=p.IDUsuario where u.Estado=0 and p.email=@parm1";
-            cmSql.Parameters.Add("@parm1", SqlDbType.VarChar);
-            cmSql.Parameters["@parm1"].Value = email;
-            SqlDataAdapter da = new SqlDataAdapter(cmSql);
-            DataSet ds = new DataSet();
-            da.Fill(ds);
-
-            if (ds.Tables.Count > 0)
+            try
             {
-                DataTable dtDatos = ds.Tables[0];
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    DataRow drDatos = dtDatos.Rows[0];
-                    resultado = new Usuario();
-                    resultado.idUsuario = int.Parse(drDatos["idusuario"].ToString());
-                    resultado.nombre = drDatos["nombre"].ToString();
-                    Persona p = new Persona(); 
-                }
+                SqlCommand cmSql = _conn.CreateCommand();
+                cmSql.CommandText = "select u.IDUsuario as 'l',u.Nombre, u.esEmpleado,u.Estado,p.IDPersonas, p.IDUsuario,p.Nombre as nomUsuario,"
+                        + " p.Apellido,p.FechaRegistro,p.Tecnologias,p.Estado, p.Email, p.Telefono from Usuarios u inner join  Personas  p"
+                        + " on u.IDUsuario=p.IDUsuario where u.Estado=0 and p.email=@parm1";
+                cmSql.Parameters.Add("@parm1", SqlDbType.VarChar);
+                cmSql.Parameters["@parm1"].Value = email;
+                SqlDataAdapter da = new SqlDataAdapter(cmSql);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
 
+                if (ds.Tables.Count > 0)
+                {
+                    DataTable dtDatos = ds.Tables[0];
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        DataRow drDatos = dtDatos.Rows[0];
+                        resultado = new Usuario();
+                        resultado.idUsuario = int.Parse(drDatos["idusuario"].ToString());
+                        resultado.nombre = drDatos["nombre"].ToString();
+                        Persona p = new Persona();
+                    }
+
+                }
+            }catch(Exception c){
+            
             }
             cerrarConexion();
             return resultado;
@@ -279,23 +300,29 @@ namespace ProyectosWeb.DAO.SeguridadDAOS
             cmSql.CommandText = "Select * from usuarios where idusuario=@parm1";
             cmSql.Parameters.Add("@parm1", SqlDbType.Int);
             cmSql.Parameters["@parm1"].Value = idusuario;
-            SqlDataAdapter da = new SqlDataAdapter(cmSql);
-            DataSet ds = new DataSet();
-            da.Fill(ds);
-
-            if (ds.Tables.Count > 0)
+            try
             {
-                DataTable dtDatos = ds.Tables[0];
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    DataRow drDatos = dtDatos.Rows[0];
-                    us = new Usuario();
-                    us.idUsuario = int.Parse(drDatos["idusuario"].ToString());
-                    us.nombre = drDatos["nombre"].ToString();
-                    us.tiempoExpiracion = Convert.ToDateTime(drDatos["tiempoExpiracion"].ToString());
-                    us.linkCliked = (drDatos["linkClicked"].ToString().Length>0) ? int.Parse(drDatos["linkClicked"].ToString()):0;
-                }
+                SqlDataAdapter da = new SqlDataAdapter(cmSql);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
 
+                if (ds.Tables.Count > 0)
+                {
+                    DataTable dtDatos = ds.Tables[0];
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        DataRow drDatos = dtDatos.Rows[0];
+                        us = new Usuario();
+                        us.idUsuario = int.Parse(drDatos["idusuario"].ToString());
+                        us.nombre = drDatos["nombre"].ToString();
+                        us.tiempoExpiracion = Convert.ToDateTime(drDatos["tiempoExpiracion"].ToString());
+                        us.linkCliked = (drDatos["linkClicked"].ToString().Length > 0) ? int.Parse(drDatos["linkClicked"].ToString()) : 0;
+                    }
+
+                }
+            }
+            catch{
+            
             }
             cerrarConexion();
             return us;
@@ -336,5 +363,6 @@ namespace ProyectosWeb.DAO.SeguridadDAOS
             cerrarConexion();
             return exito;
         }
+        
     }
 }

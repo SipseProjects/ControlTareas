@@ -21,9 +21,10 @@ namespace DAOS.Seguridad
         public DbQueryResult  registrarOpcion(Opcion opcion)
         {
             DbQueryResult resultado = new DbQueryResult();          
-            _conn.Open();
+            
             try
-            {                              
+            {
+                _conn.Open();              
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
 
@@ -66,9 +67,10 @@ namespace DAOS.Seguridad
         public DbQueryResult UpdateOpcion(Opcion opcion)
         {
             DbQueryResult resultado = new DbQueryResult();
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
 
@@ -102,15 +104,22 @@ namespace DAOS.Seguridad
             return resultado;
         }
 
-        public Opcion getOpcion(String idAsp, String idcheckbox)
+        public Opcion getOpcion(String idAsp, String idcheckbox, int d, int pantallaindex)
         {
             Opcion p = new Opcion();            
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 SqlCommand cmSql = _conn.CreateCommand();
+                if(d==0){
                 cmSql.CommandText = "select * from opciones o where o.idasp='" + idAsp.Trim() + "' and o.idcheckbox='" + idcheckbox + "'";                                
-                SqlDataAdapter da = new SqlDataAdapter(cmSql);
+                }else{
+                    cmSql.CommandText = "select * from opciones o inner join pantallas p on"+
+                    " p.idpantalla=o.idpantalla and p.pantallaindex="+pantallaindex+""+
+                        " where o.idasp='" + idAsp.Trim() + "' and o.idcheckbox like '%" + idcheckbox + "%'";                                               
+                }
+                    SqlDataAdapter da = new SqlDataAdapter(cmSql);
                 DataSet ds = new DataSet();
                 da.Fill(ds);
 
@@ -124,6 +133,7 @@ namespace DAOS.Seguridad
                             p.idPantalla = int.Parse(drDatos["idpantalla"].ToString());                            
                             p.nombre = drDatos["nombre"].ToString();
                             p.idAsp = drDatos["idasp"].ToString();
+                            p.idcheckbox = drDatos["idcheckbox"].ToString();
                             p.componenteIndex = drDatos["componenteIndex"].ToString(); 
                             p.estado = (drDatos["estado"].ToString().Length > 0 ? int.Parse(drDatos["estado"].ToString()) : 0);
                           
@@ -135,17 +145,20 @@ namespace DAOS.Seguridad
             _conn.Close();
             return p;
         }
-        public DbQueryResult DeleteOpcion(int idOpcion)
+        public DbQueryResult DeleteOpcion(int idOpcion, int activar)
         {
             DbQueryResult resultado = new DbQueryResult();
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 resultado.Success = false;
                 SqlCommand cmSql = _conn.CreateCommand();
-                cmSql.CommandText = " update opciones   set estado=1 where idopcion=@parm4";
+                cmSql.CommandText = " update opciones   set estado=@parm6 where idopcion=@parm4";
                 cmSql.Parameters.Add("@parm4", SqlDbType.Int);
                 cmSql.Parameters["@parm4"].Value = idOpcion;
+                cmSql.Parameters.Add("@parm6", SqlDbType.Int);
+                cmSql.Parameters["@parm6"].Value = activar;
                 int exito = cmSql.ExecuteNonQuery();
                 if (exito > 0)
                 {
@@ -162,9 +175,10 @@ namespace DAOS.Seguridad
         public List<Pantalla> getPantallas()
         {
             List<Pantalla> listado = new List<Pantalla>();
-            _conn.Open();
+            
             try
             {
+                _conn.Open();
                 SqlCommand cmSql = _conn.CreateCommand();
                 cmSql.CommandText = "select * from pantallas p where p.Estado=0";
                 SqlDataAdapter da = new SqlDataAdapter(cmSql);

@@ -29,9 +29,9 @@ namespace BusinessLogic.Seguridad
         {
             return _modulodao.UpdateModulo(modulo);
         }
-        public DbQueryResult DeleteModulo(Modulo modulo)
+        public DbQueryResult DeleteModulo(Modulo modulo, int activar)
         {
-            return _modulodao.DeleteModulo(modulo);
+            return _modulodao.DeleteModulo(modulo, activar);
         }
         public Modulo getModulo(String nombre, String h3Id, String divId, int idModulo)
         {
